@@ -1,0 +1,7 @@
+# Geograph bulk dump: 235 MB, re-downloadable, never commit it.
+data/*.tsv.gz
+data/*.mysql.gz
+
+# Resumable run state; regenerable and noisy in diffs.
+data/image_state.json
+data/image_state.json.tmp
