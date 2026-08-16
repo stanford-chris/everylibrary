@@ -10,3 +10,5 @@ data/image_state.json.tmp
 # state file in this repo is handled. No .tmp line: everylibrary_post.py
 # writes this one directly, unlike image_state.json.
 data/post_state.json
+data/_tmp/
+data/describe_test.log

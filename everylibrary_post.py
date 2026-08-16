@@ -360,16 +360,38 @@ def pin_credits(dry_run=False):
     print('Pinned to profile.')
 
 
+ALT_PATH = DATA / 'alt_text.json'
+_alt_cache = None
+
+
+def alt_text_store():
+    global _alt_cache
+    if _alt_cache is None:
+        _alt_cache = json.loads(ALT_PATH.read_text()) if ALT_PATH.exists() else {}
+    return _alt_cache
+
+
 def build_alt(row):
+    """Describe the photograph, not the post.
+
+    The name, address, photographer and licence are all visible immediately
+    above the image, so repeating them here spends a screen-reader user's time
+    on what they already have and never tells them what the building looks
+    like. Written by everylibrary_describe.py.
+
+    Falls back to bare identification when no description has been generated
+    yet: worse than a description, but better than nothing at all.
+    """
+    entry = alt_text_store().get(library_id(row), {})
+    visual, context = entry.get('visual'), entry.get('context')
+
+    if visual:
+        return ' '.join(p for p in (visual, context) if p)[:1900]
+
     place = short_place(row['authority'])
     address = clean_address(row.get('address'), row.get('postcode'))
     name = display_name(row['name'])
-    where = f'{name}, {address}' if address else f'{name}, {place}'
-    bits = [f"Photograph of {where}."]
-    if row.get('year_opened', '').isdigit():
-        bits.append(f"The library opened in {row['year_opened']}.")
-    bits.append(f"Photograph by {row['photographer']}, licensed {row['licence']}.")
-    return ' '.join(bits)[:1900]  # Bluesky alt-text cap is 2000
+    return f"Photograph of {name}, {address or place}."[:1900]
 
 
 # ----------------------------------------------------------------- selection
