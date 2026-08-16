@@ -488,7 +488,8 @@ def build_manifest(rows, state):
 
         out.append({
             "name": r["name"], "authority": r["authority"], "nation": r["nation"],
-            "address": r.get("address", ""), "postcode": r["postcode"],
+            "address": r.get("address", ""), "town": r.get("town", ""),
+            "postcode": r["postcode"],
             "lat": r["lat"], "lon": r["lon"],
             "type": r["type"], "statutory": r["statutory"], "year_opened": r["year_opened"],
             "wikidata": qid,

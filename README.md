@@ -44,6 +44,22 @@ curl -o data/gridimage_base.tsv.gz https://data.geograph.org.uk/dumps/gridimage_
 
 Resumable: state checkpoints to `data/image_state.json` every 100 libraries. Output is `data/uk_libraries_images.csv`.
 
+### Results, full run 16 August 2026
+
+**2,188 of 3,750 libraries have a usable, credited image (58.3%).** All 2,188 are `postable`; none are blocked for a missing credit.
+
+| Stage | Found |
+|---|---|
+| Commons geosearch | 1,338 |
+| Wikidata P18 | 747 |
+| Geograph dump | 103 |
+
+England 1,747/2,913 (60.0%) · Wales 158/261 (60.5%) · Northern Ireland 57/98 (58.2%) · Scotland 226/478 (47.3%).
+
+Licences: 1,639 CC BY-SA 2.0, 216 CC BY 2.0, 162 CC BY-SA 4.0, 91 CC BY-SA 3.0, 41 CC0, 16 public domain, 19 CC BY 3.0/4.0.
+
+**Geograph supplies most of this project, but arrives via Commons.** 80% of the geosearch matches and 55% of the Wikidata ones are Geograph photographs mirrored onto Commons. That is why the direct Geograph stage adds only 103: by the time it runs, the other two stages have already harvested the mirrored material, with attribution normalised into Commons metadata on the way. Run stage 3 anyway — those 103 exist nowhere else — but expect it to be the tail, not the trunk.
+
 Note the sweep is slow from Seoul, roughly one second per Commons call, so a full stage 2 run takes about an hour.
 
 ## Licensing
@@ -95,6 +111,8 @@ Checked August 2026: **no UK library bot exists, and the niche is clear.**
 
 ## Open threads
 
-- Confirm the Libraries Hacked data licence.
+- **Confirm the Libraries Hacked data licence**, which covers the roster's 384 postable Scottish and Welsh libraries (18% of the corpus). The photographs are unaffected: they are separately licensed from Commons and Geograph. Only names, addresses and coordinates are in question, and 86% of the Scottish and 83% of the Welsh entries also exist in OpenStreetMap under ODbL, so Libraries Hacked is not the only possible source for most of them.
+
+  If the answer comes back no, set `EXCLUDE_NATIONS = {'Scotland', 'Wales'}` in `everylibrary_post.py`. That drops the rotation from 2,188 to 1,804 and needs no rebuild.
 - Decide whether to include the 71 independent community libraries, which sit outside the statutory service.
 - Closure history is England-heavy: 470 English closures on record against 6 Scottish and 2 Welsh, yet SLIC has separately verified 53 Scottish closures between 2014 and 2024. Don't imply national coverage on the closure angle.

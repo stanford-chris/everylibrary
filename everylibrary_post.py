@@ -38,7 +38,7 @@ import time
 from pathlib import Path
 
 import requests
-from atproto import Client, client_utils
+from atproto import Client, client_utils, models
 
 DATA        = Path(__file__).parent / 'data'
 MANIFEST    = DATA / 'uk_libraries_images.csv'
@@ -50,6 +50,12 @@ KEYCHAIN_SERVICE = 'everylibrary-bluesky'
 MAX_CHARS       = 290      # 10-char buffer under Bluesky's 300 limit
 MAX_IMAGE_BYTES = 950_000  # stay under Bluesky's ~1 MB blob limit
 SHUFFLE_SEED    = 20260816 # fixed, so the running order is reproducible
+
+# Nations to hold back from the rotation. The roster's Scottish and Welsh
+# records come from Libraries Hacked, which states no data licence; the English
+# portion traces to DCMS under the OGL. Set this to {'Scotland', 'Wales'} to
+# pause those 384 libraries pending an answer, without rebuilding anything.
+EXCLUDE_NATIONS = set()
 
 USER_AGENT = 'everylibrary-bot/0.1 (https://chris-stanford.com; stanfordc+claude@mac.com)'
 
@@ -103,6 +109,14 @@ def display_name(name):
     if 'librar' in s.lower() or FACILITY_WORD.search(s):
         return s
     return f'{s} Library'
+
+
+def tag_slug(name):
+    """Bluesky tags carry no spaces or punctuation, so 'Newcastle upon Tyne'
+    becomes NewcastleUponTyne and "King's Lynn" becomes KingsLynn."""
+    s = re.sub(r"[’'`]", '', name or '')
+    parts = re.split(r'[^0-9A-Za-z]+', s)
+    return ''.join(p[:1].upper() + p[1:] for p in parts if p)
 
 
 def clean_address(address, postcode):
@@ -222,11 +236,34 @@ def build_post(row):
     year = (row.get('year_opened') or '').strip()
     tb.text(f'{place} · opened {year}\n\n' if year.isdigit() else f'{place}\n\n')
 
-    tb.text(f"📷 {row['photographer']} · ")
-    if row.get('licence_url'):
-        tb.link(row['licence'], row['licence_url'])
+    # One link only: the photographer's name, pointing at the file's own page.
+    # CC BY-SA 4.0 s3(a)(2) allows the attribution conditions to be satisfied
+    # "by providing a URI or hyperlink to a resource that includes the required
+    # information", and the Commons file page carries the author, the licence,
+    # the deed link and the source. The licence stays named in plain text, so a
+    # reader still sees the terms without a second run of blue swallowing the
+    # credit line.
+    tb.text('📷 ')
+    if row.get('credit_page'):
+        tb.link(row['photographer'], row['credit_page'])
     else:
-        tb.text(row['licence'] or 'CC BY-SA')
+        tb.text(row['photographer'])
+
+    tb.text(f" · {row['licence'] or 'CC BY-SA'}")
+
+    # Two tags, no more. #Libraries for the topic, the town so local people can
+    # find their own branch. Skipped when the roster has no usable town: a wrong
+    # tag is worse than none, and 3% of Address 2 values are streets.
+    tags = ['Libraries']
+    town = tag_slug(row.get('town'))
+    if town and town.lower() != 'libraries':
+        tags.append(town)
+
+    tb.text('\n\n')
+    for i, tag in enumerate(tags):
+        if i:
+            tb.text(' ')
+        tb.tag(f'#{tag}', tag)
 
     text = tb.build_text()
     if len(text) > MAX_CHARS:
@@ -254,7 +291,8 @@ def load_rows():
         sys.exit(f'Manifest not found: {MANIFEST}\nRun everylibrary_images.py first.')
     with MANIFEST.open() as f:
         rows = list(csv.DictReader(f))
-    postable = [r for r in rows if r.get('postable') == 'yes']
+    postable = [r for r in rows if r.get('postable') == 'yes'
+                and r.get('nation') not in EXCLUDE_NATIONS]
     if not postable:
         sys.exit('No postable rows in the manifest.')
     return rows, postable
@@ -328,7 +366,14 @@ def main():
             client = Client()
             client.login(HANDLE, keychain_password(HANDLE, KEYCHAIN_SERVICE))
 
-        client.send_images(text=tb, images=[image], image_alts=[alt])
+        # Without an aspect ratio Bluesky has to guess, and reflows or crops the
+        # image once it loads. The everylot bots all omit this; it costs nothing.
+        from PIL import Image
+        with Image.open(io.BytesIO(image)) as im:
+            ratio = models.AppBskyEmbedDefs.AspectRatio(width=im.width, height=im.height)
+
+        client.send_images(text=tb, images=[image], image_alts=[alt],
+                           image_aspect_ratios=[ratio], langs=['en'])
         state.setdefault('posted', []).append(lib_id)
         save_state(state)
         print(f'Posted ({len(state["posted"])}/{len(postable)}).')
