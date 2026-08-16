@@ -5,3 +5,8 @@ data/*.mysql.gz
 # Resumable run state; regenerable and noisy in diffs.
 data/image_state.json
 data/image_state.json.tmp
+
+# Posted-library IDs, written on every run. Matches how every other bot's
+# state file in this repo is handled. No .tmp line: everylibrary_post.py
+# writes this one directly, unlike image_state.json.
+data/post_state.json
