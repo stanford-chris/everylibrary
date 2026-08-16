@@ -44,7 +44,7 @@ DATA        = Path(__file__).parent / 'data'
 MANIFEST    = DATA / 'uk_libraries_images.csv'
 STATE_FILE  = DATA / 'post_state.json'
 
-HANDLE           = 'everylibrary.bsky.social'
+HANDLE           = 'everyuklibrary.bsky.social'
 KEYCHAIN_SERVICE = 'everylibrary-bluesky'
 
 MAX_CHARS       = 290      # 10-char buffer under Bluesky's 300 limit
