@@ -80,7 +80,9 @@ That second shape is the trap. The name is present, so the image looks credited 
 
 Geograph images resolve to the “stamped” variant, which has the credit burned into the image, so attribution survives a screenshot.
 
-Credit in the bot bio: DCMS, OpenStreetMap contributors, Libraries Hacked, and Wikimedia Commons / Geograph photographers.
+**Attribution lives in two places, by design.** Each post names its own photographer and licence, with the name linking to the file's source page: that is the CC obligation, it is per-image, and it is the only credit that survives a reshare. Platform-level credit for DCMS (OGL), Libraries Hacked and OpenStreetMap (ODbL) lives in the **pinned post**, because bios carry no link facets and both licences ask for a link where possible. The bio points at the pinned post rather than repeating it.
+
+Re-run `everylibrary_post.py --pin` to update that note. It replaces its own previous version and refuses to delete a pinned post it does not recognise.
 
 ## Why not Street View
 

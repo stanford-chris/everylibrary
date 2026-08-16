@@ -57,6 +57,17 @@ SHUFFLE_SEED    = 20260816 # fixed, so the running order is reproducible
 # pause those 384 libraries pending an answer, without rebuilding anything.
 EXCLUDE_NATIONS = set()
 
+# First line of the pinned attribution note, and the pattern used to recognise
+# our own post before replacing it, so --pin never deletes something else that
+# happens to be pinned.
+#
+# The pattern ignores trailing punctuation deliberately. Matching the heading
+# exactly means that editing it orphans the previous note: changing the full
+# stop to a colon once left two credits posts in the feed, because the old one
+# no longer matched.
+CREDITS_HEADING = 'Sources and credits:'
+CREDITS_PATTERN = re.compile(r'^\s*Sources and credits\b', re.I)
+
 USER_AGENT = 'everylibrary-bot/0.1 (https://chris-stanford.com; stanfordc+claude@mac.com)'
 
 
@@ -271,6 +282,84 @@ def build_post(row):
     return tb
 
 
+def build_credits():
+    """The attribution that will not fit in a bio.
+
+    OGL (the DCMS roster) and ODbL (OpenStreetMap) both require attribution, and
+    bios carry no link facets, so the working links have to live in a post.
+    """
+    tb = client_utils.TextBuilder()
+    tb.text(CREDITS_HEADING + '\n\n')
+    tb.text('Photographs: ')
+    tb.link('Wikimedia Commons', 'https://commons.wikimedia.org')
+    tb.text(' and ')
+    tb.link('Geograph', 'https://www.geograph.org.uk')
+    tb.text(' contributors, credited by name on every post.\n\n')
+    tb.text('Libraries: ')
+    tb.link('DCMS', 'https://www.data.gov.uk/dataset/'
+                    'public-libraries-in-england-basic-dataset')
+    tb.text(' (OGL) and ')
+    tb.link('Libraries Hacked', 'https://www.librarieshacked.org')
+    tb.text('.\nBuildings: ')
+    tb.link('OpenStreetMap', 'https://www.openstreetmap.org/copyright')
+    tb.text(' contributors (ODbL).')
+    return tb
+
+
+def pin_credits(dry_run=False):
+    """Post the credits and pin them to the profile.
+
+    Pinning means rewriting the whole profile record, so this is a strict
+    read-modify-write: everything else on the record is carried across
+    untouched, and swap_record makes the server reject the write if the profile
+    changed underneath us.
+    """
+    tb = build_credits()
+    text = tb.build_text()
+    print('-' * 60)
+    print(text)
+    print(f'[{len(text)} chars]')
+    if dry_run:
+        print('\nDry run: not posted, profile untouched.')
+        return
+
+    client = Client()
+    client.login(HANDLE, keychain_password(HANDLE, KEYCHAIN_SERVICE))
+
+    # Posts cannot be edited, so re-running this replaces the old note rather
+    # than leaving an orphan behind. Only ever deletes a post that is both
+    # pinned and recognisably ours.
+    existing = client.app.bsky.actor.profile.get(client.me.did, 'self')
+    old = existing.value.pinned_post
+    if old:
+        try:
+            rec = client.get_post(old.uri.rsplit('/', 1)[-1], profile_identify=client.me.did)
+            if CREDITS_PATTERN.match(rec.value.text):
+                client.delete_post(old.uri)
+                print(f'Replaced previous credits post: {old.uri.rsplit("/", 1)[-1]}')
+            else:
+                print('Existing pinned post is not the credits note; leaving it in place.')
+        except Exception as exc:
+            print(f'Could not inspect the pinned post ({exc}); leaving it alone.')
+
+    posted = client.send_post(text=tb, langs=['en'])
+    print(f'Posted: {posted.uri}')
+
+    existing = client.app.bsky.actor.profile.get(client.me.did, 'self')
+    profile = existing.value
+    profile.pinned_post = models.ComAtprotoRepoStrongRef.Main(
+        uri=posted.uri, cid=posted.cid)
+
+    client.com.atproto.repo.put_record(models.ComAtprotoRepoPutRecord.Data(
+        repo=client.me.did,
+        collection='app.bsky.actor.profile',
+        rkey='self',
+        record=profile,
+        swap_record=existing.cid,
+    ))
+    print('Pinned to profile.')
+
+
 def build_alt(row):
     place = short_place(row['authority'])
     address = clean_address(row.get('address'), row.get('postcode'))
@@ -327,7 +416,13 @@ def main():
                     help='print the post without posting')
     ap.add_argument('--count', type=int, default=1,
                     help='how many to post in this run (default 1)')
+    ap.add_argument('--pin', action='store_true',
+                    help='post the sources-and-credits note and pin it')
     args = ap.parse_args()
+
+    if args.pin:
+        pin_credits(dry_run=args.dry_run)
+        return
 
     rows, postable = load_rows()
     state = load_state()
