@@ -38,7 +38,7 @@ import time
 from pathlib import Path
 
 import requests
-from atproto import Client, client_utils, models
+from atproto import Client, client_utils, exceptions, models
 
 DATA        = Path(__file__).parent / 'data'
 MANIFEST    = DATA / 'uk_libraries_images.csv'
@@ -86,6 +86,34 @@ def keychain_password(account, service):
             f'  security add-generic-password -a "{account}" -s "{service}" -w'
         )
     return result.stdout.strip()
+
+
+def login_client(retries=4):
+    """Log in, retrying transient network failures at fire time.
+
+    The 17 August 01:00 run died here rather than posting: atproto's login()
+    creates a session and then calls getProfile to populate client.me, and the
+    getProfile leg timed out. It is the same sub-ten-second network blip that
+    has cost the other launchd bots posts, so it gets the same linear backoff
+    as fetch_image.
+
+    Only the login retries. A failed send_images is left to fail, because a
+    timeout there cannot distinguish a post that never landed from one that
+    landed with the response lost, and retrying the second case double-posts.
+    """
+    password = keychain_password(HANDLE, KEYCHAIN_SERVICE)  # outside the loop: a
+    last_error = None                                       # missing key is not transient
+    for attempt in range(retries):
+        try:
+            client = Client()
+            client.login(HANDLE, password)
+            return client
+        except exceptions.NetworkError as exc:
+            last_error = f'{type(exc).__name__}: {exc}'
+            print(f'Login attempt {attempt + 1}/{retries} failed ({last_error})')
+            if attempt + 1 < retries:
+                time.sleep(2 * (attempt + 1))
+    raise RuntimeError(f'Could not log in to Bluesky after {retries} attempts: {last_error}')
 
 
 def library_id(row):
@@ -323,8 +351,7 @@ def pin_credits(dry_run=False):
         print('\nDry run: not posted, profile untouched.')
         return
 
-    client = Client()
-    client.login(HANDLE, keychain_password(HANDLE, KEYCHAIN_SERVICE))
+    client = login_client()
 
     # Posts cannot be edited, so re-running this replaces the old note rather
     # than leaving an orphan behind. Only ever deletes a post that is both
@@ -480,8 +507,7 @@ def main():
 
         image = fetch_image(row)
         if client is None:
-            client = Client()
-            client.login(HANDLE, keychain_password(HANDLE, KEYCHAIN_SERVICE))
+            client = login_client()
 
         # Without an aspect ratio Bluesky has to guess, and reflows or crops the
         # image once it loads. The everylot bots all omit this; it costs nothing.
