@@ -294,15 +294,15 @@ def build_credits():
     tb.link('Wikimedia Commons', 'https://commons.wikimedia.org')
     tb.text(' and ')
     tb.link('Geograph', 'https://www.geograph.org.uk')
-    tb.text(' contributors, credited by name on every post.\n\n')
+    tb.text(' contributors, credited by name on every post\n\n')
     tb.text('Libraries: ')
     tb.link('DCMS', 'https://www.data.gov.uk/dataset/'
                     'public-libraries-in-england-basic-dataset')
     tb.text(' (OGL) and ')
     tb.link('Libraries Hacked', 'https://www.librarieshacked.org')
-    tb.text('.\nBuildings: ')
+    tb.text('\nBuildings: ')
     tb.link('OpenStreetMap', 'https://www.openstreetmap.org/copyright')
-    tb.text(' contributors (ODbL).')
+    tb.text(' contributors (ODbL)')
     return tb
 
 
