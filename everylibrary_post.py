@@ -265,7 +265,7 @@ def build_post(row):
     """Name, place, then the credit. CC BY-SA wants the creator named, the
     licence named and the licence linked, so the licence itself is the link."""
     tb = client_utils.TextBuilder()
-    tb.text(display_name(row['name']) + '\n')
+    tb.text(display_name(row['name']) + ' 📚\n')
 
     address = clean_address(row.get('address'), row.get('postcode'))
     if address:
