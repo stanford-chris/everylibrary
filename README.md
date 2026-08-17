@@ -23,7 +23,11 @@ Built from two sources, joined spatially at a 250 m radius:
 
 Cross-check: the two datasets were built independently and agree closely. Scotland 478 vs 470 in OSM, Wales 261 vs 251, Northern Ireland 98 vs 107, and England's statutory count of 2,579 against 2,612 derived separately from the ACE workbook.
 
-⚠️ **Unresolved:** the Libraries Hacked aggregate has no stated data licence. Checked the API headers, the map site, the blog, the portal and the Libraries Hacked homepage. The England-derived portion traces back to OGL, but the Scottish and Welsh records (739 libraries) have no traceable upstream licence. Ask Dave Rowe before publishing anything covering those.
+⚠️ **Unresolved:** the Libraries Hacked aggregate has no stated data licence. Checked the API headers, the map site, the blog, the portal and the Libraries Hacked homepage. The England-derived portion traces back to OGL, but the Scottish, Welsh and Northern Irish records (837 libraries) have no traceable upstream licence. Ask Dave Rowe before publishing anything covering those.
+
+This previously said “the Scottish and Welsh records (739 libraries)”, which quietly dropped Northern Ireland's 98. They arrive through the same aggregate with the same unstated licence, and nothing here ever recorded a finding that they were separately covered. The enquiry as sent does ask about all four nations; it was only this scope line, and the fallback below, that were narrower than the question.
+
+⚠️ **The roster is a snapshot**, taken 16 August 2026, and nothing re-fetches it. See “The roster is frozen” below.
 
 ## The image pipeline
 
@@ -84,6 +88,61 @@ Geograph images resolve to the “stamped” variant, which has the credit burne
 
 Re-run `everylibrary_post.py --pin` to update that note. It replaces its own previous version and refuses to delete a pinned post it does not recognise.
 
+## Alt text
+
+`everylibrary_describe.py` writes a description for every photograph, ahead of time, into `data/alt_text.json`. All 2,188 postable libraries have one. Posting makes no model calls: it reads the stored text.
+
+The bot's original alt text repeated the post — name, address, photographer, licence — all of which sits visibly above the image already, so a screen-reader user heard the caption twice and learned nothing about the building.
+
+Two sources, kept separate so provenance stays honest:
+
+| | Source | Count |
+|---|---|---|
+| **visual** | Generated from the image by `claude -p` (`claude-haiku-4-5`) | 2,188 |
+| **context** | The human-written note on the Commons file page, kept only where it says more than the file title | 685 |
+
+The model is never shown the context, so it cannot launder a human's claim into something it appears to have observed.
+
+**Each source labels itself, at the head of its own section:**
+
+> **A.I.-written description:** Single-storey brick building with hipped slate roof, white trim, and a central cupola… **Note from Wikimedia Commons:** Opposite a church, and next to a cluster of specialist NHS clinics, this small library is in a village south of Maidstone.
+
+Labelling in place rather than in the bio is the same reasoning that puts the photographer in every post: it is the only signal that survives a reshare, and someone meeting a single reposted photograph otherwise has no way to know no human ever looked at it. A single closing note was tried first and abandoned — it said both sources were present but never where one stopped and the other started, so a model's observation and a human's research arrived as one paragraph. No model can tell from a photograph that the neighbours are NHS clinics.
+
+The roster-assembled fallback carries no label, having never been near a model.
+
+Two filters stand between the model and a screen reader, both because the naive version shipped first:
+
+- **`not_a_description()`** rejects the model talking rather than describing — refusals, and the subtler case where the photograph is not what the prompt promised and the model corrects the brief instead of describing what it can see. That failure is fluent, confident prose, and one instance would have published a path on this Mac to Bluesky.
+- **Two independent reads, kept only if they agree.** Auditing 20 descriptions against their photographs found no invention but five that misled, all over-specifying: eight windows where there are six, a timber fence called metal railings, knitted remembrance poppies on a memorial cross described as burgundy ivy. A disagreement drops the description rather than guessing. It doubles the generation cost, and only ever runs on entries that have no description yet, so nothing already written is at risk.
+
+A dropped description falls back to bare identification. That is honest about knowing nothing, which a fabrication is not — and a wrong name is the one error a listener cannot detect.
+
+## The roster is frozen
+
+`data/uk_libraries_images.csv` is a snapshot and nothing re-fetches it. Over a two-year rotation the bot will eventually post a library that has closed, and will never post one that opened afterwards.
+
+`everylibrary_roster_check.py` detects that drift. It is read-only: it never writes to the manifest, the post state or the alt text.
+
+```bash
+python3 everylibrary_roster_check.py           # report and notify
+python3 everylibrary_roster_check.py --json     # machine-readable
+```
+
+Runs monthly on the 1st at 10:00 under `com.chrisstanford.everylibraryroster`, writing `~/Library/Logs/everylibrary-roster.md`. A clean run writes nothing and deletes any previous report, so the file existing means there is something to read.
+
+**Detecting rather than refreshing is deliberate.** `library_id` is `sha1(name|postcode|lat)`, so an upstream coordinate correction mints a new id, the library reads as never-posted and goes out twice. Solvable, but it is work spent before anyone knows the size of the problem, and the drift rate is unmeasured. A year of reports will say whether the refresh is worth building and which fields actually move.
+
+Three refusals, all tested, because every failure here is silent:
+
+- The API accepts `?offset=` and **ignores it**, returning page 1 forever. Paginate with `?page=`. A sweep that trusted `offset` would produce a confident, complete-looking 1,000-row roster and report 1,188 mass closures.
+- A short fetch is refused rather than reported as drift.
+- A broken check exits 2, never 0. A check that could not run is not a pass.
+
+**Disappearance from the endpoint is the closure signal.** The API carries a `Year closed` field, but it is empty on all 3,753 live records, so it cannot be relied on to mean anything. It is still reported, as a tripwire for it starting to be populated.
+
+First run, 17 August 2026: three additions (Stratford-upon-Avon, Dafen, Pontyates), no closures. Additions will never post — the rotation reads the frozen CSV, so adding them needs an image-pipeline run.
+
 ## Why not Street View
 
 The Google Maps Platform Terms of Service, §3.2.3(a) “No Scraping”, prohibit exporting or scraping Maps Content for use outside the Services, and the enumerated examples explicitly include pre-fetching, storing, resharing or rehosting that content, and bulk downloading Street View images. A bot that downloads Street View images, stores them and reposts them to Bluesky does all of those things.
@@ -92,15 +151,31 @@ Related: §3.2.3(b) permits caching only where the service-specific terms allow,
 
 The long-running everylot bots demonstrate non-enforcement, not permission.
 
+## Posting
+
+```bash
+python3 everylibrary_post.py             # post one
+python3 everylibrary_post.py --dry-run   # print it, post nothing, write no state
+python3 everylibrary_post.py --count 3   # catch up
+python3 everylibrary_post.py --pin       # rewrite the pinned credits note
+```
+
+**Three a day**, at 17:00, 21:00 and 01:00 Asia/Seoul under `com.chrisstanford.everyuklibrary`. The times are picked by London clock, because the audience is British: 09:00, 13:00 and 17:00 UK during BST, an hour earlier once GMT returns.
+
+The rotation is the 2,188 postable libraries, not the full 3,750, so three a day runs **about two years**; two a day ran three. Order is a fixed shuffle seeded on `SHUFFLE_SEED`, so the feed does not march through one county at a time but the sequence survives a corpus rebuild. Posted ids live in `data/post_state.json`.
+
+Each post carries the name, address, place, the photographer linked to the file's source page, and the licence in plain text. Where the roster has one, it reads **`library since 1820`** rather than `opened 1820`: the field records when the library began at that address, not when the building went up, and 32 of the 191 entries dated 2000 or later are described in plainly period terms. Idea Store Bow says 2002 beside a red-brick Victorian building. “Library since” is true under either reading, which matters because the field carries no definition anywhere findable.
+
+`login_client()` retries the Bluesky login four times with linear backoff. The first scheduled run, on 17 August, built its post, fetched the image and then died without posting when the `getProfile` leg inside `login()` timed out — the same brief network blip that has cost the other bots here posts. **Only the login retries.** A timeout on `send_images` cannot distinguish a post that never landed from one that landed with the response lost, and retrying the second case posts the library twice.
+
 ## Implementation notes
 
 - Uses `requests`, not `urllib`: `urllib` fails certificate verification on this Python install.
 - Geograph filenames embed an unguessable hash, so stage 3 reads each URL from the photo page's `og:image` tag.
 - Postcode geocoding, where needed, went through [postcodes.io](https://postcodes.io) (98.9% resolution).
-
-## Cadence
-
-3,750 libraries. Two a day runs a little over five years, three a day about three years and five months.
+- `everylibrary_post.py` uses argparse rather than the `'--dry-run' in sys.argv` test the older bots here use, so a mistyped flag is rejected instead of silently posting live.
+- ⚠️ **`save_alt()` writes the whole dict from memory**, so two concurrent `everylibrary_describe.py` runs end with whichever saves last winning, silently and with no error. This nearly bit on 17 August when two sessions overlapped. Check nothing else is running before starting one.
+- `data/_tmp/` exists because Claude Code's Read tool refuses paths outside its working directory. A tempfile in `/var/folders` returns exit 0 and a courteous “I don't have a tool available to read image files”, which is exactly the shape of a sentence that could be stored as a description by mistake.
 
 ## Prior art on Bluesky
 
@@ -113,8 +188,10 @@ Checked August 2026: **no UK library bot exists, and the niche is clear.**
 
 ## Open threads
 
-- **Confirm the Libraries Hacked data licence**, which covers the roster's 384 postable Scottish and Welsh libraries (18% of the corpus). The photographs are unaffected: they are separately licensed from Commons and Geograph. Only names, addresses and coordinates are in question, and 86% of the Scottish and 83% of the Welsh entries also exist in OpenStreetMap under ODbL, so Libraries Hacked is not the only possible source for most of them.
+- **Confirm the Libraries Hacked data licence**, which covers the roster's 441 postable Scottish, Welsh and Northern Irish libraries (20% of the corpus). The photographs are unaffected: they are separately licensed from Commons and Geograph. Only names, addresses and coordinates are in question, and 86% of the Scottish and 83% of the Welsh entries also exist in OpenStreetMap under ODbL, so Libraries Hacked is not the only possible source for most of them.
 
-  If the answer comes back no, set `EXCLUDE_NATIONS = {'Scotland', 'Wales'}` in `everylibrary_post.py`. That drops the rotation from 2,188 to 1,804 and needs no rebuild.
+  If the answer comes back no, the fallback is `EXCLUDE_NATIONS = {'Scotland', 'Wales', 'Northern Ireland'}` in `everylibrary_post.py`, dropping the rotation from 2,188 to 1,747 with no rebuild. **The decision as of 17 August 2026 is to keep all four nations**, so this is a contingency and not a plan.
+
+  Note the fallback previously read `{'Scotland', 'Wales'}`, which would have left 57 Northern Irish libraries posting under precisely the licence being reacted to.
 - Decide whether to include the 71 independent community libraries, which sit outside the statutory service.
 - Closure history is England-heavy: 470 English closures on record against 6 Scottish and 2 Welsh, yet SLIC has separately verified 53 Scottish closures between 2014 and 2024. Don't imply national coverage on the closure angle.
