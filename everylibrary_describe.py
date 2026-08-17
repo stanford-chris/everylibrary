@@ -117,6 +117,15 @@ def not_a_description(text):
 # which is what invited the correction: told the subject and shown something
 # else, the model argued with the prompt. It is now told the subject varies, and
 # told explicitly that saying what the image is *not* helps nobody listening.
+#
+# The two rules about precision come from auditing 20 descriptions against their
+# photographs on 17 August 2026. None was invented, but five misled, and all
+# five in the same direction: the model over-specifies. It counted eight windows
+# where there are six, called buff brick red, called a timber fence metal rails,
+# put a library's sign on the building next door, and described a cascade of
+# knitted remembrance poppies down a memorial cross as burgundy ivy. Every one
+# is a confident specific the frame does not support, and a listener has no way
+# to hear that it is wrong.
 PROMPT = (
     'Read the image at {path} and describe it as alt text for a blind reader. '
     'It is usually the exterior of a UK public library, but it may be an '
@@ -130,6 +139,16 @@ PROMPT = (
     'address me, and never mention the image, the file or these rules. Someone '
     'who cannot see it is listening to this description, and none of that '
     'tells them anything about what is there.\n'
+    '- Prefer a safe observation to a precise one. Do not give a number unless '
+    'you have counted it: "a row of tall windows" beats "eight sash windows" '
+    'when you have not counted eight. Name a material only where you can see it '
+    'plainly, and if you cannot tell brick from stone, or red brick from brown, '
+    'say less rather than choosing. Attribute signage only to the building it is '
+    'plainly fixed to.\n'
+    '- If you cannot tell what something is, describe how it looks instead of '
+    'naming it: "a cascade of red fabric flowers" rather than "ivy". A wrong '
+    'name is worse than a plain description, because the listener cannot see '
+    'that it is wrong.\n'
     '- Do not name the library, the town or the photographer.\n'
     '- Do not guess the age, architect or history. If a date is carved on the '
     'building and legible, you may state it.\n'
@@ -184,8 +203,21 @@ def load_rows():
 def strip_markup(s):
     """Commons descriptions are wikitext rendered to HTML, so they arrive with
     both tags and entities. Stripping tags alone leaves "Warrington Library
-    &amp; Museum" for a screen reader to read out as "ampersand a-m-p"."""
-    text = html.unescape(re.sub(r'<[^>]+>', ' ', s or ''))
+    &amp; Museum" for a screen reader to read out as "ampersand a-m-p".
+
+    Stripping once and unescaping once is not enough, which is what shipped and
+    what left entities in 37 of the stored notes. Some Commons descriptions are
+    escaped twice, so one unescape turns "&amp;amp;" into "&amp;" rather than
+    "&"; and where the source escapes its own markup, unescaping after the
+    stripper has run re-creates "<br>" as literal text it will never see. So
+    strip and unescape alternately until the string stops changing.
+    """
+    text = s or ''
+    for _ in range(4):
+        nxt = html.unescape(re.sub(r'<[^>]+>', ' ', text))
+        if nxt == text:
+            break
+        text = nxt
     return re.sub(r'\s+', ' ', text).strip()
 
 
