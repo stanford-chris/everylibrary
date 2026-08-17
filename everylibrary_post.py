@@ -407,13 +407,17 @@ ALT_MAX = 1900
 # and someone meeting a single reposted photograph otherwise has no signal that
 # no human ever looked at it.
 #
-# Two forms, because 685 of the descriptions are not purely machine-written:
-# they carry a note from the Commons file page as well. Crediting that human's
-# sentence to a model would invert the provenance the two sources are kept
-# separate to protect. The fallback description below gets no disclosure at
-# all — it is assembled from the roster, and no model ever saw the photograph.
-AI_ONLY = 'A.I.-written description.'
-AI_PLUS_COMMONS = 'A.I.-written description; note from Wikimedia Commons.'
+# Each source labels itself, at the head of its own section. A single note at
+# the end reading "A.I.-written description; note from Wikimedia Commons" says
+# both sources are present but never where one stops and the other starts, so a
+# listener hears a machine's guess and a human's research as one undivided
+# paragraph. That is the exact confusion these two sources are kept separate to
+# prevent. Labelling in place is the only version that actually attributes.
+#
+# The fallback description below gets no label at all — it is assembled from
+# the roster, and no model ever saw the photograph.
+AI_PREFIX = 'A.I.-written description:'
+COMMONS_PREFIX = 'Note from Wikimedia Commons:'
 
 
 def alt_text_store():
@@ -438,13 +442,12 @@ def build_alt(row):
     visual, context = entry.get('visual'), entry.get('context')
 
     if visual:
-        body = ' '.join(p for p in (visual, context) if p)
-        suffix = AI_PLUS_COMMONS if context else AI_ONLY
-        # Trim the description, never the disclosure: an alt text that runs out
-        # of room mid-sentence is a smaller problem than one whose provenance
-        # note is the part that got cut.
-        room = ALT_MAX - len(suffix) - 1
-        return f'{body[:room].rstrip()} {suffix}'
+        # Labels lead their sections, so each survives truncation with the text
+        # it introduces rather than being stranded at the end of it.
+        parts = [f'{AI_PREFIX} {visual}']
+        if context:
+            parts.append(f'{COMMONS_PREFIX} {context}')
+        return ' '.join(parts)[:ALT_MAX]
 
     place = short_place(row['authority'])
     address = clean_address(row.get('address'), row.get('postcode'))
