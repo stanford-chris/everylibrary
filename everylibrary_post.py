@@ -273,7 +273,16 @@ def build_post(row):
 
     place = short_place(row['authority'])
     year = (row.get('year_opened') or '').strip()
-    tb.text(f'{place} · opened {year}\n\n' if year.isdigit() else f'{place}\n\n')
+    # "library since", not "opened", because the roster's Year opened records
+    # when the library began there and not when the building went up. Checked
+    # against the photographs: 32 of the 191 entries dated 2000 or later are
+    # described in plainly period terms — Idea Store Bow says 2002 beside a
+    # three-storey red-brick Victorian building with sash windows, Littleport
+    # says 2010 beside an ornate Victorian corner building. "Opened 2002" over
+    # a photograph of a Victorian building is simply wrong to anyone looking at
+    # it. "Library since" is true either way, which matters because the field
+    # carries no definition and both readings stay possible.
+    tb.text(f'{place} · library since {year}\n\n' if year.isdigit() else f'{place}\n\n')
 
     # One link only: the photographer's name, pointing at the file's own page.
     # CC BY-SA 4.0 s3(a)(2) allows the attribution conditions to be satisfied
