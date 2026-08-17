@@ -390,6 +390,22 @@ def pin_credits(dry_run=False):
 ALT_PATH = DATA / 'alt_text.json'
 _alt_cache = None
 
+ALT_MAX = 1900
+
+# Provenance, disclosed in the alt text itself rather than only in the bio and
+# the pinned post. The README's reason for naming the photographer on every
+# post applies here unchanged: it is the only credit that survives a reshare,
+# and someone meeting a single reposted photograph otherwise has no signal that
+# no human ever looked at it.
+#
+# Two forms, because 685 of the descriptions are not purely machine-written:
+# they carry a note from the Commons file page as well. Crediting that human's
+# sentence to a model would invert the provenance the two sources are kept
+# separate to protect. The fallback description below gets no disclosure at
+# all — it is assembled from the roster, and no model ever saw the photograph.
+AI_ONLY = 'A.I.-written description.'
+AI_PLUS_COMMONS = 'A.I.-written description; note from Wikimedia Commons.'
+
 
 def alt_text_store():
     global _alt_cache
@@ -413,7 +429,13 @@ def build_alt(row):
     visual, context = entry.get('visual'), entry.get('context')
 
     if visual:
-        return ' '.join(p for p in (visual, context) if p)[:1900]
+        body = ' '.join(p for p in (visual, context) if p)
+        suffix = AI_PLUS_COMMONS if context else AI_ONLY
+        # Trim the description, never the disclosure: an alt text that runs out
+        # of room mid-sentence is a smaller problem than one whose provenance
+        # note is the part that got cut.
+        room = ALT_MAX - len(suffix) - 1
+        return f'{body[:room].rstrip()} {suffix}'
 
     place = short_place(row['authority'])
     address = clean_address(row.get('address'), row.get('postcode'))
