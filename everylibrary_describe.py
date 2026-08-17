@@ -286,17 +286,8 @@ def fetch_image(row, session):
     return None
 
 
-def describe(row, session, env):
-    """One image, one description. Returns None on any failure: a missing
-    description is fine, a wrong one is not."""
-    data = fetch_image(row, session)
-    if not data:
-        return None
-
-    TMP_DIR.mkdir(exist_ok=True)
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False, dir=TMP_DIR) as fh:
-        fh.write(data)
-        path = fh.name
+def _one_description(path, env):
+    """A single read of one image file. None on any failure."""
     try:
         p = subprocess.run(
             ['claude', '-p', '--model', MODEL,
@@ -314,6 +305,104 @@ def describe(row, session, env):
             return None
         return out
     except (subprocess.TimeoutExpired, OSError):
+        return None
+
+
+# A description can be fluent, guard-clean and simply invented. On 17 August
+# 2026 one run returned "A stone-built library, three to four storeys, with
+# regularly spaced windows" for a photograph of a low modern library with a
+# cascade of remembrance poppies down a memorial cross. The fetch was a valid
+# JPEG, the same 169,809 bytes on three consecutive pulls, and three other runs
+# on that same file described the poppies correctly. Nothing was wrong with the
+# image: the model did not look at it. One fabrication in eleven calls.
+#
+# Nothing in the text of a fabrication marks it out — that is what makes it
+# worse than the refusals and the commentary, both of which announce themselves.
+# What does mark it out is a second opinion. A description of a photograph that
+# was actually looked at agrees with another one on the plain facts; an invented
+# one agrees with nothing, because there was nothing generating it.
+#
+# So two independent reads per image, kept only if they agree. The comparison is
+# deliberately coarse. Two honest descriptions of the same building differ all
+# the time on wording, on which details they choose, on whether the brick is
+# 'red' or 'warm red', and a strict test would throw away good work. It asks
+# only whether they saw the same kind of thing.
+NUMBER_WORDS = {'single': 1, 'one': 1, 'two': 2, 'three': 3, 'four': 4,
+                'five': 5, 'six': 6, 'seven': 7, 'eight': 8}
+OUTDOOR = re.compile(r'\b(sky|skies|forecourt|pavement|street|roofline|roof|'
+                     r'fa[çc]ade|car park|hedge|kerb|road|chimney|chimneys|'
+                     r'gable|gables|courtyard|garden|railings|pathway)\b', re.I)
+INDOOR = re.compile(r'\b(shelving|bookshel\w+|carpet\w*|ceiling|reading room|'
+                    r'interior|indoor|furniture|armchair\w*|study space|'
+                    r'issue desk|counter)\b', re.I)
+
+
+def _storeys(text):
+    """The storey counts a description commits to, as a set.
+
+    'three to four storeys' yields {4}: one number is enough to disagree with
+    'single-storey', and the range itself is not the interesting part.
+    """
+    words = re.findall(r'([a-z]+)[\s-]stor(?:ey|ie)s?\b', text, re.I)
+    return {NUMBER_WORDS[w.lower()] for w in words if w.lower() in NUMBER_WORDS}
+
+
+def _setting(text):
+    """'outdoor', 'indoor', or None where the description does not say."""
+    out, ins = len(OUTDOOR.findall(text)), len(INDOOR.findall(text))
+    if out == ins:
+        return None
+    return 'outdoor' if out > ins else 'indoor'
+
+
+def disagreement(first, second):
+    """Why two descriptions cannot be of the same photograph, or None.
+
+    Only two tests, both chosen because they are things a description states
+    outright rather than implies. Material was tried as a third and dropped: a
+    brick building with stone dressings is honestly 'brick' to one read and
+    'stone' to another, and Overton's knapped flint came back as brick, cream
+    brick and stone across three runs of a photograph nobody was inventing.
+    That rule rejected real work; these two did not.
+    """
+    a, b = _storeys(first), _storeys(second)
+    if a and b and not (a & b):
+        return f'storeys {sorted(a)} vs {sorted(b)}'
+    sa, sb = _setting(first), _setting(second)
+    if sa and sb and sa != sb:
+        return f'{sa} vs {sb}'
+    return None
+
+
+def describe(row, session, env):
+    """One image, two independent reads, kept only if they agree.
+
+    Returns the shorter of the two: both passed the same guard, and the shorter
+    is the one making fewer claims. Returns None on any failure or on
+    disagreement — a missing description is fine, a wrong one is not.
+    """
+    data = fetch_image(row, session)
+    if not data:
+        return None
+
+    TMP_DIR.mkdir(exist_ok=True)
+    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False, dir=TMP_DIR) as fh:
+        fh.write(data)
+        path = fh.name
+    try:
+        first = _one_description(path, env)
+        if not first:
+            return None
+        second = _one_description(path, env)
+        if not second:
+            return None
+        conflict = disagreement(first, second)
+        if conflict:
+            log(f'         two reads disagreed ({conflict}), dropped: '
+                f'{row.get("name", "?")}')
+            return None
+        return min(first, second, key=len)
+    except OSError:
         return None
     finally:
         os.unlink(path)
