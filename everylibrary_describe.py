@@ -71,18 +71,65 @@ CALL_TIMEOUT = 240
 # shape of a sentence that could be stored as a description by mistake.
 TMP_DIR = DATA / '_tmp'
 
-# Anything matching this is the model talking about itself rather than the
-# photograph, and must never reach a screen reader.
-REFUSAL = re.compile(
-    r"\b(i (don'?t|do not|cannot|can'?t|am unable)|no tool|not able to (read|view|see)|"
-    r"unable to (read|view|see|access)|as an ai|i'?m sorry)\b", re.I)
+# Two ways the model returns a sentence that is not a description, both seen in
+# the wild, both worse for a screen-reader user than no alt text at all:
+#
+#   refusal     "I don't have a tool available to read image files."
+#   commentary  "This image doesn't show a library building. Could you verify
+#                the file path? The image at /Users/.../tmpqv20hp53.jpg appears
+#                to be a historical marker rather than a library building."
+#
+# The first was guarded from the start. The second is what happens when the
+# photograph is not what the prompt promised — an interior, a plaque, a parade
+# of shops — and the model corrects the brief instead of describing what it can
+# actually see. It is fluent, confident prose, so only a filter catches it, and
+# the second example would have published a path on this Mac to Bluesky.
+#
+# These are not a list of the sentences seen. They are four things a description
+# of a photograph never does: ask a question, speak in the first or second
+# person, mention the image as an object rather than its contents, or carry
+# markdown. 'Grade I listed' is the one legitimate standalone I in the corpus.
+NOT_A_DESCRIPTION = (
+    re.compile(r'\?'),
+    re.compile(r"\b(i|i'?m|i'?ve|my|we|us|you|your)\b", re.I),
+    re.compile(r'\b(image|photograph|photo)\b'
+               r'|\bpicture\b(?!\s+(books?|windows?|frames?|rails?))', re.I),
+    re.compile(r'\*\*|/Users/|\.jpg\b'),
+    re.compile(r'\b(no tool|not able to (read|view|see)|as an ai)\b', re.I),
+)
 
+
+def not_a_description(text):
+    """True when the text is the model talking rather than describing.
+
+    Two exemptions, both found by running the rules over the descriptions
+    already held. A library is full of picture books and picture windows, and
+    signage gets quoted: "Libraries gave us power" on a wall is a description of
+    what is written there, not the model addressing anybody. Quoted spans are
+    therefore exempt from the pronoun rule, and 'Grade I listed' from all of it.
+    """
+    probe = re.sub(r'\bGrade I{1,3}\b', '', text)
+    probe = re.sub(r'["“][^"“”]{0,120}["”]', '', probe)
+    return any(rx.search(probe) for rx in NOT_A_DESCRIPTION)
+
+
+# The brief used to assert 'It is a photograph of a UK public library building',
+# which is what invited the correction: told the subject and shown something
+# else, the model argued with the prompt. It is now told the subject varies, and
+# told explicitly that saying what the image is *not* helps nobody listening.
 PROMPT = (
     'Read the image at {path} and describe it as alt text for a blind reader. '
-    'It is a photograph of a UK public library building.\n\n'
+    'It is usually the exterior of a UK public library, but it may be an '
+    'interior, a plaque, a memorial, a shopfront or something else entirely.\n\n'
     'Rules:\n'
     '- Describe only what is visible: building material, number of storeys, '
-    'windows, doors, signage, surroundings, weather.\n'
+    'windows, doors, signage, surroundings, weather. Indoors, describe the '
+    'room: shelving, furniture, lighting, what the space is for.\n'
+    '- Describe whatever is in the frame, whatever it turns out to be. Never '
+    'say what it is not, never remark on whether it matches this brief, never '
+    'address me, and never mention the image, the file or these rules. Someone '
+    'who cannot see it is listening to this description, and none of that '
+    'tells them anything about what is there.\n'
     '- Do not name the library, the town or the photographer.\n'
     '- Do not guess the age, architect or history. If a date is carved on the '
     'building and legible, you may state it.\n'
@@ -231,7 +278,7 @@ def describe(row, session, env):
         out = re.sub(r'\s+', ' ', out).strip()
         if len(out) < 25 or len(out) > MAX_VISUAL_CHARS * 2:
             return None
-        if REFUSAL.search(out):
+        if not_a_description(out):
             return None
         return out
     except (subprocess.TimeoutExpired, OSError):

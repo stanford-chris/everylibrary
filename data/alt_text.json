@@ -581,7 +581,7 @@
  },
  "a17c39945902": {
   "context": "",
-  "visual": "This image doesn't show a library building. It depicts a stone monument or carved block mounted on a stone plinth, with a blue plaque affixed to the top, set in a grassy area. Could you verify the file path? The image at `/Users/christopherstanford/Scripts/everylibrary/data/_tmp/tmpqv20hp53.jpg` appears to be a historical marker rather than a library building."
+  "visual": "A large rough-hewn light stone rests on a dark flagstone platform, topped with a small blue plaque. Grass surrounds the memorial, with a fence visible behind."
  },
  "0561b9e26670": {
   "context": "The Post Office and Bramley Library Bramley Library was built in 1965. Later the Post Office relocated after 1994 to the northern end of the Library. The Old House, which stood on this spot was demolished in 1962. Louis Gautier lived there until his death in 1943.",
@@ -681,7 +681,7 @@
  },
  "99d92e17c2e7": {
   "context": "Idea Store Canary Wharf, Tower Hamlets Photo credit: Julia Chandler/Libraries Taskforce",
-  "visual": "This image doesn't show a UK public library building exterior—it's an interior storefront for an \"Idea Store\" (a modern community/retail space) in what appears to be a shopping centre. The rules ask me to describe what's visible, not to guess or reinterpret. Could you confirm this is the correct image, or did you mean to send a photograph of an actual library building?"
+  "visual": "Contemporary storefront with glazed glass entrance flanked by lime green and white promotional panels. Bright fluorescent strip lights illuminate the interior, revealing shelving, display screens and retail furnishings within."
  },
  "fe329dc9774c": {
   "context": "",
@@ -885,7 +885,7 @@
  },
  "83fcf326c160": {
   "context": "Inside Corby library. Each of those narrow window slots contains either a study desk or comfy chair.",
-  "visual": "I need to flag that this image shows a library interior, not an exterior building photograph. It depicts a contemporary indoor space with wooden bookshelves, tall cream pillars bearing large letters, burgundy carpeting, and modern ceiling lights—not an outdoor view with building materials, storeys, windows, or weather. Should I describe the interior as shown, or do you have a different image of the building's exterior?"
+  "visual": "A modern library interior with tall white and tan columns lettered with the word \"library\". Burgundy carpet, wooden shelving units stocked with books and media, contemporary linear ceiling lights in white and burgundy, and a sofa to the left."
  },
  "5f6ff38227a3": {
   "context": "Library Sculpture, Ashford. Formerly outside the library before it's demolition.",
@@ -1133,7 +1133,7 @@
  },
  "c5498b6d2e18": {
   "context": "",
-  "visual": "This image shows the interior of a library, not the exterior of a library building. It features a modern table with colourful chairs (orange, blue, and magenta) in front of shelves stacked with books, with a stylised floor painted like a roadway with white and yellow lines. If you need alt text for a photograph of the exterior of a UK public library building, please provide that image instead."
+  "visual": "A library study area with a grey table and orange and blue upholstered chairs. Built-in bookshelves filled with books line the walls, and the floor features a road-marking pattern in grey, lime and white."
  },
  "f1df938bc62e": {
   "context": "",
@@ -1141,7 +1141,7 @@
  },
  "82e5892ee2f3": {
   "context": "Visited by members of the Libraries Taskforce team for the official opening. Photo credit: Kathy Settle/Libraries Taskforce",
-  "visual": "This appears to be an **interior photograph** of a modern library — I can see shelving, a checkout desk, display tables, and contemporary green fixtures. However, your rules ask for exterior details: building material, storeys, windows, doors, surroundings, and weather. Is this the correct image, or did you mean to provide an exterior photograph of the library building's facade?"
+  "visual": "Shelving units with lime-green frames display books along white walls; a central white table showcases colourful titles. Fluorescent lights illuminate the space above grey patterned carpet, with a staffed desk visible in the background."
  },
  "6b6daee3ccc2": {
   "context": "",
@@ -1529,7 +1529,7 @@
  },
  "d89bdd092fc6": {
   "context": "Visited by members of the Taskforce team. Photo credit: Anna Wadsworth/Libraries Taskforce",
-  "visual": "The image is an interior library space, not an exterior photograph of a building. I can see the interior counter area, furnishings, shelving, and fixtures, but this doesn't match the task requirement of describing a UK public library building's exterior (which would require showing building materials, storeys, windows, doors, and surroundings). Did you mean to provide a different image, or would you like me to describe the interior space instead?"
+  "visual": "The entrance of a library, with a lime-green shelving unit on the left, staffed reception desk with display boards behind, a red armchair, windows on the right, dark wooden flooring and bright fluorescent overhead lights."
  },
  "835d0657b874": {
   "context": "Ormesby Library Library on Sunnyfield. Houses on Wellby Grove can be seen reflected in the windows (as can I).",
@@ -1593,7 +1593,7 @@
  },
  "32bde89a78e1": {
   "context": "This library is run by Stockton-on-Tees council. Find out more about it: &lt;a href=\"https://www.stockton.gov.uk/arts-culture-and-leisure/libraries/find-your-local-library/yarm-library/\" rel=\"nofollow\"&gt;www.stockton.gov.uk/arts-culture-and-leisure/libraries/fi...&lt;/a&gt;",
-  "visual": "This is an interior photograph of a library, not an exterior view of a building. The image shows the inside of a modern library with a self-service kiosk area, customer services desk, contemporary yellow-green shelving, and visitors. For alt text describing the exterior of a UK public library building, I'll need a different image. Would you like to provide the correct photograph?"
+  "visual": "Contemporary library interior with a bright lime-green shelving unit for customer services and self-service terminals, displaying books and materials. Rust and lime-coloured upholstered chairs sit in the foreground beneath linear ceiling lights and a wooden staircase."
  },
  "69c6aa2aac9d": {
   "context": "York Library, Museum Street, York, North Yorkshire. Taken on the afternoon of Wednesday the 15th of July 2013.",
@@ -1881,7 +1881,7 @@
  },
  "02e7ffc55847": {
   "context": "Lots of great reading corners in the children's section of Grays library.",
-  "visual": "The image shows an interior children's section, not an exterior building photograph. Could you confirm this is the correct file? The rules request description of exterior features (building material, storeys, windows, doors, weather), but this image shows a bright, modern library space with lime-green flooring, blue seating, and children's displays."
+  "visual": "A bright children's library space with lime-green striped flooring and white picket fence edging. Blue upholstered sofas, small wooden tables, colourful pendant lights, and blue-and-white wall displays featuring weather and celestial illustrations create an inviting reading area."
  },
  "a4f4b75cf0ee": {
   "context": "One of the few quiet spaces in the library - lots of activities everywhere else for Fun Palaces weekend. Westcliff is Grade II listed - I think those unusual windows and the 'central 6 bay ridge and furrow clerestorey' as described in the listing, might have something to do with it.",
@@ -2257,7 +2257,7 @@
  },
  "20319258f0e9": {
   "context": "",
-  "visual": "I've loaded the image, but it shows a library interior (reading room with bookshelves, books, furniture, and windows) rather than the exterior of a UK public library building. The rules you've provided ask me to describe building materials, storeys, doors, signage, and surrounding weather — all exterior features. Could you confirm: should I describe this interior reading room instead, or is a different image needed?"
+  "visual": "Library fiction section with cream walls, burgundy trim and large windows. Black metal and wooden built-in shelves overflow with colourful books, whilst an orange wooden trolley and blue chair occupy the grey-blue floor."
  },
  "f077f257fc44": {
   "context": "",
@@ -2677,7 +2677,7 @@
  },
  "da444c34d638": {
   "context": "Carlisle Library is managed by Cumbria libraries. More information can be found: &lt;a href=\"http://www.cumbria.gov.uk/libraries/locations/cal_lib.asp\" rel=\"nofollow\"&gt;www.cumbria.gov.uk/libraries/locations/cal_lib.asp&lt;/a&gt; Photo credit: Cumbria County Council",
-  "visual": "This appears to be an interior library space, not an exterior building photograph. The image shows a multi-level interior with a green-framed metal staircase, fluorescent ceiling lights, blue and yellow signage panels, and patrons browsing shelves, rather than the exterior of a library building. Could you verify this is the correct image file, or would you like me to proceed with describing the interior as alt text instead?"
+  "visual": "View down a modern library's interior with a teal-green metal staircase, skylights above, bright blue-and-yellow wall panels, and shelving on the lower floor where visitors browse."
  },
  "e742ebe4bc10": {
   "context": "",
@@ -3009,7 +3009,7 @@
  },
  "1e5620595ba8": {
   "context": "",
-  "visual": "This image appears to be an interior shot of a library collection area—specifically shelves of CDs/DVDs and media—not an exterior photograph of a UK public library building. The \"Bangla\" signage suggests this is a section for Bengali-language media. Could you confirm this is the correct file, or do you have a different image of the library building's exterior?"
+  "visual": "Interior media collection area with tiered metal shelving. Upper display cases hold records and albums with colourful spines; lower shelves densely packed with compact discs arranged spine-out. Red and black section signs mark different collections. Fluorescent ceiling lights illuminate the grey carpet."
  },
  "632f107be411": {
   "context": "",
@@ -3305,7 +3305,7 @@
  },
  "a4dd95327d90": {
   "context": "",
-  "visual": "I can verify the image file exists (960×671 JPEG), but I'm unable to visually view its contents through the available tools in this environment. To write accurate alt text describing the library building, I need to see the image. Could you either: - Paste or upload the image directly in the chat, or - Take a screenshot of it and share that instead? Once I can see it, I'll provide the alt text description following your rules."
+  "visual": "Symmetrical building with three peaked gables rendered in cream with brick lower section and dark timber framing, large sash windows, fronted by iron railings with parked cars beneath clear sky."
  },
  "b4795d30a612": {
   "context": "",
@@ -3556,7 +3556,8 @@
   "visual": "Single-storey red-brick building with flat roof and solar panels, small regular windows, dark metal canopy, and signage. Set in open countryside under clear skies."
  },
  "85c094b02341": {
-  "context": ""
+  "context": "",
+  "visual": "Spacious library interior with vibrant purple carpet and recessed ceiling lights. Study tables with wooden tops and black chairs are arranged throughout, with shelving units, computer stations, and an information kiosk visible in the modern space."
  },
  "925bad12548b": {
   "context": "",
@@ -3800,7 +3801,7 @@
  },
  "fa0680bd8e47": {
   "context": "Part of the Barbican centre - alongside the theatre, gallery, concert hall plus bars and restaurants",
-  "visual": "This appears to be an interior photograph of a library entrance, not an exterior building photograph. The rules ask for description of building materials, storeys, windows, surroundings, and weather—elements that require an exterior view. Could you confirm this is the correct image? If you need alt text for this interior entrance space, I can provide that instead, but it won't follow the architectural description guidelines you've outlined."
+  "visual": "A contemporary library entrance with large glazed doors in dark metal frames, grey wall signage, and a coffered ceiling with recessed LED lights. Reddish-brown brick flooring and black display panels line the modern entrance hall."
  },
  "ff69332a4cb4": {
   "context": "",
@@ -4047,7 +4048,8 @@
   "visual": "Single-storey building with red brick and cream render, large dark-framed glass storefront, and pitched metal roof. Ornamental planters front the brick plaza; grey, overcast sky."
  },
  "b4bd59630d30": {
-  "context": "A large space as part of a bigger development, this library was buzzing on a Saturday lunchtime. Almost all tables occupied, and all the comfy chairs. There is an interesting museum display in one corner, with photographs and artefacts from Erith's past."
+  "context": "A large space as part of a bigger development, this library was buzzing on a Saturday lunchtime. Almost all tables occupied, and all the comfy chairs. There is an interesting museum display in one corner, with photographs and artefacts from Erith's past.",
+  "visual": "Dark brick ground-floor entrance with glass doors and windows, interior lighting visible, white render above. Two taller windows on upper storeys, modern metal railings, paved forecourt, grey sky."
  },
  "0b9bf70ffcbf": {
   "context": "",
@@ -4203,7 +4205,7 @@
  },
  "835c5b0047f7": {
   "context": "Brentford Library (public library in Brentford, London, England, UK)",
-  "visual": "This image does not appear to be a photograph of a library building. It shows a memorial site with three plaques in a landscaped area with a large tree, fronted by residential and municipal buildings. Could you confirm whether the correct image file was provided?"
+  "visual": "Three stone memorial plaques mounted on concrete bases stand in a gravel area surrounded by brick residential buildings and tall mature trees beneath a partly cloudy sky."
  },
  "db87d437a14b": {
   "context": "",
@@ -4235,7 +4237,7 @@
  },
  "0c9abc61d4d6": {
   "context": "___________________________________ Photoset from the Friends of Marcus Garvey Library 'Tea Party' event on 23 October 2016. ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ § Facebook group for the Friends of Marcus Garvey Library. § 15 October 2015. Buzzfeed website journalist Fiona Rutherford's article: \"Campaigners Are Worried For The Future Of A Treasured London Library\".",
-  "visual": "This image shows a library interior, not an exterior building photograph. It depicts a crowded indoor space with white ceilings and recessed lighting, with many visitors standing and sitting on modern furnishings. Could you confirm if this is the correct image? The task description mentions describing an exterior of a UK library building, but this shows an interior scene."
+  "visual": "Bright modern library interior with linear ceiling panels. A group of approximately twenty people gather, some seated on orange upholstered benches and others standing, with shelving and a circulation desk visible in the background."
  },
  "1ef48bb2a3c2": {
   "context": "",
@@ -4427,7 +4429,7 @@
  },
  "44f1e86aaf06": {
   "context": "",
-  "visual": "I can see the image, but it shows a row of street-level retail shops (including a hair salon and ice cream shop) in a brick building, not a library. This appears to be a high street or town centre commercial frontage. Could you verify this is the correct image? If this is indeed the image you meant to describe, I can write alt text for what's actually visible—the shopfronts and building—but I'd want to confirm before describing a retail scene as a library building."
+  "visual": "Two-storey corner building in red and buff brick with ground-floor retail units, some shuttered. Four windows span the upper storey. Paved street with black bollards, road markings, bare tree branches above and overcast sky."
  },
  "b8fd70a83987": {
   "context": "",
@@ -4667,7 +4669,7 @@
  },
  "e4422bd2dd36": {
   "context": "",
-  "visual": "The image shows a memorial plaque, not a library building photograph. It's a brass plaque mounted on a white wall with a wooden base, commemorating George Mitchell, an assistant librarian from Leicester who died in 1917. A poppy flower decoration sits atop it. This doesn't match the description you provided. Could you verify the file path is correct for the library building photograph you meant to share?"
+  "visual": "A brass memorial plaque on dark wood with decorative border, engraved with text commemorating an assistant librarian who fell in 1917. A single red flower rests on the plaque's surface."
  },
  "b55c2797bb4d": {
   "context": "To find out more about this library: &lt;a href=\"http://www.cambridgeshire.gov.uk/directory_record/37677/st_ives_library\" rel=\"nofollow\"&gt;www.cambridgeshire.gov.uk/directory_record/37677/st_ives_...&lt;/a&gt; Photo credit: Cambridgeshire libraries",
@@ -4931,7 +4933,7 @@
  },
  "a58a4a3ba604": {
   "context": "",
-  "visual": "Looking at the image file: Stone-built library with three storeys, tall multi-pane windows arranged symmetrically, modern single-storey extension to the right. Clear sky, orderly streetside presence."
+  "visual": "A single-storey building with white-painted walls and large gridded windows displays a prominent red Library sign. Metal cycle racks stand before the brick forecourt on a sunny day."
  },
  "fcb0ac4a20af": {
   "context": "",
@@ -5215,7 +5217,7 @@
  },
  "1a2da2fe34dc": {
   "context": "Found another of Kent's libraries today - just off the main road through Borough Green (which is close to Sevenoaks) this small library shares a carpark with the memorial hall.",
-  "visual": "Based on my analysis of the image data, here's the alt text description: Dark rendered-stone building with symmetrical rows of windows across multiple storeys. Dark paved forecourt beneath clear sky."
+  "visual": "Single-storey red brick building with multiple pitched roof gables and a covered porch entrance on the left. Institutional signage is displayed on the facade, with green recycling bins and a disabled parking space visible in front."
  },
  "c76c165459be": {
   "context": "",
@@ -5850,8 +5852,7 @@
   "visual": "Single-storey red brick building with dark tiled roof, small windows, and red entrance door beneath a covered porch, fronted by dense green hedges."
  },
  "9270173af9f7": {
-  "context": "Spur of the moment visit to Kibworth community library. They had actually just closed, but a member of the team was putting up a display, and was happy to show me round and tell me all about the library activities and plans.",
-  "visual": "This is an interior shot of a library, not the building exterior. The image shows a children's section with colourful displays, shelving, and seating—not the outside of the building. Could you confirm this is the correct image, or provide the exterior photograph you'd like described?"
+  "context": "Spur of the moment visit to Kibworth community library. They had actually just closed, but a member of the team was putting up a display, and was happy to show me round and tell me all about the library activities and plans."
  },
  "372151755e52": {
   "context": "",
@@ -5978,8 +5979,7 @@
   "visual": "Single-storey red brick building with modern flat roof and angled section, featuring white-framed windows and doors. Set on a paved forecourt with mature trees under clear blue skies."
  },
  "2ad1b71624b1": {
-  "context": "",
-  "visual": "This image is not a photograph of a UK public library building. It's a historical metal sign or plaque, weathered and mounted on a light background, bearing text about \"Mocking ton Gate\" with dense legal notice text below the heading. The metal shows age and patina. Could you verify that this is the correct file? The path suggests it may be a temporary file that doesn't match the intended library building photograph."
+  "context": ""
  },
  "aff95d988c8c": {
   "context": "",
@@ -6158,8 +6158,7 @@
   "visual": "Twin red brick towers frame a sweeping glass atrium with curved metal roof. Modern building with broad paved forecourt under grey, cloudy skies."
  },
  "bfc507ee672f": {
-  "context": "",
-  "visual": "I can see the image, but it shows a decorative stone archway with carved relief, positioned in a garden bed with blue planters and flowers — not a library building. The background shows a brick house, but the main subject is the stonework ornament. This doesn't match \"a photograph of a UK public library building.\" Could you verify the file path, or clarify what building or structure I should be describing?"
+  "context": ""
  },
  "536d62a79054": {
   "context": "",
@@ -6210,8 +6209,7 @@
   "visual": "Single-storey red-brick building with purple signage sits behind a paved forecourt, flanked by bare winter trees. Large glass entrance with white-painted frames faces the suburban road under an overcast sky."
  },
  "00189b60457c": {
-  "context": "",
-  "visual": "The image I'm seeing is a close-up of weathered red brick at ground level with moss and lichen growth—not a photograph of a UK library building. This appears to be a detail shot of masonry, possibly from the base of a structure. Could you verify the file path? It's possible the wrong image ended up in that location, or the file reference has drifted."
+  "context": ""
  },
  "5355c21d4e6c": {
   "context": "Benson Library All I can say is this is a lucky village to have one",
@@ -6618,16 +6616,14 @@
   "visual": "Red sandstone building, three storeys, with symmetrical arched windows and carved stone ornamental details. Large arched bays punctuate the ground floor. Overcast."
  },
  "afbfd07b3c95": {
-  "context": "",
-  "visual": "This appears to be an interior photograph, not an exterior building photograph. The image shows an ornate interior space with decorative cast-iron railings, wooden window frames, and sunlight casting shadows across a tiled floor—but no visible exterior building materials, storeys, or weather conditions as your rules specify. Is this the correct image, or should I be looking at a different photograph of the library's exterior?"
+  "context": ""
  },
  "f2928a6044a0": {
   "context": "Belfast Public Library Carnegie Branch Falls Road",
   "visual": "Red-brick, three-storey building with mansard roofs and central cupola. Arched ground-floor entrances, rows of sash windows, and \"Public Library\" signage; clear blue sky."
  },
  "469faf477eba": {
-  "context": "",
-  "visual": "Based on my analysis of the image, here's the alt text: Three-storey grey stone building with regular window pattern across all levels and a prominent ground-floor entrance. Overcast sky, paved forecourt."
+  "context": ""
  },
  "1b23243892d1": {
   "context": "",
@@ -6790,15 +6786,15 @@
   "visual": "Two-storey pale stone building with uniformly-spaced tall windows on each level and decorative roofline balustrade. High boundary wall alongside; parked cars visible in clear weather."
  },
  "648dbe4f8603": {
-  "context": "Carnegie Library, Lurgan. This library was erected in 1906 with an endowment from the American industrialist, Andrew Carnegie. It was one of 2,800 such libraries worldwide. The Library has recently been extended",
-  "visual": "Based on my detailed analysis of the image, I can now provide the alt text description: Reddish brick, two-storey public library building with regular window bays across the facade, set against a partly cloudy sky. Multiple windows and architectural detailing suggest Victorian or Edwardian design."
+  "context": "Carnegie Library, Lurgan. This library was erected in 1906 with an endowment from the American industrialist, Andrew Carnegie. It was one of 2,800 such libraries worldwide. The Library has recently been extended"
  },
  "a63d4e1cfae3": {
   "context": "",
   "visual": "Single-storey stone library with cream and red ashlar, twin gables with slate roofs, multiple tall sash windows, central blue entrance, and a blue convertible parked on the forecourt beneath clear skies."
  },
  "aa66617e77aa": {
-  "context": "Elliot Clothing / Library, Irvinestown They are located at Main Street"
+  "context": "Elliot Clothing / Library, Irvinestown They are located at Main Street",
+  "visual": "Mauve and white-rendered two-storey building with slate roof: right side displays \"LIBRARY\" in large letters; left has an arched shop entrance with climbing ivy. Parked cars in front, overcast sky."
  },
  "348d4c17d401": {
   "context": "{| class=\"layouttemplate\" style=\"width:100%; clear:both; text-align:center; margin:0.5em auto; box-sizing: border-box; padding: 0; border-spacing: 8px; background-color: var(--background-color-neutral-subtle, #f6f7f5); color: var(--color-base, #202122); border: var(--border-subtle, 1px solid #555555); \" dir=\"ltr\" lang=\"\" class=\"layouttemplate sourcetemplate \" |This file was uploaded as part of the",
@@ -6857,7 +6853,8 @@
   "visual": "Two-storey red brick building with white-framed windows. Accessible entrance features a metal ramp and safety rail; notice boards and glass display cases frame the central doors."
  },
  "a072a9073220": {
-  "context": ""
+  "context": "",
+  "visual": "A single-storey building with orange exterior, blue doors, and a grey pitched roof sits behind green hedging in an open landscape. Two stone cottages with slate roofs stand to the left beneath overcast sky."
  },
  "7940ad057ebc": {
   "context": "",
@@ -6924,7 +6921,8 @@
   "visual": "Two-storey structure with cream-rendered walls, red metal cladding and dark cantilevered roof. Large upper-level windows; lower entrance with metal railings and yellow bollards facing a paved forecourt, overcast sky."
  },
  "06195c10b405": {
-  "context": ""
+  "context": "",
+  "visual": "Red-brick building with two storeys and glazed ground-floor frontage, modern entrance with flagpole. A café adjoins it on the right; parked cars and a bare tree occupy the forecourt."
  },
  "d2b10de05225": {
   "context": "Randalstown Library Built in local stone and it is located at New Street",
@@ -6935,7 +6933,8 @@
   "visual": "Single-storey building with pyramid-shaped green metal roof and cream walls. Multiple horizontal windows along the sides; dark concrete barriers enclose the forecourt overlooking wooded hills under an overcast sky."
  },
  "e76902fabdf4": {
-  "context": ""
+  "context": "",
+  "visual": "A cream-rendered two-storey building with mansard roof adjoins a brick structure topped with a cross. Both face a car park with vehicles; a planted lawn bordered by black railings fills the foreground beneath overcast sky."
  },
  "1ffb1942cd8a": {
   "context": "",
@@ -7034,8 +7033,7 @@
   "visual": "Stone-built public building with red entrance doors and signage, featuring a traditional tower section and contemporary extension. Sits on an open lawn with partly cloudy sky."
  },
  "b5a2509d19af": {
-  "context": "",
-  "visual": "The image shows ground-level bark mulch or wood chips with scattered colourful objects (toys or play equipment in pink, purple, and other colours) and green foliage at the top. This doesn't appear to be a photograph of a UK public library building. Could you verify the correct image file? The path may point to the wrong file, or the image may have been captured from a different location than expected."
+  "context": ""
  },
  "bcb946d2b775": {
   "context": "",
@@ -7138,8 +7136,7 @@
   "visual": "Single-storey red brick building with extensive glazed frontage and dark metal framework canopy overhead. Weathered exterior with notice boards across the entrance wall; bare trees and clear sky visible."
  },
  "d9833dab0d52": {
-  "context": "",
-  "visual": "This image doesn't appear to be a UK public library building. It shows a grassy slope with scattered trees and buildings visible on a distant hillside in autumn light. There are no visible library structures, windows, doors, or signage. Could you verify that the correct file was uploaded? The path may have pointed to the wrong temporary image."
+  "context": ""
  },
  "60adecda702c": {
   "context": "",
@@ -7314,7 +7311,8 @@
   "visual": "Stone building of two storeys with regular sash windows and dark painted doors. Carved stone ornament above the right entrance; mansard roof with dormers. A red telephone box stands nearby."
  },
  "67e5029118bc": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey building with pitched slate roof and white-rendered walls, enclosed behind metal security fencing and gate. Large windows line the front; brick structure stands to the left with trees beyond, grassy foreground under partly cloudy sky."
  },
  "582886d1d25e": {
   "context": "",
@@ -7325,7 +7323,8 @@
   "visual": "Contemporary single-storey library with dark timber lower section and pale timber above, sheltered by a deep angled metal overhang. Stone forecourt with retaining wall and metal railings, surrounded by trees and hillside."
  },
  "f11a525f1999": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey library with cream-rendered walls and charcoal-grey pitched roof. Tall metal-framed windows with vertical ribbing face a front safety railing and overgrown grass, brick building to the right, under grey sky."
  },
  "864b78c008c8": {
   "context": "",
@@ -7428,7 +7427,8 @@
   "visual": "Ashlar stone building with two-storey columned portico, tall sash windows and red vertical banners; parked vehicles on street beneath overcast sky."
  },
  "d17cab74f5f0": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey library of honey-coloured stone with pitched roofs, ornamental finials and dormer windows. Red entrance door and large multi-pane windows; metal railings enclose a marked car park."
  },
  "2fd834fe1fd6": {
   "context": "",
@@ -7707,7 +7707,8 @@
   "visual": "Symmetrical stone building with three storeys and a central green copper dome. Multiple tall windows, rusticated lower level, and stone balustrade beneath a cloudy sky."
  },
  "91c88fcc8b1e": {
-  "context": ""
+  "context": "",
+  "visual": "Honey-coloured sandstone building with two principal storeys, featuring a distinctive cupola with clock tower above, arched windows on the upper floor, and ornamental stone balustrades. Street-level entrance with notice boards and planters; a minibus parked nearby."
  },
  "28e780639a0e": {
   "context": "",
@@ -7798,8 +7799,7 @@
   "visual": "Single-storey modern building with cream and bright blue painted walls stands beneath a tall weeping willow tree. A zebra crossing fronts the entrance, with a parked car and residential homes visible beyond under clear skies."
  },
  "fdc653704327": {
-  "context": "",
-  "visual": "Rather than trying to access the image through APIs, could you simply tell me what the library building looks like? I need to know: - Building material and colour (stone, brick, concrete, etc.) - Number of storeys - Type of windows and doors visible - Any signage or dates carved on it - The surrounding area - Weather conditions Once you describe it, I'll write the alt text following your specific rules."
+  "context": ""
  },
  "48a216a1301e": {
   "context": "St Peter's Street, Carmarthen. Town house built c1760 for Robert Morgan (1707-78) , who set up the Carmarthen Furnace in 1748. The railings are contemporary, dated 1761. Redeveloped in 1972-73 for the library with only the facade retained,",
@@ -7942,7 +7942,8 @@
   "visual": "Modern single-storey library with tan brick and bright blue corrugated metal cladding, rows of large rectangular windows, and a low brick boundary wall with benches. Bare trees and traditional stone buildings visible beyond, under grey sky."
  },
  "19ff4b22ea64": {
-  "context": "Prestatyn Library The Library is in Prestatyn on Nant Hall Road, near the Council Offices. The mural on the right depicts Offa, as Offa's Dyke was said to commence near Prestatyn."
+  "context": "Prestatyn Library The Library is in Prestatyn on Nant Hall Road, near the Council Offices. The mural on the right depicts Offa, as Offa's Dyke was said to commence near Prestatyn.",
+  "visual": "A modern brick library building with a flat roof and continuous band of upper windows. The forecourt features a central palm tree and bench; bare deciduous trees stand to either side."
  },
  "27add2c93072": {
   "context": "",
@@ -7977,37 +7978,48 @@
   "visual": "Rendered stone library with white-framed windows and pitched slate roof, positioned amongst traditional stone buildings on a tree-lined street in clear daylight."
  },
  "9d332f9b2776": {
-  "context": "Aberbargoed Library Part of Caerphilly County Borough Council's library service, the library in Pant Street reopened in May 2013 after a £90,000 refurbishment and modernisation. Aberbargoed Clinic is on the right."
+  "context": "Aberbargoed Library Part of Caerphilly County Borough Council's library service, the library in Pant Street reopened in May 2013 after a £90,000 refurbishment and modernisation. Aberbargoed Clinic is on the right.",
+  "visual": "Single-storey red-brick building with white fascia and large red-framed glass frontage; wheelchair accessible via concrete ramp with metal handrails. Clear blue sky, trees and adjacent structures visible."
  },
  "60ba4768daf8": {
-  "context": "Abercarn Library. Public library viewed across High Street. The corner of Cwrt Dyffryn is on the right. Part of the Caerphilly County Borough Council libraries service, this library is open three days a week in January 2017 - Mondays, Wednesdays and Thursdays."
+  "context": "Abercarn Library. Public library viewed across High Street. The corner of Cwrt Dyffryn is on the right. Part of the Caerphilly County Borough Council libraries service, this library is open three days a week in January 2017 - Mondays, Wednesdays and Thursdays.",
+  "visual": "Three-storey building with red brick and cream-rendered sections. Glass-fronted ground floor entrance with rectangular windows on upper levels. Bare trees and overcast weather."
  },
  "cca3306fb651": {
-  "context": "Abercynon Library, Ynysmeurig Road, Abercynon. Viewed in February 2019. This public library and lifelong learning centre opened in 2013, replacing one nearby. LLYFRGELL is Welsh for LIBRARY."
+  "context": "Abercynon Library, Ynysmeurig Road, Abercynon. Viewed in February 2019. This public library and lifelong learning centre opened in 2013, replacing one nearby. LLYFRGELL is Welsh for LIBRARY.",
+  "visual": "Cream-rendered, single-storey library building with dark grey roof and rows of large, tinted windows. Grey signage on the facade; parked cars in front beneath overcast sky."
  },
  "d0bdaf4dcde1": {
-  "context": "Aberdare Library. The Rhondda Cynon Taf library service has 29 libraries including 3 main libraries at Pontypridd, Treorchy and this one, located on High Street Aberdare."
+  "context": "Aberdare Library. The Rhondda Cynon Taf library service has 29 libraries including 3 main libraries at Pontypridd, Treorchy and this one, located on High Street Aberdare.",
+  "visual": "Two-storey library with cream-coloured cladding panels to the left and large dark-glazed windows to the right. The recessed ground floor features full-height glazing and metal railings fronting a paved forecourt."
  },
  "b7e3665cf582": {
-  "context": "Abertridwr Public Library Located on the east side of Aberfawr Road, part of Caerphilly County Borough's library service. The library reopened in March 2008 after an extensive refurbishment which improved disabled access and completely renewed its internal space."
+  "context": "Abertridwr Public Library Located on the east side of Aberfawr Road, part of Caerphilly County Borough's library service. The library reopened in March 2008 after an extensive refurbishment which improved disabled access and completely renewed its internal space.",
+  "visual": "Single-storey brick building combining red and white sections with a gabled metal roof. Modern glass entrance with metal railings fronts an asphalt forecourt bordered by mature trees and fencing."
  },
  "b753faee3b41": {
-  "context": "Beddau and Tynant Community Library, Beddau Set back from the south side of Tynant Road in Beddau a few metres from the Tynant boundary sign. In March 2018 the nameboard shows that the library is run by volunteers for the local community. The library was formerly part of the Rhondda Cynon Taf County Borough library service."
+  "context": "Beddau and Tynant Community Library, Beddau Set back from the south side of Tynant Road in Beddau a few metres from the Tynant boundary sign. In March 2018 the nameboard shows that the library is run by volunteers for the local community. The library was formerly part of the Rhondda Cynon Taf County Borough library service.",
+  "visual": "Single-storey building with dark brick lower section and white rendered upper half, featuring large front windows and glazed doors, set in a grassy area with bare winter trees and metal railings under overcast skies."
  },
  "b6cd591145be": {
-  "context": "Bedwas Library. The public library is located in a small, single-storey building on the west side of the former Workmen's Hall and Institute. Bedwas Library is part of Caerphilly County Borough Council's library service."
+  "context": "Bedwas Library. The public library is located in a small, single-storey building on the west side of the former Workmen's Hall and Institute. Bedwas Library is part of Caerphilly County Borough Council's library service.",
+  "visual": "Single-storey structure with dark brick base and cream-coloured metal upper section featuring large windows, positioned on a street corner. Overcast skies frame tree-lined hills beyond."
  },
  "540fb679aeb7": {
-  "context": "Blackwood Library One of 19 libraries run by Caerphilly County Borough Council, Blackwood Library at 192 High Street is on the corner of Gordon Road."
+  "context": "Blackwood Library One of 19 libraries run by Caerphilly County Borough Council, Blackwood Library at 192 High Street is on the corner of Gordon Road.",
+  "visual": "Two-storey brick library building with multiple rectangular windows, a green library sign on the side, and stone planter boxes at the base. The building sits beside a road with yellow bollards and street lamps, under an overcast sky."
  },
  "586dfd22b292": {
-  "context": ""
+  "context": "",
+  "visual": "A contemporary building with curved corners, clad in dark ribbed metal with large glazed windows in blue-grey mosaic patterns, fronted by a sweeping gold arch sculpture above a paved plaza."
  },
  "97c1b19e776d": {
-  "context": ""
+  "context": "",
+  "visual": "Substantial stone library building with two distinct sections featuring large arched windows across multiple storeys, a central clocktower spire, and decorative pitched gables. Modern street railings and lamps front the entrance under blue sky."
  },
  "cfb98277ec93": {
-  "context": "Cowbridge Library. Part of the Vale of Glamorgan Council library service, the library is in Old Hall Gardens, south of Cowbridge High Street."
+  "context": "Cowbridge Library. Part of the Vale of Glamorgan Council library service, the library is in Old Hall Gardens, south of Cowbridge High Street.",
+  "visual": "Single-storey library with white rendered walls and dark slate roof, accessed via a tarmac path bordered by bare winter trees. A stone wall and green surroundings under overcast skies."
  },
  "02fd9905cecd": {
   "context": "Cwmavon Library. Located in Depot Road, part of Neath Port Talbot County Borough's library service.",
@@ -8018,225 +8030,288 @@
   "visual": "Single-storey library of brown brick and cream panels, situated below a forested hillside in overcast conditions. Rectangular modern building with regular windows and glass doors facing a paved forecourt with fenced parking."
  },
  "6d1cea6e0173": {
-  "context": "Deri Public Library. Set above the west side of Bailey Street, the library is part of Caerphilly County Borough Council's library service."
+  "context": "Deri Public Library. Set above the west side of Bailey Street, the library is part of Caerphilly County Borough Council's library service.",
+  "visual": "Single-storey brick library on a hillside with barred metal windows and doors, surrounded by stone retaining walls and overgrown vegetation. Power lines and trees frame the overcast sky above."
  },
  "fcb279d31b45": {
-  "context": "Dinas Powys Library. Vale of Glamorgan Council public library located on a bank of East Brook at the northern end of Fairoaks."
+  "context": "Dinas Powys Library. Vale of Glamorgan Council public library located on a bank of East Brook at the northern end of Fairoaks.",
+  "visual": "Low, modern single-storey library with white rendered walls and dark brick sections, multiple windows, and glass entrance doors. Surrounded by a car park and greenery beneath overcast skies."
  },
  "6582b878c3fd": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey brick library with tan-coloured walls and bright blue windows, raised on a stone foundation and fronted by a white railing. Bare trees and overcast sky frame the building."
  },
  "150bb824e231": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey stone library with steeply pitched gable roof and distinctive red-sandstone arches, overgrown ivy at the base, surrounded by hills under heavy grey skies."
  },
  "ad8372987413": {
   "context": "Glynneath Public Library. Part of Neath Port Talbot County Borough's library service. The library's address is Park Avenue, Glynneath though it is located about 50 metres along an unnamed side road. There is a library sign on the corner of Park Avenue pointing visitors in the right direction.",
   "visual": "Single-storey red brick building with curved corners, large green-framed glass entrance doors and windows, surrounded by grass and trees under overcast sky."
  },
  "8da65cb3544f": {
-  "context": "Hirwaun Library. Located on High Street, part of Rhondda Cynon Taf's library service. The building dates from 1972."
+  "context": "Hirwaun Library. Located on High Street, part of Rhondda Cynon Taf's library service. The building dates from 1972.",
+  "visual": "Brick-built library with black-tiled pitched roof, large windows along its front elevation, and signage visible. Rural setting with grass verge, distant trees and hills under grey skies."
  },
  "d8e07e0923d0": {
-  "context": ""
+  "context": "",
+  "visual": "Stone two-storey building with slate roof and decorative corner turrets, large multi-pane windows, and a clock face; parked cars positioned in front beneath grey, overcast skies."
  },
  "3020041b459a": {
-  "context": "Llanbradach Library. Located between School Street and the Rhymney River, Llanbradach Library is part of Caerphilly County Borough Council's library service."
+  "context": "Llanbradach Library. Located between School Street and the Rhymney River, Llanbradach Library is part of Caerphilly County Borough Council's library service.",
+  "visual": "A single-storey building with cream-rendered walls and a pitched tile roof occupies an asphalt car park. Bare deciduous trees and wooded hillsides surround and rise behind it, with red metal posts visible to the right."
  },
  "e7e1dc6e127d": {
-  "context": ""
+  "context": "",
+  "visual": "Two-storey terrace building with white rendered walls and dark slate roof; ground-floor retail unit with display windows, residential space above."
  },
  "164321ca3824": {
-  "context": ""
+  "context": "",
+  "visual": "Two-storey building of white render and red brick with distinctive curved roof edge, extensive windows, and dark-framed glazed entrance. Paved forecourt beneath overcast sky."
  },
  "529faeb17cfc": {
-  "context": ""
+  "context": "",
+  "visual": "Modern library building with a distinctive circular turret topped by a slate roof, cream render and grey stone façades, extensive glazing, and a curved glass entrance. Clear blue sky."
  },
  "b56e9ee2692b": {
-  "context": "Machen Village Hall and Library. Located on the north side of The Crescent. The library is at the right end of the village hall, behind the two cars."
+  "context": "Machen Village Hall and Library. Located on the north side of The Crescent. The library is at the right end of the village hall, behind the two cars.",
+  "visual": "Single-storey cream-rendered building with red brick base and gables, multiple rectangular windows, pitched roof, set in asphalt car park surrounded by residential terraces under overcast sky."
  },
  "4f3adce75d55": {
   "context": "Main entrance to Maesteg Sports Centre and Llynfi Library. The Bridgend County Borough Council buildings are part of a former iron forge site.",
   "visual": "Stone-built library with two storeys, arched and oval windows set in golden-brown masonry, beneath a black slate pitched roof. Modern black-framed glass extensions form the ground-floor entrance; bare trees visible beyond under overcast sky."
  },
  "fc5123310966": {
-  "context": "Mountain Ash Library. Part of the Rhondda Cynon Taf County Borough Council library service, the Mountain Ash branch has been located here in Knight Street since April 1997."
+  "context": "Mountain Ash Library. Part of the Rhondda Cynon Taf County Borough Council library service, the Mountain Ash branch has been located here in Knight Street since April 1997.",
+  "visual": "Two-storey cream and brick building with gabled section and arched window. Ground floor has red doors; modern extension to the left. Yellow-marked car park with vehicles, overcast weather."
  },
  "803491470a82": {
-  "context": "Nelson Library. Located on Commercial Street, the Library and Learning Centre are part of Caerphilly County Borough's library service."
+  "context": "Nelson Library. Located on Commercial Street, the Library and Learning Centre are part of Caerphilly County Borough's library service.",
+  "visual": "Single-storey red-brick building with pitched slate roof, multiple grouped windows across the front façade, situated beside a street with parked cars and surrounding buildings visible."
  },
  "1a18adcac09a": {
-  "context": "Penarth Public Library. Located on the corner of Stanwell Road and Rectory Road, this grand Edwardian building is Penarth public library. It was built at the start of the 20th century with money donated by Scottish-American businessman and philanthropist Andrew Carnegie. More than 2,500 Carnegie libraries were built worldwide, including about 660 in the UK. The year inscribed above the north entra"
+  "context": "Penarth Public Library. Located on the corner of Stanwell Road and Rectory Road, this grand Edwardian building is Penarth public library. It was built at the start of the 20th century with money donated by Scottish-American businessman and philanthropist Andrew Carnegie. More than 2,500 Carnegie libraries were built worldwide, including about 660 in the UK. The year inscribed above the north entra",
+  "visual": "Three-storey building constructed from honey-coloured stone with a distinctive clock tower topped by a domed roof. Regular rows of sash windows and a green entrance door; parked cars visible on the street beyond."
  },
  "30e6cf20f646": {
   "context": "",
   "visual": "Two-storey library with vertical metal cladding and a distinctive square clock tower. Three tall windows light the upper floor; dark entrance below is enclosed by black railings. Residential surroundings under partly cloudy skies."
  },
  "0b7ea5f4fe0d": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey brick library with steeply pitched slate roof and central ridge vent. Large glazed frontage opens onto a paved courtyard with benches and bare trees under clear blue sky."
  },
  "6ebc50de2c00": {
   "context": "Pontardawe Library. Viewed across Holly Street, part of the Neath Port Talbot County Borough Council's library service.",
   "visual": "Two-storey red brick and cream-rendered building with large multi-pane windows and arched entrance. Dark slate roof with gable ends, corner location, overcast sky."
  },
  "a540a68aa71d": {
-  "context": "Pontyclun Library. Located in Heol y Felin, part of the Rhondda Cynon Taf library service. The modernised, extended library has eight public access computers, a colourful children's area, a dedicated teenage area and community meeting room. It is a WiFi hotspot."
+  "context": "Pontyclun Library. Located in Heol y Felin, part of the Rhondda Cynon Taf library service. The modernised, extended library has eight public access computers, a colourful children's area, a dedicated teenage area and community meeting room. It is a WiFi hotspot.",
+  "visual": "Single-storey library of dark brown brick with green-framed windows and door, set behind a slate dry-stone wall and metal railings, beneath a mature tree and clear skies."
  },
  "9a0e7d18b4a1": {
-  "context": "Porth Library. Part of Rhondda Cynon Taf library service, located on Pontypridd Road."
+  "context": "Porth Library. Part of Rhondda Cynon Taf library service, located on Pontypridd Road.",
+  "visual": "Two-storey red brick building with stepped gables, arched windows and dark shopfront doors; concrete extension on the left. Street scene with parked cars and green hills visible beyond, under overcast sky."
  },
  "fba2c1420527": {
   "context": "Porthcawl Library. The Church Place library is part of Bridgend Library and Information Service, owned and run by Bridgend County Borough Council.",
   "visual": "Two-storey red brick building with metal stairs and railings leading to an elevated entrance; upper-level steel walkway visible. Bare trees and grey sky in background."
  },
  "74250f1106bb": {
-  "context": "Radyr Library, Cardiff. Viewed across Park Road in early March 2015. The library was rebuilt in 2012."
+  "context": "Radyr Library, Cardiff. Viewed across Park Road in early March 2015. The library was rebuilt in 2012.",
+  "visual": "Single-storey building with red brick and cream render sections, vertical timber cladding around the entrance doors, and a flat modern roof. Several cars parked in front beneath conifers under clear skies."
  },
  "f02b09ebd04a": {
-  "context": "Rear of Whitchurch Library, Cardiff, together with the new extension, seen from the Whitchurch Library Gardens"
+  "context": "Rear of Whitchurch Library, Cardiff, together with the new extension, seen from the Whitchurch Library Gardens",
+  "visual": "Brick building with gabled roof, two storeys, and arched upper-storey windows. A modern timber-clad single-storey extension adjoins it. Both structures sit in parkland with trees and lawn."
  },
  "a282e10eca29": {
   "context": "Resolven Library. Part of the Neath Port Talbot County Borough library service. Located on Neath Road (B4434). \"Join today nothing to pay\" is the motto in the window.",
   "visual": "Single-storey red-brick building with flat roof, rectangular windows, and red entrance doors accessed by yellow metal stairs. Low stone perimeter wall; forested hillside and overcast sky in background."
  },
  "53089bbb8d62": {
-  "context": ""
+  "context": "",
+  "visual": "Brick library building with two storeys, upper floor sheathed in grey cladding with a long strip of horizontal windows. Ground floor features white glazed entrance doors, metal railings and a cycle rack outside; overcast weather."
  },
  "eb27a48d53b0": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey brick and stone building with slate roof and modern extension. Red bilingual signage across the front, metal security railing, and large entrance windows. Parked car in foreground; clear blue sky."
  },
  "6ed0b05420e4": {
   "context": "Skewen Library. Viewed across New Road. Skewen Library is part of Neath Port Talbot County Borough Council's library service.",
   "visual": "Single-storey library building with white painted exterior and black base, bright green roof trim and window frames. Multiple sash windows face a brick courtyard set amongst residential terraces under grey skies."
  },
  "a5f414e0d01e": {
-  "context": "St Athan Community Hub and Library. In a corrugated metal building in Church Lane, St Athan. The notice on the gate shows that the community hub and library is open for only 10 hours a week in September 2019 - 9am to 12:30pm on Tuesdays and Saturdays, 2pm to 5pm on Thursdays."
+  "context": "St Athan Community Hub and Library. In a corrugated metal building in Church Lane, St Athan. The notice on the gate shows that the community hub and library is open for only 10 hours a week in September 2019 - 9am to 12:30pm on Tuesdays and Saturdays, 2pm to 5pm on Thursdays.",
+  "visual": "Single-storey corrugated metal building with cream walls and dark pitched roof, positioned behind a dry-stone wall and metal gate. Blue sky with scattered white clouds."
  },
  "24719677c0f9": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey white metal building with blue roller-shutter doors and notice boards, surrounded by fencing and concrete paving with yellow markings, beneath bare trees under an overcast sky."
  },
  "01863b9e9ba1": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey brick building with large horizontal glazed panels above dark cladding, glass entrance doors and paved forecourt under overcast skies."
  },
  "733c2a6a7508": {
   "context": "",
   "visual": "Two-storey stone building with honey-coloured ashlar facade, large arched windows and an ornamental balustrade beneath a curved roof. Blue entrance door at street level; adjoining red-brick terraced housing on wet pavement."
  },
  "10af7d900e15": {
-  "context": ""
+  "context": "",
+  "visual": "Red brick Victorian building with two storeys, pitched slate roof with decorative gables, and arched windows with cream stone surrounds. Modern cars parked in front on an overcast day."
  },
  "a675d56f5430": {
-  "context": "Tonypandy Library. Set back from De Winton Street, immediately north of the A4119 bridge. The library is part of Rhondda Cynon Taf's library service."
+  "context": "Tonypandy Library. Set back from De Winton Street, immediately north of the A4119 bridge. The library is part of Rhondda Cynon Taf's library service.",
+  "visual": "Single-storey whitewashed building with dark slate pitched roof and regular windows along the front. Stone boundary wall with steps leads to parking area with parked vehicles."
  },
  "9b02f867a044": {
-  "context": "Treorchy Library. Located on the corner of Station Road and Dyfodwg Street. The library, part of Rhondda Cynon Taf's library service, opened here in December 1971."
+  "context": "Treorchy Library. Located on the corner of Station Road and Dyfodwg Street. The library, part of Rhondda Cynon Taf's library service, opened here in December 1971.",
+  "visual": "Single-storey concrete building with turquoise metal-framed entrance and dark doors, set amongst bare moorland hills under overcast sky."
  },
  "c5965a304c4e": {
-  "context": "Wenvoe Library. Located in the Terrapin Building at the back of the Community Centre on the west side of Old Port Road. The library is part of the Vale of Glamorgan Library and Information Service."
+  "context": "Wenvoe Library. Located in the Terrapin Building at the back of the Community Centre on the west side of Old Port Road. The library is part of the Vale of Glamorgan Library and Information Service.",
+  "visual": "Single-storey building clad in dark brown timber with white-framed windows, a pitched roof and blue entrance door, situated in a paved car park ringed by bare trees."
  },
  "a9281c99de6a": {
-  "context": "Abertillery Library. This is the Castle Street side of the library on the corner of Station Hill. It is part of the Blaenau Gwent County Borough Council library service."
+  "context": "Abertillery Library. This is the Castle Street side of the library on the corner of Station Hill. It is part of the Blaenau Gwent County Borough Council library service.",
+  "visual": "Contemporary single-storey building with extensive glass fronting and steel frame, enclosed by blue safety barriers. A Victorian brick building with turrets stands behind. Overcast sky, wet paved forecourt, mature surrounding trees."
  },
  "b4e5a1017f84": {
-  "context": "Antur Gwy. The former primary school for Builth Wells. The playground, now the car park, was divided by a hooped-topped metal fence, with girls and infants on the left, and older boys on the right. Later a high chainlink fence was added to the perimeter to stop stray balls landing in the roadway, the neighbouring chapel grounds or gardens. The outside toilets of the fifties and sixties are no long"
+  "context": "Antur Gwy. The former primary school for Builth Wells. The playground, now the car park, was divided by a hooped-topped metal fence, with girls and infants on the left, and older boys on the right. Later a high chainlink fence was added to the perimeter to stop stray balls landing in the roadway, the neighbouring chapel grounds or gardens. The outside toilets of the fifties and sixties are no long",
+  "visual": "Two-storey stone library building with slate roof and regularly spaced sash windows, central gabled porch, set in a paved car park on an overcast day."
  },
  "4f5e13e5306f": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey modern library building of red brick with bright blue metal cladding and extensive glass panels. Fronted by a paved forecourt and grass verges, with residential housing visible on the hillside beyond."
  },
  "9321e7383dc0": {
-  "context": "Blaenavon Library. Torfaen County Borough library located on Lion Street. Formerly derelict council offices and town hall, the building has been converted and renovated, one of many transformations in Blaenavon since World Heritage status was achieved in 2000."
+  "context": "Blaenavon Library. Torfaen County Borough library located on Lion Street. Formerly derelict council offices and town hall, the building has been converted and renovated, one of many transformations in Blaenavon since World Heritage status was achieved in 2000.",
+  "visual": "Three-storey stone building with cream-rendered walls, decorative chimneys and symmetrical sash windows. Autumn-gold tree in foreground, clear blue sky, street-level setting."
  },
  "76d9ac9fe8ae": {
-  "context": ""
+  "context": "",
+  "visual": "Red-brick building with stone entrance portico and arched doorway. Bilingual signage for entrance and opening hours displayed on the facade; blue metal railings front the property."
  },
  "15645bf78e2d": {
-  "context": ""
+  "context": "",
+  "visual": "Library building at a road corner: pale single-storey section with large sash windows on left; red-brick two-storey section with red front door on right. Dark slate roof, surrounded by black bollards and metal fencing; overcast sky."
  },
  "81b9de8cddaa": {
-  "context": "Chepstow Library Next to the Welsh Street car park. http://www.visionwebsites.co.uk/Contents/Text/Index.asp?SiteId=137&amp;SiteExtra=14722766&amp;TopNavId=283&amp;NavSideId=1480"
+  "context": "Chepstow Library Next to the Welsh Street car park. http://www.visionwebsites.co.uk/Contents/Text/Index.asp?SiteId=137&amp;SiteExtra=14722766&amp;TopNavId=283&amp;NavSideId=1480",
+  "visual": "Single-storey library with white rendered walls and cream horizontal bands, featuring three peaked roofs with dark coverings and large grid-pattern windows in a modern design. Grey slate base and landscaped forecourt under overcast sky."
  },
  "bb898a067ac1": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey brick building with expansive rectangular windows on its right side and smaller windows on the left; an accessible metal-railed ramp fronts the entrance, with climbing ivy and low hedging partially screening the façade."
  },
  "3ca62ab8f0a1": {
-  "context": ""
+  "context": "",
+  "visual": "Two-storey stone building with gabled roof and large arched windows set in bands of alternating lighter and darker masonry. Dark arched entrance door with small window above; paved forecourt with planter boxes."
  },
  "a51c72da6330": {
-  "context": "Grade II listed central library and statue, Merthyr Tydfil The High Street library, now part of Merthyr Tydfil County Borough Council's library service, was built as a Carnegie library, with money donated by Scottish-American businessman and philanthropist Andrew Carnegie. More than 2,500 Carnegie libraries were built worldwide, including 660 in Britain and Ireland. The statue is by Goscombe John."
+  "context": "Grade II listed central library and statue, Merthyr Tydfil The High Street library, now part of Merthyr Tydfil County Borough Council's library service, was built as a Carnegie library, with money donated by Scottish-American businessman and philanthropist Andrew Carnegie. More than 2,500 Carnegie libraries were built worldwide, including 660 in Britain and Ireland. The statue is by Goscombe John.",
+  "visual": "Cream-rendered two-storey building with slate roof and symmetrical sash windows, central entrance accessed by steps with railings, bronze sculpture in forecourt, paved surroundings and overcast sky."
  },
  "d57e799ec8a5": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey brick building with two tall white-framed windows and white entrance doors beneath. Located in a residential area with neighbouring stone buildings and parked cars, under overcast sky."
  },
  "eab04793c130": {
-  "context": "Institute and Library, Blaina Side-by-side on High Street, at the corner of Station Road are: On the left, Blaina Institute Learning Action Centre. On the right, Blaina Library, part of Blaenau Gwent County Borough Council's library service."
+  "context": "Institute and Library, Blaina Side-by-side on High Street, at the corner of Station Road are: On the left, Blaina Institute Learning Action Centre. On the right, Blaina Library, part of Blaenau Gwent County Borough Council's library service.",
+  "visual": "Terraced stone and red-brick library building with slate roofs, white-trimmed gables, and sash windows across two storeys; central glazed entrance on a paved forecourt with benches."
  },
  "7d8773b397b3": {
-  "context": ""
+  "context": "",
+  "visual": "Brick-built library with pitched-roof gable on its left end and lower-profile right section. Glass entrance doors at ground level, regular windows on upper storeys, brick forecourt wall, and landscaping alongside a road junction."
  },
  "1192c4a27e6b": {
-  "context": "Part of Powys County Council's library service, the library shares a site on the south side of Dolecoed Road with Ysgol Dôlafon (county primary school)."
+  "context": "Part of Powys County Council's library service, the library shares a site on the south side of Dolecoed Road with Ysgol Dôlafon (county primary school).",
+  "visual": "Single-storey stone and brick library with slate roof and red brick detailing. Modern glass doors on right, red entrance on left; wet forecourt with puddles; wooded surroundings under overcast sky."
  },
  "2dd40aab46a0": {
-  "context": "I'm not the only library tourist in our family. This striking building is in Mid Wales. Photo credit - my sister!"
+  "context": "I'm not the only library tourist in our family. This striking building is in Mid Wales. Photo credit - my sister!",
+  "visual": "Single-storey modern brick library with cream walls, dark metal panels, and turquoise-framed glass entrance. Bare winter trees frame the building beneath overcast sky, with a paved pathway through grass leading to the doors."
  },
  "2ca11216e4fc": {
-  "context": "Malpas Library There are two buildings on the site, which is set back from Pillmawr Road with parking spaces available. This one is the Malpas Library and Information Centre. A curious hybrid, its external structure is of stone, part of a former school building. The back of the building https://www.geograph.org.uk/photo/1478345 looks little changed from its earlier use. The roof seen here dates fr"
+  "context": "Malpas Library There are two buildings on the site, which is set back from Pillmawr Road with parking spaces available. This one is the Malpas Library and Information Centre. A curious hybrid, its external structure is of stone, part of a former school building. The back of the building https://www.geograph.org.uk/photo/1478345 looks little changed from its earlier use. The roof seen here dates fr",
+  "visual": "Single-storey red-brick building with a slate roof and large glazed entrance comprising doors and floor-to-ceiling windows, topped by a row of smaller rectangular windows. Paved forecourt with car-parking spaces marked in yellow; partly cloudy sky."
  },
  "8352712a7242": {
-  "context": ""
+  "context": "",
+  "visual": "Five-storey brutalist concrete structure with uniform rectangular windows and a central tower element, fronting a wet plaza with red-brick paving. Festive market stalls occupy the rain-soaked forecourt beneath overcast skies."
  },
  "23df8bd7a406": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey red-brick library with pitched grey roof and angled red-framed glazed sections. Paved forecourt with green railings, planted borders, and mature trees nearby."
  },
  "f70827a75c10": {
-  "context": "Oakdale Library Located in The Square, the library is part of Caerphilly County Borough Council's library service. The current library was built during 2003 on the site formerly occupied by Bolwell's corner shops. The new library replaced the former library located in Llwynon Road, which itself was a replacement for the library formerly housed in the Institute."
+  "context": "Oakdale Library Located in The Square, the library is part of Caerphilly County Borough Council's library service. The current library was built during 2003 on the site formerly occupied by Bolwell's corner shops. The new library replaced the former library located in Llwynon Road, which itself was a replacement for the library formerly housed in the Institute.",
+  "visual": "A two-storey corner building with red brick lower walls and cream-rendered upper storey, featuring symmetrical sash windows and a pitched roof. Parked cars line the street beneath an overcast sky; terraced housing adjoins on the left."
  },
  "da1e1a135d0e": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey red brick building with steeply sloping roof and exposed timber beams. Blue library signage above regular gridded panels alternating glazed and whitewashed sections; metal gatefront, raised brick plinth, bare winter trees beyond."
  },
  "9a41f89ba593": {
-  "context": ""
+  "context": "",
+  "visual": "A street-level shop conversion with green window frame and cream signage band, displaying wooden shelves lined with books in various-coloured spines. Bilingual promotional poster and informational notices visible through the glass."
  },
  "732ac30a69f8": {
-  "context": "Pontypool Library. Part of the Torfaen County Borough library service, located in Hanbury Road, opposite the Civic Centre and Glantorvaen Road."
+  "context": "Pontypool Library. Part of the Torfaen County Borough library service, located in Hanbury Road, opposite the Civic Centre and Glantorvaen Road.",
+  "visual": "Two-storey red-brick building with stone detailing and three large arched ground-floor windows. Pitched roof features central gable with chimney; separate red-brick tower on the right. Dark entrance doors, paved forecourt, overcast sky."
  },
  "fddfebe1076f": {
-  "context": ""
+  "context": "",
+  "visual": "Red-brick Victorian building with a prominent clock tower at the centre. Ground floor has five arched doorways beneath a colonnade; upper floor features arched windows with white stone detailing."
  },
  "5f338b3438a3": {
-  "context": ""
+  "context": "",
+  "visual": "Red brick Victorian building with three storeys, stone-banded walls, tall sash windows, and twin domed corner turrets. A prominent arched entrance with dark doors sits at ground level, facing a street with modern bollards and trees."
  },
  "89f7a4353a76": {
-  "context": ""
+  "context": "",
+  "visual": "A grey two-storey stone library building set behind mature trees and dense green hedging. The modern entrance pavilion features large windows, white signage, and bicycles parked outside on an overcast day."
  },
  "4e73831c7e95": {
-  "context": "Rhymney Library Part of Caerphilly County Borough Council's library service. The library, located on Victoria Road, reopened in July 2009 after a £200,000 modernisation and refurbishment, jointly funded by the Council and the Welsh Assembly Government."
+  "context": "Rhymney Library Part of Caerphilly County Borough Council's library service. The library, located on Victoria Road, reopened in July 2009 after a £200,000 modernisation and refurbishment, jointly funded by the Council and the Welsh Assembly Government.",
+  "visual": "Two-storey contemporary library with grey-rendered upper section and redbrick base. Blue and yellow entrance doors, surrounded by bare deciduous trees under an overcast sky."
  },
  "1873dc16ceef": {
-  "context": "Ringland Library, Newport A branch of Newport City Council library service, located at the Ringland Centre."
+  "context": "Ringland Library, Newport A branch of Newport City Council library service, located at the Ringland Centre.",
+  "visual": "Single-storey brick library with flat roof and cylindrical element, rows of rectangular windows facing a lawn. Stone boundary wall and paved path in foreground; bare trees and overcast sky beyond."
  },
  "3eb3bc230afa": {
-  "context": "Risca Palace library, Risca. The long derelict former Palace cinema in Tredegar Street was transformed in 2011 into a branch library, Caerphilly Council offices and a One Stop shop (out of shot on the left)."
+  "context": "Risca Palace library, Risca. The long derelict former Palace cinema in Tredegar Street was transformed in 2011 into a branch library, Caerphilly Council offices and a One Stop shop (out of shot on the left).",
+  "visual": "Two-storey rendered building with white facade and bright blue trim. A curved tower section frames an arched entrance; a modern shopfront adjoins it on the ground floor."
  },
  "b4867854ac19": {
-  "context": "Rogerstone Original description: Rogerstone Library The inscription above the windows is \"Carnegie Free Library 1905\"."
+  "context": "Rogerstone Original description: Rogerstone Library The inscription above the windows is \"Carnegie Free Library 1905\".",
+  "visual": "Brick building with peaked gable roof and central clock tower, sash windows across two storeys, stone plinth with metal railings, ivy covering one wall, parked cars in foreground, partly-cloudy sky."
  },
  "e64945b5a165": {
-  "context": "St Julians Community Learning &amp; Library Centre, Newport Located on Beaufort Road, next to the western edge of St Julians Junior School."
+  "context": "St Julians Community Learning &amp; Library Centre, Newport Located on Beaufort Road, next to the western edge of St Julians Junior School.",
+  "visual": "Single-storey brick-pillared entrance pavilion with white metal gates and barred windows, leading to a larger structure. Metal fencing flanks the drive; bare trees and overcast conditions."
  },
  "2cb15270df7d": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey stone-built building with cream rendered walls and dark pyramidal slate roof. Bordered by flowering shrubs with paved approach, beneath overcast sky."
  },
  "061ab09cdd04": {
-  "context": "Tredegar Library. Located in the centre of town, on the corner of Iron Street and Coronation Street, adjacent to The Circle and the Town Clock."
+  "context": "Tredegar Library. Located in the centre of town, on the corner of Iron Street and Coronation Street, adjacent to The Circle and the Town Clock.",
+  "visual": "Two-storey brick and concrete building of modernist design with distinctive geometric forms, large window openings, and red entrance doors. A bare tree grows in the brick-paved forecourt."
  },
  "7884b471b0eb": {
-  "context": ""
+  "context": "",
+  "visual": "A two-storey stone building with red-brown masonry, pitched roof and chimneys, white-framed windows and an arched entrance. Library signage is displayed at the front, with climbing ivy and bare deciduous trees flanking the structure under grey skies."
  },
  "2ecc734c626c": {
-  "context": ""
+  "context": "",
+  "visual": "Two-storey red-brick building with slate roof and sash windows, adjoined by a modern dark-clad pavilion with glazed entrance. Brick-paved forecourt, clear sky, trees behind."
  },
  "22f8220559ac": {
-  "context": "Ystrad Mynach Library. Located on High Street. The library is part of Caerphilly County Borough's library service. A distinctive feature of the library is the stainless steel artwork on an external wall. Depicted are various alphabets: Welsh, finger spelling, semaphore, Braille and English."
+  "context": "Ystrad Mynach Library. Located on High Street. The library is part of Caerphilly County Borough's library service. A distinctive feature of the library is the stainless steel artwork on an external wall. Depicted are various alphabets: Welsh, finger spelling, semaphore, Braille and English.",
+  "visual": "Single-storey brick library with decorative tile panels and large windows. Paved forecourt with brick planters, bare trees, and modern glass entrance in clear daylight."
  },
  "ffb56a18b29a": {
   "context": "",
@@ -8251,7 +8326,8 @@
   "visual": "Two-storey stone-built public library with ashlar walls and gabled roofline. Large grouped windows, ornamental stonework, and a \"PUBLIC LIBRARY\" inscription frame the principal facade."
  },
  "5e95ddb6dc53": {
-  "context": "Treorchy Library. Located on the corner of Station Road and Dyfodwg Street. The library, part of Rhondda Cynon Taf's library service, opened here in December 1971."
+  "context": "Treorchy Library. Located on the corner of Station Road and Dyfodwg Street. The library, part of Rhondda Cynon Taf's library service, opened here in December 1971.",
+  "visual": "Single-storey library with concrete upper sections and a turquoise glazed entrance corner. Positioned at a street junction beneath bare wooded hills under overcast skies."
  },
  "8fc2bb498eda": {
   "visual": "Two-storey building of cream brick with gabled roof and sash windows above; large glazed windows frame the lower entrance. Metal bollards line the street frontage; clear weather and bare trees visible."
@@ -8448,9 +8524,7 @@
  "86024d862a49": {
   "visual": "Single-storey brick building with steep gable roof and large blue-framed windows. Bare trees and clear sky; paved forecourt with bus shelter nearby."
  },
- "c0ae9a98c78a": {
-  "visual": "This appears to be an interior photograph of a library, not an exterior photograph of the building itself. The image shows a reading room with bookshelves, computers, and seating. Could you confirm whether you intended to share an exterior photograph of the library building? The rules you've specified (building material, storeys, windows, doors, signage, surroundings, weather) all apply to exterior shots, but this image is of the interior."
- },
+ "c0ae9a98c78a": {},
  "b7c02afbe8d3": {
   "visual": "Two-storey stone and brick building with pitched slate roof, sash windows and red entrance door, fronted by a low brick wall beneath overcast sky."
  },
@@ -8470,7 +8544,7 @@
   "visual": "Contemporary single-storey library with extensive glass frontage and black metal framing, topped by two white pyramidal roofs. Situated in a paved forecourt bordered by trees and protective bollards."
  },
  "5a73a09dbc27": {
-  "visual": "I see a mismatch: the image shows a modern multi-storey residential and retail development, not a library building. It's a mixed-use block with red brick and rendered facades, approximately five to six storeys, ground-floor commercial windows, metal balconies, and contemporary urban surroundings. Could you confirm this is the correct image, or provide the actual library photograph?"
+  "visual": "Red-brick five-storey building with cream-toned upper sections, metal balconies, and a glazed ground-floor retail frontage. Two trees frame the entrance on an urban street beneath clear sky."
  },
  "5012edc04ba1": {
   "visual": "Single-storey red brick building with dark metal roof and extensive glazing, set on a paved forecourt surrounded by mature deciduous trees."
@@ -8549,5 +8623,17 @@
  },
  "fb133f7d8d45": {
   "visual": "Three-storey rendered stone building with regularly spaced windows and a recessed ground-floor entrance. Power cables cross overhead, with parked cars in front and overcast sky above."
+ },
+ "95769d487c02": {
+  "visual": "Modern four-storey library with cream metal cladding and red panel base featuring a regular grid of rectangular windows. Paved plaza courtyard with red flower planters; glass pavilion shelters the entrance under overcast skies."
+ },
+ "668a1ff2863f": {
+  "visual": "Single-storey brick library with pale-roofed modern extension, large windows and glazed entrance door, metal wheelchair ramp with white handrails, Victorian brick buildings visible behind, trees and wooded hills beyond."
+ },
+ "af2326db567f": {
+  "visual": "Single-storey brown brick building with a distinctive peaked roof and timber-framed central gable above the blue entrance. Wide asphalt forecourt with grass verge, bare trees and distant residential buildings under grey sky."
+ },
+ "8fe33150b3cd": {
+  "visual": "A red-brick building with cream upper floors and horizontal window bands, marked by a tall vertical sign reading 'Public Library'. Parked cars occupy the forecourt, with neighbouring masonry buildings and bare trees beneath an overcast sky."
  }
 }
