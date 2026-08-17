@@ -5852,7 +5852,8 @@
   "visual": "Single-storey red brick building with dark tiled roof, small windows, and red entrance door beneath a covered porch, fronted by dense green hedges."
  },
  "9270173af9f7": {
-  "context": "Spur of the moment visit to Kibworth community library. They had actually just closed, but a member of the team was putting up a display, and was happy to show me round and tell me all about the library activities and plans."
+  "context": "Spur of the moment visit to Kibworth community library. They had actually just closed, but a member of the team was putting up a display, and was happy to show me round and tell me all about the library activities and plans.",
+  "visual": "Bright children's library interior with blue carpeted floor and fluorescent ceiling lighting. Yellow-framed shelving displays books along the left wall; navy armchairs and wooden book units occupy the centre, with white vertical blinds at the windows."
  },
  "372151755e52": {
   "context": "",
@@ -5979,7 +5980,8 @@
   "visual": "Single-storey red brick building with modern flat roof and angled section, featuring white-framed windows and doors. Set on a paved forecourt with mature trees under clear blue skies."
  },
  "2ad1b71624b1": {
-  "context": ""
+  "context": "",
+  "visual": "Aged printed document headed \"Mockington Gate\" with dense historical text setting out tolls and regulations for horses, carriages and other transport, mounted with chains against a neutral background."
  },
  "aff95d988c8c": {
   "context": "",
@@ -6158,7 +6160,8 @@
   "visual": "Twin red brick towers frame a sweeping glass atrium with curved metal roof. Modern building with broad paved forecourt under grey, cloudy skies."
  },
  "bfc507ee672f": {
-  "context": ""
+  "context": "",
+  "visual": "Weathered stone relief plaque with circular frame, heavily mossed and tilted amongst garden beds. Magenta petunias in blue containers and climbing ivy surround it, with a pink brick building beyond."
  },
  "536d62a79054": {
   "context": "",
@@ -6209,7 +6212,8 @@
   "visual": "Single-storey red-brick building with purple signage sits behind a paved forecourt, flanked by bare winter trees. Large glass entrance with white-painted frames faces the suburban road under an overcast sky."
  },
  "00189b60457c": {
-  "context": ""
+  "context": "",
+  "visual": "Weathered red brick with pale mortar joints, heavily colonised by moss and lichen towards the top. Grass and green growth emerge from the ground at the base of the wall."
  },
  "5355c21d4e6c": {
   "context": "Benson Library All I can say is this is a lucky village to have one",
@@ -6616,14 +6620,16 @@
   "visual": "Red sandstone building, three storeys, with symmetrical arched windows and carved stone ornamental details. Large arched bays punctuate the ground floor. Overcast."
  },
  "afbfd07b3c95": {
-  "context": ""
+  "context": "",
+  "visual": "Ornate wrought-iron railings cast detailed shadows on dark tiled flooring in sunlight. Wooden-framed windows with glass panes and lower panelled doors frame the interior, with framed artworks displayed at an upper window."
  },
  "f2928a6044a0": {
   "context": "Belfast Public Library Carnegie Branch Falls Road",
   "visual": "Red-brick, three-storey building with mansard roofs and central cupola. Arched ground-floor entrances, rows of sash windows, and \"Public Library\" signage; clear blue sky."
  },
  "469faf477eba": {
-  "context": ""
+  "context": "",
+  "visual": "Single-storey red brick building with angular dark roof sections and bands of windows along the front. A covered porch with metal railings and gate opens onto a grey car park; grass verges frame the site under cloudy sky."
  },
  "1b23243892d1": {
   "context": "",
@@ -6786,7 +6792,8 @@
   "visual": "Two-storey pale stone building with uniformly-spaced tall windows on each level and decorative roofline balustrade. High boundary wall alongside; parked cars visible in clear weather."
  },
  "648dbe4f8603": {
-  "context": "Carnegie Library, Lurgan. This library was erected in 1906 with an endowment from the American industrialist, Andrew Carnegie. It was one of 2,800 such libraries worldwide. The Library has recently been extended"
+  "context": "Carnegie Library, Lurgan. This library was erected in 1906 with an endowment from the American industrialist, Andrew Carnegie. It was one of 2,800 such libraries worldwide. The Library has recently been extended",
+  "visual": "Red brick two-storey building with a prominent arched doorway framed in decorative stone, tall sash windows with white glazing bars, and peaked gables topped with green copper."
  },
  "a63d4e1cfae3": {
   "context": "",
@@ -7033,7 +7040,8 @@
   "visual": "Stone-built public building with red entrance doors and signage, featuring a traditional tower section and contemporary extension. Sits on an open lawn with partly cloudy sky."
  },
  "b5a2509d19af": {
-  "context": ""
+  "context": "",
+  "visual": "Three metal flower or butterfly sculptures in red, blue and purple are arranged on a bed of wood chip, surrounded by green foliage and a brick wall."
  },
  "bcb946d2b775": {
   "context": "",
@@ -7136,7 +7144,8 @@
   "visual": "Single-storey red brick building with extensive glazed frontage and dark metal framework canopy overhead. Weathered exterior with notice boards across the entrance wall; bare trees and clear sky visible."
  },
  "d9833dab0d52": {
-  "context": ""
+  "context": "",
+  "visual": "Gently sloping green field with scattered trees in autumn colours, their foliage golden and green. Stone buildings visible on a hilltop in the distance beneath a pale blue sky."
  },
  "60adecda702c": {
   "context": "",
@@ -7799,7 +7808,8 @@
   "visual": "Single-storey modern building with cream and bright blue painted walls stands beneath a tall weeping willow tree. A zebra crossing fronts the entrance, with a parked car and residential homes visible beyond under clear skies."
  },
  "fdc653704327": {
-  "context": ""
+  "context": "",
+  "visual": "Red brick building with slate roof and stone chimneys, single-storey on the left rising to two storeys. Arched windows with a wall-mounted clock mark the street frontage; cars parked alongside on a yellow-lined road."
  },
  "48a216a1301e": {
   "context": "St Peter's Street, Carmarthen. Town house built c1760 for Robert Morgan (1707-78) , who set up the Carmarthen Furnace in 1748. The railings are contemporary, dated 1761. Redeveloped in 1972-73 for the library with only the facade retained,",
@@ -8524,7 +8534,9 @@
  "86024d862a49": {
   "visual": "Single-storey brick building with steep gable roof and large blue-framed windows. Bare trees and clear sky; paved forecourt with bus shelter nearby."
  },
- "c0ae9a98c78a": {},
+ "c0ae9a98c78a": {
+  "visual": "A library study room with wooden bookshelves lining the walls and centre unit, computer workstations on the left, blue upholstered chairs and tables, recessed ceiling lights, and cream walls on grey carpet."
+ },
  "b7c02afbe8d3": {
   "visual": "Two-storey stone and brick building with pitched slate roof, sash windows and red entrance door, fronted by a low brick wall beneath overcast sky."
  },
