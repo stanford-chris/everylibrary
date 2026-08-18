@@ -265,7 +265,18 @@ def build_post(row):
     """Name, place, then the credit. CC BY-SA wants the creator named, the
     licence named and the licence linked, so the licence itself is the link."""
     tb = client_utils.TextBuilder()
-    tb.text(display_name(row['name']) + ' 📚\n')
+
+    # Link the name to the library's own page where one survived checking.
+    # A facet annotates text that is already there, so the link costs nothing
+    # against the 300-character limit. Getting on for two in five postable
+    # libraries have no url that survived checking, and go out as plain text.
+    name = display_name(row['name'])
+    url = (row.get('url') or '').strip()
+    if url:
+        tb.link(name, url)
+        tb.text(' 📚\n')
+    else:
+        tb.text(name + ' 📚\n')
 
     address = clean_address(row.get('address'), row.get('postcode'))
     if address:

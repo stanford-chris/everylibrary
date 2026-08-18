@@ -51,6 +51,7 @@ os.makedirs(DATA, exist_ok=True)
 CORPUS_PATH = os.path.join(DATA, "uk_libraries_final.csv")
 STATE_PATH = os.path.join(DATA, "image_state.json")
 MANIFEST_PATH = os.path.join(DATA, "uk_libraries_images.csv")
+URLS_PATH = os.path.join(DATA, "urls.json")      # written by everylibrary_urls.py
 GEOGRAPH_DUMP = os.path.join(DATA, "gridimage_base.tsv.gz")
 
 # Wikimedia asks for a descriptive User-Agent with contact details.
@@ -579,6 +580,14 @@ def attribution_line(meta):
 
 
 def build_manifest(rows, state):
+    # Verified library websites, if everylibrary_urls.py has been run. Absent is
+    # normal and simply means no row gets a link: the poster falls back to plain
+    # text, so the manifest never depends on that script having been run.
+    urls = {}
+    if os.path.exists(URLS_PATH):
+        with open(URLS_PATH) as f:
+            urls = json.load(f)
+
     out = []
     for r in rows:
         key = r["osm_id"] or f"{r['lat']:.5f},{r['lon']:.5f}"
@@ -624,6 +633,7 @@ def build_manifest(rows, state):
             "lat": r["lat"], "lon": r["lon"],
             "type": r["type"], "statutory": r["statutory"], "year_opened": r["year_opened"],
             "wikidata": qid,
+            "url": urls.get(key, {}).get("url", ""),
             "image_source": source or "",
             "image_title": title if source else "",
             "image_url": (meta or {}).get("url", "") if source else "",

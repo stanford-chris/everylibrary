@@ -12,3 +12,8 @@ data/image_state.json.tmp
 data/post_state.json
 data/_tmp/
 data/describe_test.log
+
+# Per-URL verdicts from everylibrary_urls.py. Regenerable, and it churns every
+# time a council's WAF has a bad minute.
+data/url_state.json
+data/url_state.json.tmp
