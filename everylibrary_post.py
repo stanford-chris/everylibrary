@@ -283,6 +283,14 @@ def build_post(row):
         tb.text(address + '\n')
 
     place = short_place(row['authority'])
+
+    # Name the nation. "Medway" places nothing for a reader outside the UK, and
+    # the feed is not a UK-only room. The guard matters for Northern Ireland,
+    # where the roster's authority IS "Northern Ireland" and the naive version
+    # gives "Northern Ireland, Northern Ireland".
+    nation = (row.get('nation') or '').strip()
+    if nation and nation.lower() != place.lower():
+        place = f'{place}, {nation}'
     year = (row.get('year_opened') or '').strip()
     # "library since", not "opened", because the roster's Year opened records
     # when the library began there and not when the building went up. Checked
