@@ -10,7 +10,10 @@ Sources, tried in order of confidence:
                        library. This also catches the Geograph photos that have been
                        bulk-mirrored onto Commons, with their attribution already
                        normalised into Commons metadata.
-  3. Geograph dump     Offline index for whatever the first two miss. Optional: needs
+  2b. Wikidata nearby  A photo on a Wikidata library item within RADIUS_M whose
+                       QID nothing in the corpus links to. Reaches items by
+                       position when the OSM join never supplied the link.
+  3. Geograph dump     Offline index for whatever the first three miss. Optional: needs
                        gridimage_base.tsv.gz (235 MB) from data.geograph.org.uk/dumps.
 
 Every row carries photographer, licence name and a credit URL, because everything
@@ -23,6 +26,7 @@ the geosearch sweep, so an interrupted run picks up where it left off.
 Usage:
     python3 everylibrary_images.py                 # run all available stages
     python3 everylibrary_images.py --stage 1       # Wikidata only
+    python3 everylibrary_images.py --stage 2b      # Wikidata neighbours only
     python3 everylibrary_images.py --reset         # discard saved state and restart
 """
 
@@ -113,7 +117,7 @@ def load_state():
     if os.path.exists(STATE_PATH):
         with open(STATE_PATH) as f:
             return json.load(f)
-    return {"p18": {}, "geo": {}, "imageinfo": {}, "geosearch_done": []}
+    return {"p18": {}, "geo": {}, "wdnear": {}, "imageinfo": {}, "geosearch_done": []}
 
 
 def save_state(state):
@@ -215,6 +219,123 @@ def stage2_geosearch(rows, state):
 
     state["geosearch_done"] = sorted(done_set)
     save_state(state)
+
+
+# --------------------------------------------- stage 2b: Wikidata neighbours
+
+# Stage 1 finds a photograph only when the corpus already knows the library's
+# QID, and it knows that only from an OSM `wikidata=` tag. Wikidata holds plenty
+# of UK library items with a photograph and coordinates that nothing in OSM
+# points at, so stage 1 never sees them. This stage reaches them by position
+# instead of by link.
+#
+# It runs after the geosearch, not before, for two reasons. It is only worth
+# doing for libraries still without a picture; and Commons geosearch already
+# finds most P18 files on its own, because a P18 is usually a Commons image near
+# the building with "library" in its title. Measured against the 16 August
+# corpus, this stage adds 51 libraries on top of stages 1 and 2, not the 559 the
+# raw gap in QIDs suggests.
+#
+# CLOSED_RE is load-bearing. The query asks Wikidata for public libraries, and
+# Wikidata keeps items for buildings that used to be one. Without the filter the
+# open East Ham Library takes the photograph of "Former East Ham Library", 147 m
+# away, which is a different building.
+
+CLOSED_RE = re.compile(
+    r"\b(former(ly)?|closed|disused|demolished|vacant|"
+    r"replaced by|until \d{4})\b", re.I)
+
+# Q28564 is public library; P279* picks up its subclasses. P17 wd:Q145 is the UK.
+WD_NEARBY_QUERY = """
+SELECT ?item ?itemLabel ?itemDescription ?img ?coord WHERE {
+  ?item wdt:P31/wdt:P279* wd:Q28564 .
+  ?item wdt:P17 wd:Q145 .
+  ?item wdt:P18 ?img .
+  ?item wdt:P625 ?coord .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+"""
+
+
+def fetch_wd_uk_libraries(state, refresh=False):
+    """Every UK public library in Wikidata carrying both a photograph and
+    coordinates. Cached in the state file: it is one large query and a repeat
+    sweep should not re-ask for it."""
+    if state.get("wd_items") and not refresh:
+        return state["wd_items"]
+
+    d = get_json(SPARQL_API, {"query": WD_NEARBY_QUERY, "format": "json"})
+    if d is None:
+        log("         neighbour query failed; skipping stage 2b")
+        return []
+
+    items = []
+    for b in d["results"]["bindings"]:
+        m = re.match(r"Point\(([-\d.]+) ([-\d.]+)\)", b["coord"]["value"])
+        if not m:
+            continue
+        items.append({
+            "qid": b["item"]["value"].rsplit("/", 1)[-1],
+            "label": b.get("itemLabel", {}).get("value", ""),
+            "desc": b.get("itemDescription", {}).get("value", ""),
+            "file": requests.utils.unquote(b["img"]["value"].rsplit("/", 1)[-1]),
+            "lat": float(m.group(2)),
+            "lon": float(m.group(1)),
+        })
+    state["wd_items"] = items
+    save_state(state)
+    return items
+
+
+def stage2b_wikidata_nearby(rows, state):
+    """Match libraries that still have no picture to a nearby Wikidata library
+    item that has one."""
+    items = fetch_wd_uk_libraries(state)
+    if not items:
+        return
+
+    live = [i for i in items if not CLOSED_RE.search(f"{i['label']} {i['desc']}")]
+    log(f"stage 2b Wikidata neighbours: {len(items)} items with a photo, "
+        f"{len(live)} after dropping former and closed sites")
+
+    state.setdefault("wdnear", {})
+    taken = {v["qid"] for v in state["wdnear"].values()}
+
+    # Each item is claimed by whichever library is closest to it, so two
+    # libraries never post the same photograph. A library that loses a claim is
+    # not offered the runner-up: with matches this sparse a collision is rare,
+    # and silently handing over the second-choice building is worse than a miss.
+    claims = {}
+    for r in rows:
+        key = r["osm_id"] or f"{r['lat']:.5f},{r['lon']:.5f}"
+        qid = r["wikidata"]
+        if qid and state["p18"].get(qid):
+            continue                                   # stage 1 covered it
+        if key in state["geo"]:
+            continue                                   # stage 2 covered it
+        if key in state["wdnear"]:
+            continue                                   # matched on an earlier run
+
+        best = None
+        for i in live:
+            if i["qid"] in taken:
+                continue
+            d = haversine_m(r["lat"], r["lon"], i["lat"], i["lon"])
+            if d <= RADIUS_M and (best is None or d < best[0]):
+                best = (d, i)
+        if best is None:
+            continue
+
+        d, i = best
+        prev = claims.get(i["qid"])
+        if prev is None or d < prev[0]:
+            claims[i["qid"]] = (d, key, i["file"], i["label"])
+
+    for qid, (d, key, fname, label) in claims.items():
+        state["wdnear"][key] = {"qid": qid, "title": "File:" + fname,
+                                "dist": round(d), "label": label}
+    save_state(state)
+    log(f"         matched {len(claims)} libraries")
 
 
 # ------------------------------------------------- resolve files to attribution
@@ -486,6 +607,16 @@ def build_manifest(rows, state):
                         "artist": g["photographer"],
                         "licence": GEOGRAPH_LICENCE, "licence_url": GEOGRAPH_LICENCE_URL}
 
+        # Last resort, and deliberately last. Ranking it above Geograph would
+        # swap the picture under 25 libraries that already have one, and
+        # alt_text.json is keyed by library, not by image: the description would
+        # silently go on describing the photograph it replaced.
+        if source is None:
+            w = state.get("wdnear", {}).get(key)
+            if w and state["imageinfo"].get(w["title"]):
+                source, title, dist = "wikidata-nearby", w["title"], w["dist"]
+                meta = state["imageinfo"][title]
+
         out.append({
             "name": r["name"], "authority": r["authority"], "nation": r["nation"],
             "address": r.get("address", ""), "town": r.get("town", ""),
@@ -555,7 +686,7 @@ def report(out):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--stage", type=int, choices=[1, 2, 3], help="run a single stage")
+    ap.add_argument("--stage", choices=["1", "2", "2b", "3"], help="run a single stage")
     ap.add_argument("--reset", action="store_true", help="discard saved state first")
     args = ap.parse_args()
 
@@ -570,17 +701,20 @@ def main():
     state = load_state()
     log(f"corpus: {len(rows)} libraries")
 
-    if args.stage in (None, 1):
+    if args.stage in (None, "1"):
         stage1_wikidata(rows, state)
-    if args.stage in (None, 2):
+    if args.stage in (None, "2"):
         stage2_geosearch(rows, state)
+    if args.stage in (None, "2b"):
+        stage2b_wikidata_nearby(rows, state)
 
     titles = {"File:" + v for v in state["p18"].values() if v}
     titles |= {g["title"] for g in state["geo"].values()}
+    titles |= {w["title"] for w in state.get("wdnear", {}).values()}
     fetch_imageinfo(sorted(titles), state)
     repair_uploaders(state)
 
-    if args.stage in (None, 3):
+    if args.stage in (None, "3"):
         stage3_geograph(rows, state)
 
     report(build_manifest(rows, state))
