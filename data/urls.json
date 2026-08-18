@@ -2649,6 +2649,11 @@
   "status": 0,
   "url": "http://www3.northamptonshire.gov.uk/councilservices/library-service/visiting-your-library/list-of-libraries/Pages/default.aspx"
  },
+ "191125731": {
+  "source": "roster",
+  "status": 200,
+  "url": "http://www.culturepk.org.uk/your-local-library/ak-bell-library/"
+ },
  "191278832": {
   "source": "roster",
   "status": 0,
@@ -8143,6 +8148,11 @@
   "source": "roster",
   "status": 0,
   "url": "http://www.clacksweb.org.uk/culture/tillicoultrycap/"
+ },
+ "56.41003,-3.43824": {
+  "source": "roster",
+  "status": 200,
+  "url": "http://www.culturepk.org.uk/your-local-library/north-inch-community-library/"
  },
  "56.51987,-6.91623": {
   "source": "roster",

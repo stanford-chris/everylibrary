@@ -27,6 +27,7 @@ Usage:
     python3 everylibrary_images.py                 # run all available stages
     python3 everylibrary_images.py --stage 1       # Wikidata only
     python3 everylibrary_images.py --stage 2b      # Wikidata neighbours only
+    python3 everylibrary_images.py --manifest-only # rebuild the csv, no network
     python3 everylibrary_images.py --reset         # discard saved state and restart
 """
 
@@ -698,6 +699,8 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--stage", choices=["1", "2", "2b", "3"], help="run a single stage")
     ap.add_argument("--reset", action="store_true", help="discard saved state first")
+    ap.add_argument("--manifest-only", action="store_true",
+                    help="rebuild the manifest from saved state and urls.json, fetch nothing")
     args = ap.parse_args()
 
     if args.reset and os.path.exists(STATE_PATH):
@@ -710,6 +713,13 @@ def main():
     rows = load_corpus()
     state = load_state()
     log(f"corpus: {len(rows)} libraries")
+
+    # Everything the manifest needs is already on disk. This is the cheap path
+    # after everylibrary_urls.py has re-verified the links: the image sources
+    # have not moved, only the url column has.
+    if args.manifest_only:
+        report(build_manifest(rows, state))
+        return
 
     if args.stage in (None, "1"):
         stage1_wikidata(rows, state)
