@@ -30,7 +30,8 @@ Usage:
     python3 everylibrary_describe.py             # describe everything outstanding
     python3 everylibrary_describe.py --limit 20  # a small batch, to sample quality
     python3 everylibrary_describe.py --workers 6
-    python3 everylibrary_describe.py --context-only   # refresh Commons notes, no model calls
+    python3 everylibrary_describe.py --context-only   # fetch missing Commons notes, no model calls
+    python3 everylibrary_describe.py --context-only --refetch-suspect
 """
 
 import argparse
@@ -200,6 +201,19 @@ def load_rows():
 # --------------------------------------------------------------- the context
 
 
+# A tag stripper deletes the tags and keeps what is between them, which is the
+# right behaviour everywhere except here: the contents of <style> ARE the
+# output. Commons renders TemplateStyles into the description HTML, so 17 of
+# the 703 stored notes shipped a stylesheet to screen readers —
+#
+#   "Purley Library .mw-parser-output .messagebox{margin:4px 0;width:auto;
+#    border-collapse:collapse;border:2px solid var(--border-color-progressive..."
+#
+# read out as "dot m w hyphen parser hyphen output dot messagebox open brace".
+# These blocks are removed whole, before the tags around them go.
+_BLOCK = re.compile(r'<(style|script)\b[^>]*>.*?</\1\s*>', re.I | re.S)
+
+
 def strip_markup(s):
     """Commons descriptions are wikitext rendered to HTML, so they arrive with
     both tags and entities. Stripping tags alone leaves "Warrington Library
@@ -211,14 +225,36 @@ def strip_markup(s):
     "&"; and where the source escapes its own markup, unescaping after the
     stripper has run re-creates "<br>" as literal text it will never see. So
     strip and unescape alternately until the string stops changing.
+
+    The style-block removal sits inside that loop for the same reason: an
+    escaped <style> only becomes recognisable as one after an unescape pass.
     """
     text = s or ''
     for _ in range(4):
-        nxt = html.unescape(re.sub(r'<[^>]+>', ' ', text))
+        nxt = html.unescape(re.sub(r'<[^>]+>', ' ', _BLOCK.sub(' ', text)))
         if nxt == text:
             break
         text = nxt
     return re.sub(r'\s+', ' ', text).strip()
+
+
+# Commons' messagebox templates leave a sentence of their own behind once the
+# stylesheet is gone: "Wikidata has entry Purley Library (Q27086972) with data
+# related to this item." That is the template talking, not a human describing a
+# photograph, and a screen reader spells the Q-number out digit by digit.
+#
+# It is REMOVED rather than used to discard the note, because it is not always
+# the whole note: one file pairs it with a genuine description of a Grade II
+# listed building. Strip the sentence, keep whatever a person actually wrote,
+# and let the usefulness test below decide whether what remains is worth
+# serving.
+_BOILER = re.compile(
+    r'\s*Wikidata has entry\b.*?(?:\(Q\d+\))?\s*with data related to this item\.?',
+    re.I | re.S)
+
+
+def strip_boilerplate(text):
+    return re.sub(r'\s+', ' ', _BOILER.sub(' ', text or '')).strip()
 
 
 def title_of(image_title):
@@ -230,17 +266,111 @@ def title_of(image_title):
     return t.replace('_', ' ').strip()
 
 
-def fetch_context(rows, alt, session):
+# How much of a Commons note is kept. Long notes wander off the photograph and
+# into the institution's history, which is interesting and not what alt text is
+# for; 400 characters holds the part that describes the thing in the frame.
+CONTEXT_MAX = 400
+
+
+def clip_note(text, limit=CONTEXT_MAX):
+    """Cut a Commons note to `limit` characters without ending mid-word.
+
+    The cut used to be a bare `desc[:400]`, which landed wherever it landed: 34
+    of the 703 stored notes ended on a severed word, so a screen reader
+    announced a stray syllable and stopped — "a Roman actor's mask (the only
+    one of its kind in Britain), bot". Sighted readers never saw it, because
+    the alt text is the one part of a post only a screen reader reaches.
+
+    A sentence end is preferred, so the note reads as though it simply
+    finished. That is only taken if it leaves at least half the budget: some of
+    these notes open with an abbreviation or a date, and honouring a full stop
+    20 characters in would throw away the description to respect a boundary.
+
+    Otherwise it backs off to the last space and marks the cut with an
+    ellipsis, which is honest about there being more and is not announced as a
+    word. Trailing punctuation left dangling by the backup is dropped, so the
+    result is never "…in Britain), …".
+    """
+    text = (text or '').strip()
+    if len(text) <= limit:
+        return text
+
+    head = text[:limit]
+    sentence = re.search(r'^.*[.!?](?=\s|$)', head, re.S)
+    if sentence and len(sentence.group().strip()) >= limit // 2:
+        return sentence.group().strip()
+
+    cut = head.rsplit(' ', 1)[0].rstrip(' ,;:-–—')
+    # Two ways the backup fails, both ending in a hard cut instead.
+    #
+    # It can give back almost nothing, when the only space in the head is an
+    # early one: "Est." in front of a long unbroken run collapsed the whole
+    # note to "Est.…". That trades the entire description for a clean boundary,
+    # which is the same trade the sentence branch above refuses, so it is
+    # refused here on the same threshold.
+    #
+    # It can also give back the whole head, when there is no space at all, and
+    # appending the ellipsis to that would exceed the limit.
+    if len(cut) < limit // 2 or len(cut) >= limit:
+        cut = head[:limit - 1].rstrip(' ,;:-–—')
+    return cut + '…'
+
+
+# Stored notes that predate the fixes above, identified from the stored string
+# alone. Being at exactly the cap means the old bare desc[:400] did the cutting;
+# a CSS declaration or a mw-parser-output class means a stylesheet came through
+# the stripper. Neither can be repaired in place, so both are refetch triggers.
+_JUNK = re.compile(r'mw-parser-output|\.mbox|font-size\s*:|line-height\s*:'
+                   r'|border-collapse\s*:|box-sizing\s*:|border-spacing\s*:'
+                   r'|\{\|')          # a raw wikitext table, never rendered
+
+
+def is_suspect(note):
+    # At the cap AND ending mid-word is the old bare desc[:400]'s signature.
+    # The cap alone is not: clip_note can land on exactly the cap legitimately,
+    # and flagging that would make --refetch-suspect re-fetch the same handful
+    # of files on every run without ever settling.
+    severed = len(note) == CONTEXT_MAX and note[-1:].isalnum()
+    return severed or bool(_JUNK.search(note)) or bool(_BOILER.search(note))
+
+
+def fetch_context(rows, alt, session, refetch_suspect=False):
     """Pull ImageDescription from Commons, keeping only the ~third that says
-    more than the file title already does."""
+    more than the file title already does.
+
+    Normally this only fills gaps: an entry that already has a `context` key is
+    left alone, so a rerun costs nothing and a Commons edit does not silently
+    rewrite alt text nobody asked to change.
+
+    `refetch_suspect` reopens the notes the current rules would have stored
+    differently: those sitting at exactly `CONTEXT_MAX`, which is the signature
+    of the old hard character cut, and those carrying stylesheet text that used
+    to survive `strip_markup`. Both need the original description back from
+    Commons to redo, which is why this is a refetch and not a local pass — the
+    stored string has already lost what the fix needs.
+    """
+    def outstanding(row):
+        entry = alt.get(library_id(row), {})
+        if 'context' not in entry:
+            return True
+        return refetch_suspect and is_suspect(entry.get('context') or '')
+
     todo = [r for r in rows
-            if r['image_source'] != 'geograph'
-            and 'context' not in alt.get(library_id(r), {})]
-    log(f'context  {len(todo)} files to check on Commons')
+            if r['image_source'] != 'geograph' and outstanding(r)]
+    log(f'context  {len(todo)} files to check on Commons'
+        + ('  (including notes stored under the old rules)' if refetch_suspect else ''))
 
     for i in range(0, len(todo), 50):
         chunk = todo[i:i + 50]
-        by_title = {r['image_title']: r for r in chunk}
+        # A title maps to a LIST of rows, not one row. Five photographs in the
+        # manifest serve two libraries each — a branch and the town it is in —
+        # and keying by title alone silently kept whichever came last in the
+        # chunk. Gloucester sat on a stale note through two refetches for this
+        # reason while Longlevens, sharing the same photograph, updated fine:
+        # no error, no log line, just a row the loop never reached.
+        by_title = {}
+        for r in chunk:
+            by_title.setdefault(r['image_title'], []).append(r)
         try:
             d = session.get('https://commons.wikimedia.org/w/api.php', timeout=60, params={
                 'action': 'query', 'format': 'json', 'prop': 'imageinfo',
@@ -252,18 +382,31 @@ def fetch_context(rows, alt, session):
         norm = {n['to']: n['from'] for n in d.get('query', {}).get('normalized', [])}
         for page in d.get('query', {}).get('pages', {}).values():
             requested = norm.get(page.get('title'), page.get('title'))
-            row = by_title.get(requested)
-            if not row:
+            matched = by_title.get(requested)
+            if not matched:
                 continue
             em = (page.get('imageinfo') or [{}])[0].get('extmetadata', {})
-            desc = strip_markup(em.get('ImageDescription', {}).get('value'))
+            desc = strip_boilerplate(strip_markup(em.get('ImageDescription', {}).get('value')))
             title = title_of(requested)
 
             useful = ''
             if desc and len(desc) - len(title) > 25:
                 if difflib.SequenceMatcher(None, desc.lower(), title.lower()).ratio() < 0.85:
-                    useful = desc[:400]
-            alt.setdefault(library_id(row), {})['context'] = useful
+                    useful = clip_note(desc)
+            # Last gate, and deliberately a discard rather than another
+            # stripper. Commons descriptions arrive in whatever state an editor
+            # left them: rendered HTML, escaped HTML, raw wikitext tables. Each
+            # form needs its own cleaner and there will be another one, so the
+            # backstop is a shape test on the OUTPUT — if what survived still
+            # looks like markup, no note is served at all. The alt text loses a
+            # sentence of context; the alternative is a screen reader reading
+            # out a stylesheet, which is what shipped for 17 libraries.
+            if _JUNK.search(useful):
+                log(f'         markup survived, note dropped: '
+                    f'{matched[0].get("name", "?")}')
+                useful = ''
+            for row in matched:
+                alt.setdefault(library_id(row), {})['context'] = useful
 
         save_alt(alt)
         log(f'         {min(i + 50, len(todo)):>5}/{len(todo)}')
@@ -417,7 +560,9 @@ def main():
     ap.add_argument('--workers', type=int, default=4,
                     help='concurrent claude calls (default 4)')
     ap.add_argument('--context-only', action='store_true',
-                    help='refresh the Commons notes without calling the model')
+                    help='fetch missing Commons notes only, no model calls')
+    ap.add_argument('--refetch-suspect', action='store_true',
+                    help='also redo notes stored under the old cut/strip rules')
     args = ap.parse_args()
 
     rows = load_rows()
@@ -425,7 +570,7 @@ def main():
     session = requests.Session()
     session.headers.update({'User-Agent': USER_AGENT})
 
-    fetch_context(rows, alt, session)
+    fetch_context(rows, alt, session, refetch_suspect=args.refetch_suspect)
     if args.context_only:
         ctx = sum(1 for v in alt.values() if v.get('context'))
         log(f'\ncontext notes held: {ctx}')
