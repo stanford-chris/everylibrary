@@ -53,7 +53,8 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
 from everylibrary_post import (MANIFEST, DATA, USER_AGENT, library_id,
-                               commons_filepath_url, display_name)
+                               commons_filepath_url, display_name,
+                               typographic)
 
 ALT_PATH = DATA / 'alt_text.json'
 
@@ -406,7 +407,11 @@ def fetch_context(rows, alt, session, refetch_suspect=False):
                     f'{matched[0].get("name", "?")}')
                 useful = ''
             for row in matched:
-                alt.setdefault(library_id(row), {})['context'] = useful
+                # Curled on the way in, so the store matches house style at
+                # rest. The poster curls again on the way out, which is a
+                # no-op on already-curled text and covers anything written
+                # before 20 August 2026 by another route.
+                alt.setdefault(library_id(row), {})['context'] = typographic(useful)
 
         save_alt(alt)
         log(f'         {min(i + 50, len(todo)):>5}/{len(todo)}')
@@ -596,7 +601,7 @@ def main():
             except Exception:
                 text = None
             if text:
-                alt.setdefault(library_id(row), {})['visual'] = text
+                alt.setdefault(library_id(row), {})['visual'] = typographic(text)
                 done += 1
             else:
                 failed += 1

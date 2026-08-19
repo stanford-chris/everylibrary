@@ -148,11 +148,26 @@ def typographic(s):
     O'Nysius — and every one of them went out uncurled until 20 August 2026.
     """
     out, prev = [], ' '
-    for ch in s:
+    for i, ch in enumerate(s):
         if ch == '"':
             out.append('\u201c' if prev in ' ([{\n' else '\u201d')
         elif ch == "'":
-            out.append('\u2019')
+            # Opening position gets a left single quote, exactly as a double
+            # quote does. The model labels signage in single quotes constantly
+            # ('Public Library', 'Parks & Recreation', 'LIBRARY') 111 times
+            # across the two alt-text stores, and closing both ends reads as a
+            # typo. There is not one elision ("'90s", "'tis") in either corpus,
+            # so the only exception needed is the one below.
+            #
+            # WARNING: the "'s" guard is not hypothetical. Wikipedia's Carnegie
+            # lists carry two notes with a space before the possessive, "Thomas
+            # Jefferson 's Monticello" and "Pacific University 's first
+            # library", and without it those read "Jefferson \u2018s", which is
+            # worse than the straight apostrophe this whole change is fixing.
+            rest = s[i + 1:i + 3]
+            opening = prev in ' ([{\n' and not (
+                rest[:1] == 's' and not rest[1:2].isalpha())
+            out.append('\u2018' if opening else '\u2019')
         else:
             out.append(ch)
         prev = ch
