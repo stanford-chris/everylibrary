@@ -132,6 +132,33 @@ def save_state(state):
     STATE_FILE.write_text(json.dumps(state, indent=2))
 
 
+def typographic(s):
+    """Curly quotes and apostrophes, which is the house style.
+
+    Applied to the leaf helpers rather than to the finished post, for two
+    reasons. TextBuilder records each facet as a byte range into the text
+    already emitted, and a straight apostrophe is one byte where a curly one is
+    three, so curling the assembled string silently slides every link off the
+    words it belongs to. And `image_title` is a Commons filename that reaches a
+    URL: "File:Airedale Centre - Queen's Park Drive..." must keep its straight
+    apostrophe or Special:FilePath returns a 404.
+
+    23 library names, 77 addresses, 7 towns and 4 photographers in the roster
+    carry a straight apostrophe — St. John's Wood, Bishop's Stortford, Dai
+    O'Nysius — and every one of them went out uncurled until 20 August 2026.
+    """
+    out, prev = [], ' '
+    for ch in s:
+        if ch == '"':
+            out.append('\u201c' if prev in ' ([{\n' else '\u201d')
+        elif ch == "'":
+            out.append('\u2019')
+        else:
+            out.append(ch)
+        prev = ch
+    return ''.join(out)
+
+
 # Names that already say what the building is, so appending 'Library' would be
 # wrong: 'Idea Store Bow', 'Kinson Hub', 'Whitley Bay Customer First Centre'.
 FACILITY_WORD = re.compile(
@@ -144,7 +171,7 @@ def display_name(name):
     'Redland', 'Seaton'. A post reading just 'Torrington' never says what the
     photograph shows, and posts get reshared away from the account's context,
     so each one has to stand alone."""
-    s = re.sub(r'\s+', ' ', name or '').strip()
+    s = typographic(re.sub(r'\s+', ' ', name or '').strip())
     if 'librar' in s.lower() or FACILITY_WORD.search(s):
         return s
     return f'{s} Library'
@@ -173,7 +200,7 @@ def clean_address(address, postcode):
     pc = re.sub(r'\s+', ' ', (postcode or '').strip().upper())
     if not s:
         return pc
-    return f'{s} {pc}' if pc else s
+    return typographic(f'{s} {pc}' if pc else s)
 
 
 TRAILING_ADMIN = {'council', 'borough', 'county', 'metropolitan', 'district',
@@ -197,7 +224,7 @@ def short_place(authority):
         words.pop()
 
     s = re.sub(r'\s+', ' ', ' '.join(words)).strip(' ,')
-    return s or authority
+    return typographic(s or authority)
 
 
 # ---------------------------------------------------------------- the image
@@ -311,12 +338,13 @@ def build_post(row):
     # reader still sees the terms without a second run of blue swallowing the
     # credit line.
     tb.text('📷 ')
+    who = typographic(row['photographer'])
     if row.get('credit_page'):
-        tb.link(row['photographer'], row['credit_page'])
+        tb.link(who, row['credit_page'])
     else:
-        tb.text(row['photographer'])
+        tb.text(who)
 
-    tb.text(f" · {row['licence'] or 'CC BY-SA'}")
+    tb.text(typographic(f" · {row['licence'] or 'CC BY-SA'}"))
 
     # Two tags, no more. #Libraries for the topic, the town so local people can
     # find their own branch. Skipped when the roster has no usable town: a wrong
@@ -463,9 +491,12 @@ def build_alt(row):
     if visual:
         # Labels lead their sections, so each survives truncation with the text
         # it introduces rather than being stranded at the end of it.
-        parts = [f'{AI_PREFIX} {visual}']
+        # Curled here rather than in the store: the descriptions already written
+        # carry straight quotes, and a listener gets the same house style as a
+        # reader without a migration.
+        parts = [f'{AI_PREFIX} {typographic(visual)}']
         if context:
-            parts.append(f'{COMMONS_PREFIX} {context}')
+            parts.append(f'{COMMONS_PREFIX} {typographic(context)}')
         return ' '.join(parts)[:ALT_MAX]
 
     place = short_place(row['authority'])
