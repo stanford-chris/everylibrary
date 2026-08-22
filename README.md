@@ -86,6 +86,12 @@ Geograph images resolve to the “stamped” variant, which has the credit burne
 
 **Attribution lives in two places, by design.** Each post names its own photographer and licence, with the name linking to the file's source page: that is the CC obligation, it is per-image, and it is the only credit that survives a reshare. Platform-level credit for DCMS (OGL), Libraries Hacked and OpenStreetMap (ODbL) lives in the **pinned post**, because bios carry no link facets and both licences ask for a link where possible. The bio points at the pinned post rather than repeating it.
 
+**The bio, as of 22 August 2026:**
+
+> A 🤖 visiting every public library in the United Kingdom, one at a time. Sources and credits in the pinned post. Image descriptions are written by A.I. Not affiliated with any library service. Run by @stanfordc.bsky.social. 📚
+
+Nothing in this repo sets it. It is edited by hand on the account, so this line is the only record of what it says and the only way a later session can notice drift. Note that the A.I. disclosure now sits here as well as at the head of every description. The in-post label is still the one that matters, for the reason given under “Alt text” below.
+
 Re-run `everylibrary_post.py --pin` to update that note. It replaces its own previous version and refuses to delete a pinned post it does not recognise.
 
 ## Alt text
