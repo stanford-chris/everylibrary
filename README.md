@@ -27,7 +27,7 @@ Cross-check: the two datasets were built independently and agree closely. Scotla
 
 This previously said “the Scottish and Welsh records (739 libraries)”, which quietly dropped Northern Ireland's 98. They arrive through the same aggregate with the same unstated licence, and nothing here ever recorded a finding that they were separately covered. The enquiry as sent does ask about all four nations; it was only this scope line, and the fallback below, that were narrower than the question.
 
-⚠️ **The roster is a snapshot**, taken 16 August 2026, and nothing re-fetches it. See “The roster is frozen” below.
+The roster was snapshotted on 16 August 2026. It is re-checked and re-applied monthly from 23 August 2026: see “The roster: detected monthly, applied monthly” below. It is still not rebuilt — additions are appended and closures removed, and no existing row is ever rewritten.
 
 ## The image pipeline
 
@@ -128,11 +128,11 @@ Two filters stand between the model and a screen reader, both because the naive 
 
 A dropped description falls back to bare identification. That is honest about knowing nothing, which a fabrication is not — and a wrong name is the one error a listener cannot detect.
 
-## The roster is frozen
+## The roster: detected monthly, applied monthly
 
-`data/uk_libraries_images.csv` is a snapshot and nothing re-fetches it. Over a two-year rotation the bot will eventually post a library that has closed, and will never post one that opened afterwards.
+`data/uk_libraries_final.csv` was a frozen snapshot until 23 August 2026. Over a two-year rotation that meant the bot would eventually post a library that had closed, and would never post one that opened afterwards.
 
-`everylibrary_roster_check.py` detects that drift. It is read-only: it never writes to the manifest, the post state or the alt text.
+`everylibrary_roster_check.py` detects the drift and `everylibrary_roster_apply.py` acts on it. **They are deliberately two scripts.** The check is the record of what upstream did and writes a report a person reads; the apply is the action. Folded together, the only account of a closure would be the fact that a row had gone. The check remains strictly read-only: it never writes to the corpus, the manifest, the post state or the alt text.
 
 ```bash
 python3 everylibrary_roster_check.py           # report and notify
@@ -141,7 +141,21 @@ python3 everylibrary_roster_check.py --json     # machine-readable
 
 Runs monthly on the 1st at 10:00 under `com.chrisstanford.everylibraryroster`, writing `~/Library/Logs/everylibrary-roster.md`. A clean run writes nothing and deletes any previous report, so the file existing means there is something to read.
 
-**Detecting rather than refreshing is deliberate.** `library_id` is `sha1(name|postcode|lat)`, so an upstream coordinate correction mints a new id, the library reads as never-posted and goes out twice. Solvable, but it is work spent before anyone knows the size of the problem, and the drift rate is unmeasured. A year of reports will say whether the refresh is worth building and which fields actually move.
+`everylibrary_monthly.sh` is what that job actually runs, and it is six steps under the worst-exit pattern — every step runs whatever the last one returned, and the exit code is the worst of them:
+
+```bash
+everylibrary_roster_check.py               # report the drift
+everylibrary_roster_apply.py --live        # add and remove
+everylibrary_urls.py --recheck             # re-verify every council link
+everylibrary_images.py --recheck-misses    # look again for photographs
+everylibrary_images.py --manifest-only     # cheap rebuild, in case the sweep died
+everylibrary_describe.py                   # alt text for whatever turned up
+update_colophon_library_count.py --dry-run # report the site's figures drifting
+```
+
+⚠️ **The colophon step reports and never writes.** `update_colophon_library_count.py` commits and pushes to the site repo by default, and an unattended job must not: the change would sit committed and undeployed until someone ran `site_deploy.sh`. Until the monthly pass existed the colophon could only go stale when a harvest was run by hand; now it drifts every month, so the drift is at least named in the log.
+
+**Detecting rather than refreshing was deliberate, and the reason has since been removed.** `library_id` was `sha1(name|postcode|lat)`, so an upstream coordinate correction minted a new id, the library read as never-posted and would have gone out twice. That was fixed on 23 August 2026: the latitude is gone from the key and `library_id` and the check's match key are now one function, `norm()`, imported from the poster. See “What the applier will and will not do” below for what replaced the refresh — which is still not a rebuild.
 
 Three refusals, all tested, because every failure here is silent:
 
@@ -151,15 +165,89 @@ Three refusals, all tested, because every failure here is silent:
 
 **Disappearance from the endpoint is the closure signal.** The API carries a `Year closed` field, but it is empty on all 3,753 live records, so it cannot be relied on to mean anything. It is still reported, as a tripwire for it starting to be populated.
 
-First run, 17 August 2026: three additions (Stratford-upon-Avon, Dafen, Pontyates), no closures. Additions will never post — the rotation reads the frozen CSV, so adding them needs an image-pipeline run.
+First run, 17 August 2026: three additions (Stratford-upon-Avon, Dafen, Pontyates), no closures.
 
-## The photographs are frozen too
+## What the applier will and will not do
 
-**Nothing looks for new pictures.** The image stages have run twice in total, 16 and 18 August 2026, and no job re-runs them. The monthly pass calls `everylibrary_images.py --manifest-only`, which rebuilds the CSV from `data/image_state.json` plus the freshly re-verified links and **fetches nothing**. It cannot move a library from `postable=no` to `yes`.
+`everylibrary_roster_apply.py` makes two changes to `data/uk_libraries_final.csv` and no others:
 
-So the rotation is fixed at 2,238 and the other 1,512 libraries are unillustrated for good, however many people photograph their local library over the next two years. That is a live loss rather than a theoretical one: Commons geosearch is the largest source here by some way, and both stage 1 and stage 2b read Wikidata, which gains library items steadily.
+- **Adds** libraries the live roster carries and the corpus does not, with blank `osm_id`, `wikidata` and `match_m`. Those come from the Overpass spatial join that built the original corpus, and no script here re-runs it. The image stages key on `osm_id or lat,lon`, so a blank OSM column costs nothing, and stage 2b reaches Wikidata photographs by position rather than by link.
+- **Removes** libraries that have vanished from the roster and were **never posted**. Disappearance is the closure signal. A posted library is never removed: the post exists, and dropping the row would only lose the record of it. Without `post_state.json` it cannot tell, so it removes nothing and says so.
 
-**Re-sweeping is safe whenever it is wanted.** `next_library()` keeps the running order in `post_state.json` and appends anything new, shuffled among itself, to the end — so a grown corpus cannot reshuffle the queue or re-post anything already out. The cost is time, not money: no model calls to find images, roughly an hour of Commons calls from Seoul for a full stage 2, and only newly matched libraries need describing afterwards. The consequence to weigh is that a library found on a later sweep goes to the back of the queue, so a picture uploaded next month posts in 2028.
+**Append-only is the whole safety argument.** An existing row is never rewritten, so no `library_id` can move underneath the posted state — verified on the first live run: all 3,750 existing rows came back byte-identical. A full rebuild would re-derive every row to gain three, and needs a script that does not exist.
+
+Nation comes from the ONS authority-code prefix. Verified 23 August 2026 against all 3,750 matched records: `E`/`S`/`W`/`N` predicts the corpus nation with no exceptions. An unrecognised prefix is refused rather than guessed at, as is an unparseable coordinate, a nameless record, and an addition whose `library_id` is already in use.
+
+A run touching more than 40 rows is **refused**, not applied. That is the `?offset=` lesson in another place: a bad read of the API arrives looking exactly like data.
+
+### ⚠️ A new library usually arrives with no coordinates
+
+All three additions the first check found carry `null` in **every** latitude and longitude field the API has, including the two UPRN ones. A library with no position cannot be matched to a photograph by any stage here, so without a fix this step would add nothing at all, ever.
+
+Missing coordinates are therefore resolved from the postcode through **postcodes.io** (ONS data, Open Government Licence, no key, one bulk call however many arrive). That is the same kind of figure the roster already ships: `images.py`'s own radius comment puts postcode-derived coordinates about 45 m out against a 250 m search radius.
+
+It recovers **one of the three**. Dafen and Pontyates are refused because their postcodes are malformed rather than merely absent — `SA15 5SC` uses a letter the final pair excludes, and neither exists in ONS data or in the terminated-postcode list. **An unresolvable postcode is refused, never guessed:** a wrong position attaches a library to a photograph of somewhere else, which is the one error a reader cannot detect.
+
+## Looking again: the monthly re-sweep
+
+Until 23 August 2026 **nothing ever looked twice.** The image stages had run on 16 and 18 August and no job re-ran them; the monthly pass called `--manifest-only`, which fetches nothing by design. A photograph uploaded to Commons in September could never reach the bot.
+
+⚠️ **A plain re-run would not have helped either, and that is the part worth knowing.** Every stage memoises its *misses*, permanently:
+
+| Stage | Memo | Effect on a second run |
+|---|---|---|
+| 1 · Wikidata P18 | `state["p18"]` stores a miss as `null` — “record misses too, so we don't refetch” | never re-asks that QID |
+| 2 · Commons geosearch | `state["geosearch_done"]` | never re-sweeps that library, hit or miss |
+| 2b · Wikidata neighbours | the whole item list cached in `state["wd_items"]` | re-matches against a frozen set of Wikidata items |
+| 3 · Geograph | records only hits, so misses retry ✅ | but against a static local index |
+
+`--recheck-misses` expires those memos. It runs monthly, and it is the reason the pass exists in its current form.
+
+### ⚠️ A library that already has a photograph is never looked at again
+
+Not a saving: a correctness rule, and the sharpest thing in this pipeline.
+
+The sources are **ranked**. `wikidata-p18` beats `commons-geosearch`, which beats `geograph` and `wikidata-nearby`. And `alt_text.json` is keyed **by library, not by image**. So a newly discovered higher-ranked photograph replaces the incumbent and keeps the description written for the picture it displaced — a fluent, confident description of a building nobody is looking at, served to screen-reader users, with nothing downstream able to notice. `describe.py` only fills entries that have no text at all.
+
+`build_manifest` already refused to rank stage 2b above Geograph for exactly this reason. Expiring the misses reintroduced the same hazard through the front door.
+
+**Measured against the real state file, before any of it ran in production:** re-asking Wikidata about every miss returned **140 new P18 photographs, of which three belonged to a library that had none.** The other 137 would each have swapped a described picture for an undescribed one.
+
+So `expire_misses()` protects anything `resolve_source()` says already has a picture — and `resolve_source()` is the same function `build_manifest` uses, extracted so the two cannot drift into disagreeing about what “already has a picture” means. The re-run confirmed it: 2,238 libraries left alone, and stage 1 returned exactly the three.
+
+Two corollaries:
+- **The sweep memo is keyed on whether the library ended up with a picture, not on whether the stage recorded a hit.** A geosearch hit whose Commons file has since been deleted leaves `state["geo"]` populated and `resolve_source` returning nothing; keying on the hit would strand that library with no photograph for ever. A test caught this.
+- **A better photograph for a library that already has one is out of scope**, deliberately. Getting one means re-describing, and the description is the expensive part.
+
+### What a grown corpus does to the queue
+
+`next_library()` keeps the running order in `post_state.json` and appends anything new, shuffled among itself, to the end, so a grown corpus cannot reshuffle the queue or re-post anything already out. The consequence to weigh is that **a library found on a later sweep goes to the back**: a picture uploaded next month posts in 2028.
+
+### Geograph is annual, not monthly
+
+Stage 3 needs a 235 MB dump re-downloaded and 8.3 million rows rescanned, and it has supplied 103 photographs in total, because the other stages harvest the mirrored copies first. `everylibrary_geograph_annual.sh` runs it once a year under `com.chrisstanford.everylibrarygeograph`, on 16 August, the anniversary of the original harvest. ⚠️ `extract_geograph_index()` returns the cached JSON whenever it exists, so a refresh means **deleting the index**, not just re-downloading the dump — and the index is deleted only after a good download has landed, or a failed fetch would leave stage 3 with nothing at all.
+
+## Identity: `library_id`
+
+`sha1(norm(name, postcode))`, twelve hex characters. It keys **both** `alt_text.json` and `post_state.json`, so changing it means migrating both, on every machine.
+
+⚠️ **It hashed the latitude until 23 August 2026**, which made identity depend on a number the upstream roster corrects: a coordinate refined by a metre minted a new id, the library read as never-posted, and it would have gone out a second time. That single fact is why the roster was left frozen for a week. `everylibrary_roster_check.py` had always matched on name and postcode instead, with the reason in its docstring; the two are now one function, `norm()`, defined in the poster and imported by the check, so they cannot drift apart. `norm()` also folds case and whitespace, which the old id did not, so an upstream tidy of a name no longer re-keys a library either.
+
+Verified against all 3,750 rows: name and postcode alone are unique, normalised or not. `test_everylibrary_roster_apply.py` re-checks that against the live corpus, because it is now a property of the data rather than of the hash.
+
+`everylibrary_migrate_ids.py` does the re-keying. It refuses on a collision and on a file holding a mix of old and new ids, and it is idempotent. Run 23 August 2026: 2,238 alt-text entries here, and 21 posted plus 2,238 ordered on the Mini. Done at 21 posts because that is a migration you can check by eye.
+
+## Tests
+
+```bash
+python3 test_everylibrary_roster_apply.py     # 44 tests, stdlib only
+```
+
+`atproto` and `requests` are stubbed at import, so this runs on either machine. Nothing reaches the network.
+
+**The refusal cases are the point.** Every failure mode in this pipeline is silent: a library placed at the wrong coordinates gets a photograph of somewhere else and reads as an ordinary post, a memo left unexpired makes the monthly sweep find nothing and report a clean run for ever, an invented `osm_id` fabricates a match nobody made. So the suite asserts the refusals, and the source ranking is pinned because the protection above is pointless if a lower-ranked source cannot in fact be displaced.
+
+Verified by mutation, not by a green run. Eleven deliberate breakages were each confirmed to fail the suite and to pass again on restore — and two of them exposed real gaps rather than confirming coverage: removing the P18 preference passed until a ranking test existed, and a geosearch hit whose Commons file has since been deleted was being treated as an illustrated library and could never be re-swept.
 
 ## Why not Street View
 
@@ -214,5 +302,5 @@ Checked August 2026: **no UK library bot exists, and the niche is clear.**
 
   ⏳ **No reply as of 23 August 2026**, a week after the enquiry went out. The bot has been posting Scottish, Welsh and Northern Irish libraries throughout: 21 posts in, that is a handful of records, but the count grows by three a day and the decision to keep all four nations was taken before the question had been outstanding this long.
 - Decide whether to include the 71 independent community libraries, which sit outside the statutory service.
-- **Decide whether the image sweep should ever run again.** See “The photographs are frozen too”. Nothing is scheduled, and 1,512 libraries are outside the rotation for want of a picture.
+- ✅ **Resolved 23 August 2026: the image sweep runs monthly.** See “Looking again”. The open part of it is the 1,512 libraries still outside the rotation for want of a picture — the sweep can only find what someone has photographed and uploaded.
 - Closure history is England-heavy: 470 English closures on record against 6 Scottish and 2 Welsh, yet SLIC has separately verified 53 Scottish closures between 2014 and 2024. Don't imply national coverage on the closure angle.
