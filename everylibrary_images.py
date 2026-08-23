@@ -653,10 +653,18 @@ def build_manifest(rows, state):
             "postable": "yes" if (source and clean_artist(meta)) else "no",
         })
 
-    with open(MANIFEST_PATH, "w", newline="") as f:
+    # Temp file then replace, as save_state does. This used to write in place,
+    # which was harmless while the manifest was only ever rebuilt by hand: from
+    # 23 August 2026 the monthly pass rebuilds it on a schedule, and the poster
+    # reads it three times a day. A half-written CSV read by the poster is a
+    # short manifest, which is indistinguishable from libraries having been
+    # removed from the rotation.
+    tmp = MANIFEST_PATH + ".tmp"
+    with open(tmp, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(out[0].keys()))
         w.writeheader()
         w.writerows(out)
+    os.replace(tmp, MANIFEST_PATH)
     return out
 
 
