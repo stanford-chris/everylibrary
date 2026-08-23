@@ -27,6 +27,20 @@ Verified 23 August 2026 against all 3,750 matched records: the prefix predicts
 the corpus nation with no exceptions. An unrecognised prefix is refused, not
 guessed at.
 
+⚠️ A new library usually arrives with NO COORDINATES. All three additions the
+first drift check found had null in every latitude and longitude field the API
+carries, and a library with no position cannot be matched to a photograph by
+any stage here, so this step would add nothing at all. Missing coordinates are
+therefore filled from the postcode via postcodes.io (ONS data, Open Government
+Licence, no key). That is the same kind of figure the roster already ships —
+images.py's radius comment puts postcode-derived coordinates about 45 m out
+against a 250 m search radius — so it changes the precision of nothing.
+
+A postcode that will not resolve is refused, not guessed at. Two of those first
+three are malformed rather than merely absent: `SA15 5SC` uses a letter the
+final pair excludes, and neither Welsh postcode exists in ONS data or in the
+terminated list. Bad upstream data, and no business being in the corpus.
+
     python3 everylibrary_roster_apply.py            # report, write nothing
     python3 everylibrary_roster_apply.py --live     # apply
     python3 everylibrary_roster_apply.py --live --max-change 40
@@ -39,9 +53,10 @@ import argparse
 import csv
 import os
 import sys
-from pathlib import Path
 
-from everylibrary_post import DATA, library_id, norm
+import requests
+
+from everylibrary_post import DATA, USER_AGENT, library_id, norm
 from everylibrary_roster_check import fetch_live, load_posted
 
 CORPUS = DATA / 'uk_libraries_final.csv'
@@ -74,7 +89,39 @@ def load_corpus():
     return rows
 
 
-def to_row(rec):
+POSTCODES_API = 'https://api.postcodes.io/postcodes'
+
+
+def geocode_postcodes(postcodes, user_agent):
+    """postcode -> (lat, lon) for those ONS knows. One bulk call, not N.
+
+    Anything unresolved is simply absent from the result, and its library is
+    refused by the caller. Guessing a position would put a library on a
+    photograph of somewhere else, which is the one error nobody reading the
+    feed could detect.
+    """
+    out = {}
+    postcodes = [p for p in postcodes if p]
+    if not postcodes:
+        return out
+    for i in range(0, len(postcodes), 100):       # the API's documented cap
+        chunk = postcodes[i:i + 100]
+        try:
+            r = requests.post(POSTCODES_API, json={'postcodes': chunk},
+                              headers={'User-Agent': user_agent}, timeout=60)
+            r.raise_for_status()
+            payload = r.json()
+        except (requests.RequestException, ValueError) as exc:  # noqa: PERF203
+            log(f'   postcode lookup failed for {len(chunk)}: {exc}')
+            continue
+        for item in payload.get('result') or []:
+            res = item.get('result')
+            if res and res.get('latitude') is not None:
+                out[item['query']] = (res['latitude'], res['longitude'])
+    return out
+
+
+def to_row(rec, coords=None):
     """One live API record as a corpus row, or a string saying why not."""
     code = (rec.get('Local authority code') or '').strip()
     nation = NATIONS.get(code[:1])
@@ -84,7 +131,9 @@ def to_row(rec):
     lat = (rec.get('Latitude') or '').strip()
     lon = (rec.get('Longitude') or '').strip()
     if not lat or not lon:
-        return 'no coordinates'
+        if not coords:
+            return 'no coordinates, and the postcode did not resolve'
+        lat, lon = str(coords[0]), str(coords[1])
     try:
         float(lat), float(lon)
     except ValueError:
@@ -149,11 +198,23 @@ def main():
     log(f'live {len(live)} · corpus {len(corpus)}')
 
     # ---- additions -------------------------------------------------------
+    fresh = [rec for key, rec in live_by_key.items() if key not in by_key]
+
+    # A new library usually arrives with no position at all, so the postcodes
+    # of the ones missing coordinates are resolved first, in one call, and
+    # handed to to_row(). Doing it up front keeps this to a single request
+    # however many arrive.
+    needs_geocode = [(rec.get('Postcode') or '').strip() for rec in fresh
+                     if not (rec.get('Latitude') or '').strip()
+                     or not (rec.get('Longitude') or '').strip()]
+    located = geocode_postcodes(needs_geocode, USER_AGENT)
+    if needs_geocode:
+        log(f'   {len(located)} of {len(needs_geocode)} missing positions '
+            f'recovered from the postcode')
+
     additions, refused = [], []
-    for key, rec in live_by_key.items():
-        if key in by_key:
-            continue
-        row = to_row(rec)
+    for rec in fresh:
+        row = to_row(rec, located.get((rec.get('Postcode') or '').strip()))
         if isinstance(row, str):
             refused.append((rec.get('Library name'), row))
             continue
