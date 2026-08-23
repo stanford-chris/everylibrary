@@ -28,6 +28,7 @@ Usage:
     python3 everylibrary_images.py --stage 1       # Wikidata only
     python3 everylibrary_images.py --stage 2b      # Wikidata neighbours only
     python3 everylibrary_images.py --manifest-only # rebuild the csv, no network
+    python3 everylibrary_images.py --recheck-misses # look again for pictures that did not exist last time
     python3 everylibrary_images.py --reset         # discard saved state and restart
 """
 
@@ -694,6 +695,43 @@ def report(out):
 # ------------------------------------------------------------------------ main
 
 
+def expire_misses(state, rows):
+    """Forget every "we looked and there was nothing" memo, keep every hit.
+
+    Each stage memoises its misses so a resumed run does not re-ask, which is
+    right within a run and wrong between them: a photograph uploaded to Commons
+    last week can never be found, because the library it belongs to was marked
+    swept in August and is skipped for ever. Nothing here ever looked twice
+    until this flag existed.
+
+    Only the misses go. A library that already has a picture is left alone: the
+    photograph is described, the description cost model calls, and swapping it
+    for a marginally closer one would orphan that work for no gain.
+    """
+    p18_misses = [q for q, v in state["p18"].items() if not v]
+    for q in p18_misses:
+        del state["p18"][q]
+
+    # geosearch_done is the sweep memo; state["geo"] is the hits. Anything in
+    # the first and not the second was a miss.
+    before = len(state.get("geosearch_done", []))
+    state["geosearch_done"] = [k for k in state.get("geosearch_done", [])
+                               if k in state["geo"]]
+    swept_again = before - len(state["geosearch_done"])
+
+    # One large SPARQL query, cached whole. Wikidata gains library items with
+    # photographs steadily, so a stale copy is the whole reason stage 2b would
+    # find nothing on a second run.
+    had_items = len(state.pop("wd_items", []) or [])
+
+    # Stage 3 records only its hits, so its misses are retried already. Its
+    # index is static, though, and only an annual dump re-download moves it.
+    log(f"recheck   forgot {len(p18_misses)} Wikidata misses, "
+        f"{swept_again} swept libraries with no match, "
+        f"and {had_items} cached Wikidata neighbour items")
+    save_state(state)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -701,6 +739,8 @@ def main():
     ap.add_argument("--reset", action="store_true", help="discard saved state first")
     ap.add_argument("--manifest-only", action="store_true",
                     help="rebuild the manifest from saved state and urls.json, fetch nothing")
+    ap.add_argument("--recheck-misses", action="store_true",
+                    help="forget the 'nothing found' memos so the stages look again")
     args = ap.parse_args()
 
     if args.reset and os.path.exists(STATE_PATH):
@@ -720,6 +760,9 @@ def main():
     if args.manifest_only:
         report(build_manifest(rows, state))
         return
+
+    if args.recheck_misses:
+        expire_misses(state, rows)
 
     if args.stage in (None, "1"):
         stage1_wikidata(rows, state)
