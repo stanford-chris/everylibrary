@@ -222,38 +222,58 @@ class Geocoder(unittest.TestCase):
 
 
 class ExpireMisses(unittest.TestCase):
-    """The memo expiry. Every assertion here is about what must SURVIVE."""
+    """The memo expiry, against a small corpus that exercises every source.
+
+    ⚠️ The rows matter. An earlier version of this class passed rows=[], which
+    made nothing count as illustrated and quietly turned every assertion into a
+    test of the unprotected path.
+    """
+
+    def rows(self):
+        def lib(osm_id, wikidata=''):
+            return {'osm_id': osm_id, 'lat': 51.5, 'lon': -0.1,
+                    'wikidata': wikidata}
+        return [
+            lib('kQ1', 'Q1'),   # has a P18 photograph
+            lib('k1', 'Q2'),    # has a geosearch photograph, P18 was a miss
+            lib('k2', 'Q3'),    # nothing at all, P18 was a miss
+            lib('k3'),          # nothing at all, swept fruitlessly
+            lib('k4'),          # has a Wikidata-neighbour photograph
+            lib('k5'),          # has a Geograph photograph
+        ]
 
     def state(self):
         return {
             'p18': {'Q1': 'A.jpg', 'Q2': None, 'Q3': None},
-            'geo': {'k1': {'title': 'File:B.jpg'}},
+            'geo': {'k1': {'title': 'File:B.jpg', 'dist': 3}},
             'geosearch_done': ['k1', 'k2', 'k3'],
-            'wdnear': {'k4': {'qid': 'Q9'}},
-            'geograph': {'k5': {'id': 7}},
-            'imageinfo': {'File:B.jpg': {'user': 'someone'}},
+            'wdnear': {'k4': {'title': 'File:C.jpg', 'dist': 20}},
+            'geograph': {'k5': {'id': 7, 'dist': 10, 'title': 'T',
+                                'url': 'u', 'photographer': 'p'}},
+            'imageinfo': {'File:A.jpg': {'url': 'u'},
+                          'File:B.jpg': {'url': 'u'},
+                          'File:C.jpg': {'url': 'u'}},
             'wd_items': [{'qid': 'Q9'}],
         }
 
     def setUp(self):
         self.saved = []
-        self._real_save = images.save_state
-        self._real_log = images.log
+        self._real_save, self._real_log = images.save_state, images.log
         images.save_state = self.saved.append
         images.log = lambda *a, **k: None
 
     def tearDown(self):
-        images.save_state = self._real_save
-        images.log = self._real_log
+        images.save_state, images.log = self._real_save, self._real_log
 
-    def test_forgets_only_the_wikidata_misses(self):
+    def test_forgets_only_the_unprotected_wikidata_miss(self):
         st = self.state()
-        images.expire_misses(st, [])
-        self.assertEqual(st['p18'], {'Q1': 'A.jpg'})
+        images.expire_misses(st, self.rows())
+        # Q1 is a hit, Q2's library already has a picture, Q3's has nothing.
+        self.assertEqual(st['p18'], {'Q1': 'A.jpg', 'Q2': None})
 
-    def test_forgets_only_swept_libraries_with_no_match(self):
+    def test_forgets_only_fruitless_sweeps_on_unillustrated_libraries(self):
         st = self.state()
-        images.expire_misses(st, [])
+        images.expire_misses(st, self.rows())
         self.assertEqual(st['geosearch_done'], ['k1'])
 
     def test_drops_the_cached_wikidata_item_list(self):
@@ -261,39 +281,191 @@ class ExpireMisses(unittest.TestCase):
         # cannot see a photograph added to Wikidata since. That is the exact
         # reason a plain re-run of the pipeline found nothing.
         st = self.state()
-        images.expire_misses(st, [])
+        images.expire_misses(st, self.rows())
         self.assertNotIn('wd_items', st)
 
     def test_keeps_every_hit(self):
         st = self.state()
-        images.expire_misses(st, [])
-        self.assertEqual(st['geo'], {'k1': {'title': 'File:B.jpg'}})
-        self.assertEqual(st['wdnear'], {'k4': {'qid': 'Q9'}})
-        self.assertEqual(st['geograph'], {'k5': {'id': 7}})
+        before = {k: st[k] for k in ('geo', 'wdnear', 'geograph')}
+        images.expire_misses(st, self.rows())
+        for k, v in before.items():
+            self.assertEqual(st[k], v, k)
 
     def test_keeps_the_commons_metadata_cache(self):
         # Keyed by file title, and a title's metadata does not go stale. Ditching
         # it would re-fetch imageinfo for all 2,238 every month for nothing.
         st = self.state()
-        images.expire_misses(st, [])
+        images.expire_misses(st, self.rows())
         self.assertIn('File:B.jpg', st['imageinfo'])
 
     def test_saves_once(self):
         st = self.state()
-        images.expire_misses(st, [])
+        images.expire_misses(st, self.rows())
         self.assertEqual(len(self.saved), 1)
 
     def test_is_idempotent(self):
         st = self.state()
-        images.expire_misses(st, [])
+        images.expire_misses(st, self.rows())
         first = {k: v for k, v in st.items()}
-        images.expire_misses(st, [])
+        images.expire_misses(st, self.rows())
         self.assertEqual(st, first)
 
     def test_survives_a_state_file_with_no_geosearch_key(self):
         st = {'p18': {}, 'geo': {}, 'wdnear': {}, 'imageinfo': {}}
         images.expire_misses(st, [])
         self.assertEqual(st['geosearch_done'], [])
+
+
+class ExpiryProtectsIllustratedLibraries(unittest.TestCase):
+    """The rule that stops a re-sweep swapping a photograph out from under its
+    own description. Measured 23 August 2026: of 140 new Wikidata photographs a
+    full re-ask returned, 137 belonged to libraries that already had one."""
+
+    def lib(self, **over):
+        r = {'osm_id': '', 'lat': 51.5, 'lon': -0.1, 'wikidata': ''}
+        r.update(over)
+        return r
+
+    def setUp(self):
+        self._real_save, self._real_log = images.save_state, images.log
+        images.save_state = lambda st: None
+        images.log = lambda *a, **k: None
+
+    def tearDown(self):
+        images.save_state, images.log = self._real_save, self._real_log
+
+    def test_keeps_the_p18_miss_of_a_library_that_has_a_geosearch_photo(self):
+        # The failure this exists to prevent: wikidata-p18 outranks
+        # commons-geosearch, so answering this QID next month would replace the
+        # picture and leave alt_text.json describing the old one.
+        lib = self.lib(osm_id='k1', wikidata='Q2')
+        st = {'p18': {'Q2': None}, 'geo': {'k1': {'title': 'File:B.jpg', 'dist': 3}},
+              'geosearch_done': ['k1'], 'wdnear': {}, 'geograph': {},
+              'imageinfo': {'File:B.jpg': {'url': 'u'}}}
+        images.expire_misses(st, [lib])
+        self.assertEqual(st['p18'], {'Q2': None})
+
+    def test_forgets_the_p18_miss_of_a_library_with_no_photograph(self):
+        lib = self.lib(osm_id='k9', wikidata='Q3')
+        st = {'p18': {'Q3': None}, 'geo': {}, 'geosearch_done': ['k9'],
+              'wdnear': {}, 'geograph': {}, 'imageinfo': {}}
+        images.expire_misses(st, [lib])
+        self.assertEqual(st['p18'], {})
+
+    def test_keeps_a_fruitless_sweep_when_geograph_supplied_the_picture(self):
+        # commons-geosearch outranks geograph, so re-sweeping this library
+        # could replace its Geograph photograph with a Commons one.
+        lib = self.lib(osm_id='k5')
+        st = {'p18': {}, 'geo': {}, 'geosearch_done': ['k5'], 'wdnear': {},
+              'geograph': {'k5': {'id': 7, 'dist': 10, 'title': 'T',
+                                  'url': 'u', 'photographer': 'p'}},
+              'imageinfo': {}}
+        images.expire_misses(st, [lib])
+        self.assertEqual(st['geosearch_done'], ['k5'])
+
+    def test_keeps_a_fruitless_sweep_when_a_wikidata_neighbour_supplied_it(self):
+        lib = self.lib(osm_id='k6')
+        st = {'p18': {}, 'geo': {}, 'geosearch_done': ['k6'],
+              'wdnear': {'k6': {'title': 'File:C.jpg', 'dist': 20}},
+              'geograph': {}, 'imageinfo': {'File:C.jpg': {'url': 'u'}}}
+        images.expire_misses(st, [lib])
+        self.assertEqual(st['geosearch_done'], ['k6'])
+
+    def test_forgets_a_fruitless_sweep_on_a_library_with_nothing(self):
+        lib = self.lib(osm_id='k7')
+        st = {'p18': {}, 'geo': {}, 'geosearch_done': ['k7'], 'wdnear': {},
+              'geograph': {}, 'imageinfo': {}}
+        images.expire_misses(st, [lib])
+        self.assertEqual(st['geosearch_done'], [])
+
+    def test_a_hit_whose_file_will_not_resolve_does_not_count_as_illustrated(self):
+        # imageinfo missing means build_manifest drops the source, so the
+        # library really has nothing and should be looked at again.
+        lib = self.lib(osm_id='k8')
+        st = {'p18': {}, 'geo': {'k8': {'title': 'File:gone.jpg', 'dist': 5}},
+              'geosearch_done': ['k8'], 'wdnear': {}, 'geograph': {},
+              'imageinfo': {}}
+        images.expire_misses(st, [lib])
+        self.assertEqual(st['geosearch_done'], [])
+
+    def test_resolve_source_is_what_decides(self):
+        # If expire_misses ever answered "does this have a picture" differently
+        # from build_manifest, the sweep would look for one that then outranks
+        # the incumbent. They must be the same function.
+        lib = self.lib(osm_id='k1', wikidata='Q2')
+        st = {'p18': {'Q2': None}, 'geo': {'k1': {'title': 'File:B.jpg', 'dist': 3}},
+              'geosearch_done': ['k1'], 'wdnear': {}, 'geograph': {},
+              'imageinfo': {'File:B.jpg': {'url': 'u'}}}
+        self.assertEqual(images.resolve_source(lib, st)[0], 'commons-geosearch')
+
+
+class SourceRanking(unittest.TestCase):
+    """The priority order, which is what makes the expiry rule necessary at all.
+
+    If a lower-ranked source could not be displaced by a higher-ranked one,
+    re-sweeping an illustrated library would be harmless and the whole
+    protection could go. It is not harmless, so the order is pinned here.
+    """
+
+    def lib(self, **over):
+        r = {'osm_id': 'k', 'lat': 51.5, 'lon': -0.1, 'wikidata': 'Q1'}
+        r.update(over)
+        return r
+
+    ALL = {
+        'p18': {'Q1': 'A.jpg'},
+        'geo': {'k': {'title': 'File:B.jpg', 'dist': 3}},
+        'wdnear': {'k': {'title': 'File:C.jpg', 'dist': 20}},
+        'geograph': {'k': {'id': 7, 'dist': 10, 'title': 'T',
+                           'url': 'u', 'photographer': 'p'}},
+        'imageinfo': {'File:A.jpg': {'url': 'u'}, 'File:B.jpg': {'url': 'u'},
+                      'File:C.jpg': {'url': 'u'}},
+        'geosearch_done': ['k'],
+    }
+
+    def state(self, drop=()):
+        st = {k: (dict(v) if isinstance(v, dict) else list(v))
+              for k, v in self.ALL.items()}
+        for k in drop:
+            st[k] = {} if isinstance(st[k], dict) else []
+        return st
+
+    def test_p18_outranks_everything(self):
+        self.assertEqual(images.resolve_source(self.lib(), self.state())[0],
+                         'wikidata-p18')
+
+    def test_geosearch_outranks_geograph_and_neighbours(self):
+        self.assertEqual(
+            images.resolve_source(self.lib(), self.state(drop=['p18']))[0],
+            'commons-geosearch')
+
+    def test_geograph_outranks_neighbours(self):
+        self.assertEqual(
+            images.resolve_source(self.lib(), self.state(drop=['p18', 'geo']))[0],
+            'geograph')
+
+    def test_neighbours_are_the_last_resort(self):
+        self.assertEqual(
+            images.resolve_source(self.lib(),
+                                  self.state(drop=['p18', 'geo', 'geograph']))[0],
+            'wikidata-nearby')
+
+    def test_nothing_at_all(self):
+        st = self.state(drop=['p18', 'geo', 'geograph', 'wdnear'])
+        self.assertIsNone(images.resolve_source(self.lib(), st)[0])
+
+    def test_a_p18_whose_file_will_not_resolve_falls_through(self):
+        st = self.state(drop=['geo'])
+        st['imageinfo'].pop('File:A.jpg')
+        self.assertEqual(images.resolve_source(self.lib(), st)[0], 'geograph')
+
+    def test_library_key_prefers_the_osm_id(self):
+        self.assertEqual(images.library_key(self.lib()), 'k')
+
+    def test_library_key_falls_back_to_five_decimal_coordinates(self):
+        self.assertEqual(
+            images.library_key(self.lib(osm_id='', lat=51.5, lon=-0.1)),
+            '51.50000,-0.10000')
 
 
 class LibraryIdIdentity(unittest.TestCase):

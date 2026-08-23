@@ -581,6 +581,58 @@ def attribution_line(meta):
 # ------------------------------------------------------------------- manifest
 
 
+def library_key(r):
+    """How every stage addresses a library in the state file."""
+    return r["osm_id"] or f"{r['lat']:.5f},{r['lon']:.5f}"
+
+
+def resolve_source(r, state):
+    """Which photograph this library gets, in priority order.
+
+    Pulled out of build_manifest so expire_misses() can ask the same question
+    and get the same answer. If the two ever disagreed about whether a library
+    already has a picture, the sweep would go looking for one that would then
+    outrank it — see the note on expire_misses().
+    """
+    key = library_key(r)
+    source = title = dist = None
+
+    qid = r["wikidata"]
+    if qid and state["p18"].get(qid):
+        source, title = "wikidata-p18", "File:" + state["p18"][qid]
+    elif key in state["geo"]:
+        source = "commons-geosearch"
+        title = state["geo"][key]["title"]
+        dist = state["geo"][key]["dist"]
+
+    meta = state["imageinfo"].get(title) if title else None
+    if title and not meta:
+        source = None                     # file vanished or failed to resolve
+
+    if source is None:
+        g = state.get("geograph", {}).get(key)
+        if g:
+            source, dist = "geograph", g["dist"]
+            title = g["title"]
+            meta = {"url": g["url"], "full_url": g["url"],
+                    "width": "", "height": "",
+                    "page": f"https://www.geograph.org.uk/photo/{g['id']}",
+                    "artist": g["photographer"],
+                    "licence": GEOGRAPH_LICENCE, "licence_url": GEOGRAPH_LICENCE_URL}
+
+    # Last resort, and deliberately last. Ranking it above Geograph would
+    # swap the picture under 25 libraries that already have one, and
+    # alt_text.json is keyed by library, not by image: the description would
+    # silently go on describing the photograph it replaced.
+    if source is None:
+        w = state.get("wdnear", {}).get(key)
+        if w and state["imageinfo"].get(w["title"]):
+            source, title, dist = "wikidata-nearby", w["title"], w["dist"]
+            meta = state["imageinfo"][title]
+
+    return source, title, dist, meta
+
+
 def build_manifest(rows, state):
     # Verified library websites, if everylibrary_urls.py has been run. Absent is
     # normal and simply means no row gets a link: the poster falls back to plain
@@ -592,41 +644,9 @@ def build_manifest(rows, state):
 
     out = []
     for r in rows:
-        key = r["osm_id"] or f"{r['lat']:.5f},{r['lon']:.5f}"
-        source = title = dist = None
-
+        key = library_key(r)
         qid = r["wikidata"]
-        if qid and state["p18"].get(qid):
-            source, title = "wikidata-p18", "File:" + state["p18"][qid]
-        elif key in state["geo"]:
-            source = "commons-geosearch"
-            title = state["geo"][key]["title"]
-            dist = state["geo"][key]["dist"]
-
-        meta = state["imageinfo"].get(title) if title else None
-        if title and not meta:
-            source = None                     # file vanished or failed to resolve
-
-        if source is None:
-            g = state.get("geograph", {}).get(key)
-            if g:
-                source, dist = "geograph", g["dist"]
-                title = g["title"]
-                meta = {"url": g["url"], "full_url": g["url"],
-                        "width": "", "height": "",
-                        "page": f"https://www.geograph.org.uk/photo/{g['id']}",
-                        "artist": g["photographer"],
-                        "licence": GEOGRAPH_LICENCE, "licence_url": GEOGRAPH_LICENCE_URL}
-
-        # Last resort, and deliberately last. Ranking it above Geograph would
-        # swap the picture under 25 libraries that already have one, and
-        # alt_text.json is keyed by library, not by image: the description would
-        # silently go on describing the photograph it replaced.
-        if source is None:
-            w = state.get("wdnear", {}).get(key)
-            if w and state["imageinfo"].get(w["title"]):
-                source, title, dist = "wikidata-nearby", w["title"], w["dist"]
-                meta = state["imageinfo"][title]
+        source, title, dist, meta = resolve_source(r, state)
 
         out.append({
             "name": r["name"], "authority": r["authority"], "nation": r["nation"],
@@ -704,7 +724,8 @@ def report(out):
 
 
 def expire_misses(state, rows):
-    """Forget every "we looked and there was nothing" memo, keep every hit.
+    """Forget the "we looked and there was nothing" memos, for libraries that
+    still have nothing.
 
     Each stage memoises its misses so a resumed run does not re-ask, which is
     right within a run and wrong between them: a photograph uploaded to Commons
@@ -712,30 +733,60 @@ def expire_misses(state, rows):
     swept in August and is skipped for ever. Nothing here ever looked twice
     until this flag existed.
 
-    Only the misses go. A library that already has a picture is left alone: the
-    photograph is described, the description cost model calls, and swapping it
-    for a marginally closer one would orphan that work for no gain.
+    ⚠️ A library that ALREADY has a photograph is left entirely alone, and that
+    is not a saving, it is a correctness rule. The sources are ranked, so a
+    newly found one can outrank the incumbent: wikidata-p18 beats
+    commons-geosearch, and geosearch beats both geograph and wikidata-nearby.
+    alt_text.json is keyed by library and not by image, so a swapped photograph
+    keeps the description written for the one it replaced — a confident,
+    fluent, wrong description of a building nobody is looking at, and nothing
+    downstream can detect it. describe.py only fills entries that have no text.
+    build_manifest already refuses to rank stage 2b above Geograph for exactly
+    this reason; this is the same rule applied to the sweep.
+
+    Measured 23 August 2026 against the real state file, before the rule
+    existed: re-asking Wikidata about every miss returned 140 new P18
+    photographs, and exactly THREE of them belonged to a library that had
+    none. The other 137 would each have swapped a described picture for an
+    undescribed one, silently.
+
+    "Already has one" is resolve_source(), the same function build_manifest
+    uses, so the two cannot disagree.
     """
-    p18_misses = [q for q, v in state["p18"].items() if not v]
+    illustrated_qids, illustrated_keys = set(), set()
+    for r in rows:
+        if resolve_source(r, state)[0]:
+            illustrated_keys.add(library_key(r))
+            if r["wikidata"]:
+                illustrated_qids.add(r["wikidata"])
+
+    p18_misses = [q for q, v in state["p18"].items()
+                  if not v and q not in illustrated_qids]
     for q in p18_misses:
         del state["p18"][q]
 
-    # geosearch_done is the sweep memo; state["geo"] is the hits. Anything in
-    # the first and not the second was a miss.
+    # geosearch_done is the sweep memo. The test is whether the library ended
+    # up with a picture, NOT whether this stage recorded a hit: a geo hit whose
+    # Commons file has since been deleted leaves state["geo"] populated and
+    # resolve_source returning nothing, and keying on the hit would strand that
+    # library with no photograph for ever. Anything still illustrated stays
+    # unswept, or a geosearch hit would outrank its Geograph or
+    # wikidata-nearby photograph.
     before = len(state.get("geosearch_done", []))
     state["geosearch_done"] = [k for k in state.get("geosearch_done", [])
-                               if k in state["geo"]]
+                               if k in illustrated_keys]
     swept_again = before - len(state["geosearch_done"])
 
     # One large SPARQL query, cached whole. Wikidata gains library items with
     # photographs steadily, so a stale copy is the whole reason stage 2b would
-    # find nothing on a second run.
+    # find nothing on a second run. Stage 2b skips illustrated libraries itself.
     had_items = len(state.pop("wd_items", []) or [])
 
     # Stage 3 records only its hits, so its misses are retried already. Its
     # index is static, though, and only an annual dump re-download moves it.
-    log(f"recheck   forgot {len(p18_misses)} Wikidata misses, "
-        f"{swept_again} swept libraries with no match, "
+    log(f"recheck   {len(illustrated_keys)} libraries already have a picture "
+        f"and are left alone; forgot {len(p18_misses)} Wikidata misses, "
+        f"{swept_again} fruitless sweeps, "
         f"and {had_items} cached Wikidata neighbour items")
     save_state(state)
 
