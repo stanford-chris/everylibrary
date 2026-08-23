@@ -11,12 +11,13 @@ This detects that drift. It does not fix it: nothing here writes to the corpus,
 the state file or the manifest. It fetches the live roster, compares, and
 reports. Deciding what to do about a hit is a person's job.
 
-Why detect rather than refresh. A refresh is the obvious move and the wrong
-first one. library_id is sha1(name|postcode|lat), so an upstream coordinate
-correction or a tidied name mints a new id, the library reads as never-posted,
-and it goes out a second time. That is fixable, but it is real work spent
-before anyone knows the size of the problem — and the drift rate is currently
-unmeasured. This measures it. If a year of reports shows three vanished
+Why detect rather than refresh. A refresh was the obvious move and the wrong
+first one: library_id used to hash the latitude, so an upstream coordinate
+correction minted a new id, the library read as never-posted, and it would have
+gone out a second time. That was fixed on 23 August 2026 — library_id and the
+match key below are now the same function, norm(), imported from the poster —
+and everylibrary_roster_apply.py acts on what this finds. This still only
+detects; applying is a separate, deliberate step. This measures it. If a year of reports shows three vanished
 libraries you handle them by hand; if it shows sixty, build the refresh then,
 knowing which fields actually drift.
 
@@ -41,7 +42,6 @@ not a pass, so it is never reported as one.
 import argparse
 import csv
 import json
-import re
 import subprocess
 import sys
 from datetime import datetime
@@ -51,7 +51,7 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
 from everylibrary_post import (MANIFEST, STATE_FILE, EXCLUDE_NATIONS,
-                               USER_AGENT, library_id)
+                               USER_AGENT, library_id, norm)
 
 API = 'https://api.librarydata.uk/libraries'
 PAGE_SIZE = 1000
@@ -64,16 +64,6 @@ PAGE_SIZE = 1000
 MAX_PAGES = 20
 
 REPORT = Path.home() / 'Library/Logs/everylibrary-roster.md'
-
-
-def norm(name, postcode):
-    """Match key. Deliberately not library_id: that hashes the latitude, and a
-    coordinate refined by a metre would read as a different library. Name and
-    postcode together are stable enough to match on and loose enough to survive
-    the tidying that upstream data receives."""
-    n = re.sub(r'\s+', ' ', (name or '')).strip().lower()
-    p = re.sub(r'\s+', '', (postcode or '')).upper()
-    return (n, p)
 
 
 def fetch_live():

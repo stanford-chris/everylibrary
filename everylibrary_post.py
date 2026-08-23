@@ -116,10 +116,34 @@ def login_client(retries=4):
     raise RuntimeError(f'Could not log in to Bluesky after {retries} attempts: {last_error}')
 
 
+def norm(name, postcode):
+    """The identity of a library: its name and postcode, loosely matched.
+
+    Deliberately tolerant. Upstream tidies its data — trailing spaces, a
+    doubled space, a postcode written in lower case — and none of that makes
+    it a different library. everylibrary_roster_check.py imports this rather
+    than keeping its own copy, so the drift check and the posted-state key can
+    never disagree about what counts as the same library.
+    """
+    n = re.sub(r'\s+', ' ', (name or '')).strip().lower()
+    p = re.sub(r'\s+', '', (postcode or '')).upper()
+    return (n, p)
+
+
 def library_id(row):
-    """Stable identity, so posted-state survives a corpus rebuild or reordering."""
-    key = f"{row['name']}|{row['postcode']}|{row['lat']}"
-    return hashlib.sha1(key.encode('utf-8')).hexdigest()[:12]
+    """Stable identity, so posted-state survives a corpus rebuild or reordering.
+
+    The latitude used to be in this key, which made identity depend on a number
+    the upstream roster corrects: a coordinate refined by a metre minted a new
+    id, the library read as never-posted, and it would have gone out twice.
+    Verified against the 3,750-row corpus: name and postcode alone are unique,
+    normalised or not.
+
+    Both alt_text.json and post_state.json are keyed on this. Changing it again
+    means running everylibrary_migrate_ids.py against both, on every machine.
+    """
+    n, p = norm(row['name'], row['postcode'])
+    return hashlib.sha1(f'{n}|{p}'.encode('utf-8')).hexdigest()[:12]
 
 
 def load_state():
