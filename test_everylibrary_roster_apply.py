@@ -249,7 +249,10 @@ class ExpireMisses(unittest.TestCase):
             'geosearch_done': ['k1', 'k2', 'k3'],
             'wdnear': {'k4': {'title': 'File:C.jpg', 'dist': 20}},
             'geograph': {'k5': {'id': 7, 'dist': 10, 'title': 'T',
-                                'url': 'u', 'photographer': 'p'}},
+                                'url': 'u', 'photographer': 'p'},
+                         'k2': None,      # looked, found nothing, has nothing
+                         'k1': None},     # looked, found nothing, but has a
+                                          # geosearch photograph
             'imageinfo': {'File:A.jpg': {'url': 'u'},
                           'File:B.jpg': {'url': 'u'},
                           'File:C.jpg': {'url': 'u'}},
@@ -286,10 +289,28 @@ class ExpireMisses(unittest.TestCase):
 
     def test_keeps_every_hit(self):
         st = self.state()
-        before = {k: st[k] for k in ('geo', 'wdnear', 'geograph')}
+        before = {k: dict(st[k]) for k in ('geo', 'wdnear')}
         images.expire_misses(st, self.rows())
         for k, v in before.items():
             self.assertEqual(st[k], v, k)
+
+    def test_forgets_a_geograph_miss_on_a_library_with_nothing(self):
+        # ⚠️ Stage 3 memoises its misses as an explicit None, in an else
+        # branch that is easy to read past. Left in place, the annual refresh
+        # re-downloads 235 MB and skips every library it has ever seen.
+        st = self.state()
+        images.expire_misses(st, self.rows())
+        self.assertNotIn('k2', st['geograph'])
+
+    def test_keeps_a_geograph_miss_on_a_library_that_has_a_picture(self):
+        st = self.state()
+        images.expire_misses(st, self.rows())
+        self.assertIn('k1', st['geograph'])
+
+    def test_keeps_the_geograph_hit(self):
+        st = self.state()
+        images.expire_misses(st, self.rows())
+        self.assertEqual(st['geograph']['k5']['id'], 7)
 
     def test_keeps_the_commons_metadata_cache(self):
         # Keyed by file title, and a title's metadata does not go stale. Ditching

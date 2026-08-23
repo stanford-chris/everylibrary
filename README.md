@@ -199,9 +199,26 @@ Until 23 August 2026 **nothing ever looked twice.** The image stages had run on 
 | 1 · Wikidata P18 | `state["p18"]` stores a miss as `null` — “record misses too, so we don't refetch” | never re-asks that QID |
 | 2 · Commons geosearch | `state["geosearch_done"]` | never re-sweeps that library, hit or miss |
 | 2b · Wikidata neighbours | the whole item list cached in `state["wd_items"]` | re-matches against a frozen set of Wikidata items |
-| 3 · Geograph | records only hits, so misses retry ✅ | but against a static local index |
+| 3 · Geograph | `state["geograph"]` stores a miss as `None` | never re-examines that library |
 
 `--recheck-misses` expires those memos. It runs monthly, and it is the reason the pass exists in its current form.
+
+⚠️ **Stage 3's memo was missed on the first pass at this**, and the shape of the mistake is worth keeping: its miss is written as an explicit `None` in an `else` branch, so reading the function top-down it looks like only hits are stored. This README asserted the opposite for several hours. The consequence would have been the annual Geograph job re-downloading 235 MB, rescanning 8.3 million rows and skipping all 1,561 libraries it had already looked at — the exact failure the monthly sweep exists to fix, left in the one stage that runs least often and would therefore have taken a year to notice. The tell was in `stage3_geograph` itself: `taken = {v["id"] for v in state["geograph"].values() if v}` has an `if v` guard, which only makes sense if falsy values are stored.
+
+### What the first full sweep actually returned
+
+Run against real state on 23 August 2026, seven days after the original harvest:
+
+| | |
+|---|---|
+| Postable before | 2,238 |
+| Postable after | **2,243** |
+| Photographs **swapped** | **0** |
+| Libraries that gained one | 4 (3 Wikidata P18, 1 Wikidata neighbour) |
+| New Commons geosearch hits, from 1,510 re-swept | 1 |
+| New rows from the roster | 1 (Stratford-upon-Avon, which then matched a Commons photograph by Lewis Clarke) |
+
+**Be realistic about the yield.** Five libraries in a week. Almost nobody photographs a UK library and uploads it in seven days, and that is the honest expectation for month one — the sweep can only find what somebody has published. The value is cumulative: this is the difference between a rotation frozen at 2,238 for two years and one that grows, not a windfall. The 1,508 libraries still without a picture are still without a picture.
 
 ### ⚠️ A library that already has a photograph is never looked at again
 
@@ -225,7 +242,9 @@ Two corollaries:
 
 ### Geograph is annual, not monthly
 
-Stage 3 needs a 235 MB dump re-downloaded and 8.3 million rows rescanned, and it has supplied 103 photographs in total, because the other stages harvest the mirrored copies first. `everylibrary_geograph_annual.sh` runs it once a year under `com.chrisstanford.everylibrarygeograph`, on 16 August, the anniversary of the original harvest. ⚠️ `extract_geograph_index()` returns the cached JSON whenever it exists, so a refresh means **deleting the index**, not just re-downloading the dump — and the index is deleted only after a good download has landed, or a failed fetch would leave stage 3 with nothing at all.
+Stage 3 needs a 235 MB dump re-downloaded and 8.3 million rows rescanned, and it has supplied 103 photographs in total, because the other stages harvest the mirrored copies first. `everylibrary_geograph_annual.sh` runs it once a year under `com.chrisstanford.everylibrarygeograph`, on 16 August, the anniversary of the original harvest. Two things it must do that are not obvious:
+- ⚠️ `extract_geograph_index()` returns the cached JSON whenever it exists, so a refresh means **deleting the index**, not just re-downloading the dump — and the index is deleted only after a good download has landed, or a failed fetch would leave stage 3 with nothing at all.
+- ⚠️ It runs after a monthly `--recheck-misses` has cleared stage 3's 1,561 memoised misses. Without that the whole job is inert.
 
 ## Identity: `library_id`
 

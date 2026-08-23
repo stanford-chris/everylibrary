@@ -782,11 +782,25 @@ def expire_misses(state, rows):
     # find nothing on a second run. Stage 2b skips illustrated libraries itself.
     had_items = len(state.pop("wd_items", []) or [])
 
-    # Stage 3 records only its hits, so its misses are retried already. Its
-    # index is static, though, and only an annual dump re-download moves it.
+    # ⚠️ Stage 3 memoises its misses too, as an explicit None, and that is easy
+    # to miss when reading it: the write is in the else branch. Without expiring
+    # them the annual Geograph job re-downloads 235 MB, rescans 8.3 million rows
+    # and skips every library it has ever looked at — the whole point of the
+    # refresh, defeated silently. Found 23 August 2026, after this function had
+    # been written, documented and committed asserting the opposite.
+    # `not v` is belt-and-braces and a mutation test will not catch its
+    # removal: a Geograph HIT always makes its library illustrated, so the
+    # guard below already protects it. Kept because it states the intent, and
+    # because it covers a hit whose library has since left the corpus.
+    geo3 = state.get("geograph", {})
+    geo3_misses = [k for k, v in geo3.items()
+                   if not v and k not in illustrated_keys]
+    for k in geo3_misses:
+        del geo3[k]
+
     log(f"recheck   {len(illustrated_keys)} libraries already have a picture "
         f"and are left alone; forgot {len(p18_misses)} Wikidata misses, "
-        f"{swept_again} fruitless sweeps, "
+        f"{swept_again} fruitless sweeps, {len(geo3_misses)} Geograph misses, "
         f"and {had_items} cached Wikidata neighbour items")
     save_state(state)
 
