@@ -65,7 +65,7 @@ EXCLUDE_NATIONS = set()
 # exactly means that editing it orphans the previous note: changing the full
 # stop to a colon once left two credits posts in the feed, because the old one
 # no longer matched.
-CREDITS_HEADING = 'Sources and credits:'
+CREDITS_HEADING = 'Sources and credits 📚'
 CREDITS_PATTERN = re.compile(r'^\s*Sources and credits\b', re.I)
 
 USER_AGENT = 'everylibrary-bot/0.1 (https://chris-stanford.com; stanfordc+claude@mac.com)'
@@ -413,17 +413,17 @@ def build_credits():
     """
     tb = client_utils.TextBuilder()
     tb.text(CREDITS_HEADING + '\n\n')
-    tb.text('Photographs: ')
+    tb.text('📷 Photographs: ')
     tb.link('Wikimedia Commons', 'https://commons.wikimedia.org')
     tb.text(' and ')
     tb.link('Geograph', 'https://www.geograph.org.uk')
-    tb.text(' contributors, credited by name on every post\n\n')
-    tb.text('Libraries: ')
+    tb.text(' contributors, credited by name on every post\n')
+    tb.text('🏛️ Libraries: ')
     tb.link('DCMS', 'https://www.data.gov.uk/dataset/'
                     'public-libraries-in-england-basic-dataset')
     tb.text(' (OGL) and ')
     tb.link('Libraries Hacked', 'https://www.librarieshacked.org')
-    tb.text('\nBuildings: ')
+    tb.text('\n🗺️ Buildings: ')
     tb.link('OpenStreetMap', 'https://www.openstreetmap.org/copyright')
     tb.text(' contributors (ODbL)')
     return tb
