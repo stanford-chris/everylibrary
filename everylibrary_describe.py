@@ -52,15 +52,33 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from everylibrary_post import (MANIFEST, DATA, USER_AGENT, library_id,
-                               commons_filepath_url, display_name,
+from everylibrary_post import (MANIFEST, DATA, USER_AGENT, STATE_FILE,
+                               library_id, commons_filepath_url, display_name,
                                typographic)
 
 ALT_PATH = DATA / 'alt_text.json'
 
 CLAUDE_TOKEN_ACCOUNT = 'seoulbot'
 CLAUDE_TOKEN_SERVICE = 'claude-oauth-token'
-MODEL = 'claude-haiku-4-5-20251001'
+# Sonnet, not Haiku, since 24 August 2026, and the reason is measured rather
+# than assumed. An audit of all 25 posts the bot had made found 7 carrying a
+# confident specific the photograph does not support, and tightening the prompt
+# did NOT fix them: under rules that forbid each error by name, Haiku still
+# returned "Red brick single-storey building ... ivy grows up the right wall"
+# for a buff-brick frontage with a gable above a glazed ground floor and a
+# conifer at the edge of the frame.
+#
+# Run against the same ten photographs and the same prompt, Sonnet got seven
+# right outright, including every one of Haiku's errors: interlocking circles
+# where Haiku saw a diamond lattice, hatched markings where it saw a disabled
+# bay, a conifer where it saw ivy. It is also about five times FASTER here
+# (8-20s a call against 50-145s), because the cost of these calls is dominated
+# by the session `claude -p` spins up rather than by the tokens.
+#
+# Two of the ten are still imperfect (Cosby's roof form, one of Oxgangs' two
+# reads), so this is a large improvement and not a fix. Do not read a Sonnet
+# description as verified.
+MODEL = 'claude-sonnet-5'
 
 MAX_VISUAL_CHARS = 240
 FETCH_WIDTH = 900          # enough detail to describe, small enough to move fast
@@ -128,32 +146,69 @@ def not_a_description(text):
 # knitted remembrance poppies down a memorial cross as burgundy ivy. Every one
 # is a confident specific the frame does not support, and a listener has no way
 # to hear that it is wrong.
+# Four more rules came from auditing every one of the 25 posts the bot had made,
+# each against its own posted image, on 24 August 2026. Seven carried a
+# confident specific the photograph does not support, and they cluster:
+#
+#   storeys    a tall single-storey hall read as two, a two-storey frontage
+#              read as one. This list used to ASK for "number of storeys",
+#              which is why 73% of the corpus commits to a count.
+#   a name it  sash for mullioned casements, protective bars for glazing bars,
+#   cannot     diamond-lattice for interlocking circles, curved for pyramidal,
+#   check      a disabled bay for keep-clear hatching.
+#   the wrong  a noticeboard on the pavement read as posters on the wall, a
+#   object     conifer at the frame edge read as ivy climbing the wall behind.
+#   the period Stockport's 1913 Edwardian Baroque called Victorian. The old
+#              wording said not to guess the age and 102 descriptions do it
+#              anyway, so the period words are now named and banned outright.
+#
+# Bumped whenever the wording changes in a way that should reopen work already
+# done. --redescribe reads it: an entry stamped with an older version is
+# outstanding, one stamped with this version is finished, so a re-run is
+# resumable and a half-finished pass cannot lose the descriptions it has not
+# reached yet.
+PROMPT_VERSION = 2
+
 PROMPT = (
     'Read the image at {path} and describe it as alt text for a blind reader. '
     'It is usually the exterior of a UK public library, but it may be an '
     'interior, a plaque, a memorial, a shopfront or something else entirely.\n\n'
     'Rules:\n'
-    '- Describe only what is visible: building material, number of storeys, '
-    'windows, doors, signage, surroundings, weather. Indoors, describe the '
-    'room: shelving, furniture, lighting, what the space is for.\n'
+    '- Describe only what is visible: building material, windows, doors, '
+    'signage, surroundings, weather. Indoors, describe the room: shelving, '
+    'furniture, lighting, what the space is for.\n'
     '- Describe whatever is in the frame, whatever it turns out to be. Never '
     'say what it is not, never remark on whether it matches this brief, never '
     'address me, and never mention the image, the file or these rules. Someone '
     'who cannot see it is listening to this description, and none of that '
     'tells them anything about what is there.\n'
+    '- Do not say how many storeys a building has unless you can see a separate '
+    'row of windows for each one. A tall wall, a gable, or a window set into '
+    'the roof is not a storey you have counted. Describe how the front is '
+    'arranged instead: "a glazed ground floor with a gabled window above" tells '
+    'a listener more than a number you have guessed at.\n'
     '- Prefer a safe observation to a precise one. Do not give a number unless '
     'you have counted it: "a row of tall windows" beats "eight sash windows" '
     'when you have not counted eight. Name a material only where you can see it '
     'plainly, and if you cannot tell brick from stone, or red brick from brown, '
-    'say less rather than choosing. Attribute signage only to the building it is '
-    'plainly fixed to.\n'
+    'say less rather than choosing.\n'
+    '- Attach every detail to the thing it actually belongs to. Signage is only '
+    'the building\'s if it is plainly fixed to it, never a freestanding '
+    'noticeboard or sign standing in front. A plant or a tree at the edge of '
+    'the frame is not growing on the wall behind it.\n'
     '- If you cannot tell what something is, describe how it looks instead of '
     'naming it: "a cascade of red fabric flowers" rather than "ivy". A wrong '
     'name is worse than a plain description, because the listener cannot see '
-    'that it is wrong.\n'
+    'that it is wrong. This matters most for the things that have precise names '
+    'you may not be able to tell apart from a photograph: window types (sash, '
+    'casement), what bars across a window are for, roof shapes (pitched, '
+    'hipped, curved, flat), the pattern on a facade, and markings painted on a '
+    'road or a car park. Say what the shape looks like.\n'
     '- Do not name the library, the town or the photographer.\n'
-    '- Do not guess the age, architect or history. If a date is carved on the '
-    'building and legible, you may state it.\n'
+    '- Do not guess the age, the architect or the history, and never use a '
+    'period word: not Victorian, Edwardian, Georgian, Art Deco or mid-century. '
+    'A building cannot be dated by looking at it. If a date is carved on the '
+    'building and legible, you may state that.\n'
     '- Do not begin with "A photograph of" or "An image of".\n'
     '- One or two sentences, maximum {maxlen} characters.\n'
     '- British English.\n'
@@ -194,6 +249,24 @@ def save_alt(alt):
     os.replace(tmp, ALT_PATH)
 
 
+def posted_ids():
+    """The libraries already on the feed.
+
+    --redescribe leaves them alone. Each library posts exactly once, so
+    rewriting a description that has already gone out changes nothing a reader
+    will ever hear, and the stored text is the nearest thing there is to a
+    record of what a screen reader was served.
+
+    A missing or unreadable state file ABORTS rather than returning an empty
+    set. Read the lazy way round, "no state" and "nothing posted yet" produce
+    the same answer, and the wrong one silently rewrites the record.
+    """
+    if not STATE_FILE.exists():
+        sys.exit(f'--redescribe needs {STATE_FILE}, to know what has posted.')
+    state = json.loads(STATE_FILE.read_text())
+    return set(state.get('posted', []))
+
+
 def load_rows():
     with MANIFEST.open() as f:
         return [r for r in csv.DictReader(f) if r.get('postable') == 'yes']
@@ -214,6 +287,53 @@ def load_rows():
 # These blocks are removed whole, before the tags around them go.
 _BLOCK = re.compile(r'<(style|script)\b[^>]*>.*?</\1\s*>', re.I | re.S)
 
+# Commons' {{Information}} template renders a file-information table beneath
+# the human's description. Its tags strip out fine and its CONTENTS are the
+# problem: "Camera location51° 26′ 36.24″ N, 0° 13′ 06.24″ E View this and
+# other nearby images on: OpenStreetMap 51.443400; 0.218400" reached two
+# stored notes, and a screen reader says a coordinate digit by digit. Removed
+# whole, exactly as a stylesheet is, and for the same reason.
+#
+# NOT added to _JUNK, which discards the entire note: Dartford's human half
+# ("Dartford is a town in North Kent, England. The Library and Museum") is
+# genuine and worth keeping, and the geo table is appended to it rather than
+# replacing it.
+_INFOTABLE = re.compile(
+    r'<table\b[^>]*\bcommons-file-information-table\b.*?</table\s*>', re.I | re.S)
+
+
+# A URL is unreadable as alt text: nobody can follow a link they are hearing,
+# and a screen reader says "h t t p colon slash slash w w w dot" and then
+# spells the path. 36 of 686 stored notes carried one, mostly a trailing
+# "Find out more about this library at: <url>" from a council upload.
+#
+# Removed in place rather than by cutting the note at the URL, because a URL is
+# not always at the end: Aylesbury's sits mid-sentence, between the library's
+# name and "is in Walton Street", and cutting there would throw away the half
+# that describes the building.
+#
+# The removal can leave a sentence that was only ever a lead-in to the link, so
+# any sentence ending in a colon, or left with no letters at all, goes with it.
+# The lead-in goes with the link. Fourteen of these notes read "Find out more
+# about this library: <url>", and deleting the URL alone leaves the invitation
+# pointing at nothing: "Find out more about this library: Photo credit: Leeds
+# libraries". A colon-terminated run with no sentence end in it is that
+# lead-in, and only when it sits immediately before the link — so "Photo
+# credit: Cambridgeshire libraries" a few words earlier is untouched.
+_URL = re.compile(r'(?:[^.!?]{0,60}:\s*)?<?\b(?:https?://|www\.)\S+', re.I)
+
+# One note was cut by clip_note in the middle of an anchor tag, leaving
+# '<a href="' with no closing bracket for strip_markup ever to match.
+_OPEN_TAG_TAIL = re.compile(r'[,;]?\s*(?:and\s+)?<[a-z]+\b[^>]*$', re.I)
+
+
+def strip_urls(text):
+    out = re.sub(r'\s+', ' ', _URL.sub(' ', text or '')).strip()
+    out = _OPEN_TAG_TAIL.sub('', out).strip()
+    kept = [q for q in re.split(r'(?<=[.!?])\s+', out)
+            if q.strip() and not q.rstrip().endswith(':') and re.search(r'[A-Za-z]', q)]
+    return ' '.join(kept).strip()
+
 
 def strip_markup(s):
     """Commons descriptions are wikitext rendered to HTML, so they arrive with
@@ -232,7 +352,8 @@ def strip_markup(s):
     """
     text = s or ''
     for _ in range(4):
-        nxt = html.unescape(re.sub(r'<[^>]+>', ' ', _BLOCK.sub(' ', text)))
+        stripped = _INFOTABLE.sub(' ', _BLOCK.sub(' ', text))
+        nxt = html.unescape(re.sub(r'<[^>]+>', ' ', stripped))
         if nxt == text:
             break
         text = nxt
@@ -332,7 +453,8 @@ def is_suspect(note):
     # and flagging that would make --refetch-suspect re-fetch the same handful
     # of files on every run without ever settling.
     severed = len(note) == CONTEXT_MAX and note[-1:].isalnum()
-    return severed or bool(_JUNK.search(note)) or bool(_BOILER.search(note))
+    return (severed or bool(_JUNK.search(note)) or bool(_BOILER.search(note))
+            or bool(_URL.search(note)))
 
 
 def fetch_context(rows, alt, session, refetch_suspect=False):
@@ -387,7 +509,8 @@ def fetch_context(rows, alt, session, refetch_suspect=False):
             if not matched:
                 continue
             em = (page.get('imageinfo') or [{}])[0].get('extmetadata', {})
-            desc = strip_boilerplate(strip_markup(em.get('ImageDescription', {}).get('value')))
+            desc = strip_urls(strip_boilerplate(
+                strip_markup(em.get('ImageDescription', {}).get('value'))))
             title = title_of(requested)
 
             useful = ''
@@ -503,6 +626,34 @@ def _setting(text):
     return 'outdoor' if out > ins else 'indoor'
 
 
+# The storey rule above costs this guard something, and the replacement is
+# here rather than left as a gap. Storeys were one of only two things two reads
+# were compared on, and a prompt that tells the model not to count them means
+# most pairs will now agree by saying nothing. The sky is the other thing a
+# description states outright and cannot be polite about: two honest reads of
+# one photograph do not disagree about whether it is blue or grey.
+#
+# "partly cloudy" and its relatives commit to neither and are read as silence,
+# and 'bright' is deliberately NOT a clear-sky word — a bright overcast is the
+# commonest British sky there is, and counting it as clear would invent
+# disagreements on exactly the photographs where both reads were right.
+_SKY_NEAR = re.compile(r'((?:\w+[\s-]){0,3})sk(?:y|ies)\b', re.I)
+_SKY_HEDGE = re.compile(r'\b(partly|partial|part|scattered|broken|hazy)\b', re.I)
+_SKY_CLEAR = re.compile(r'\b(clear|blue|sunny|cloudless)\b', re.I)
+_SKY_DULL = re.compile(r'\b(overcast|grey|gray|cloudy|dull|leaden|stormy)\b', re.I)
+
+
+def _sky(text):
+    """'clear', 'overcast', or None where the description does not commit."""
+    words = ' '.join(_SKY_NEAR.findall(text))
+    if not words.strip() or _SKY_HEDGE.search(words):
+        return None
+    clear, dull = bool(_SKY_CLEAR.search(words)), bool(_SKY_DULL.search(words))
+    if clear == dull:
+        return None
+    return 'clear' if clear else 'overcast'
+
+
 def disagreement(first, second):
     """Why two descriptions cannot be of the same photograph, or None.
 
@@ -519,6 +670,9 @@ def disagreement(first, second):
     sa, sb = _setting(first), _setting(second)
     if sa and sb and sa != sb:
         return f'{sa} vs {sb}'
+    ka, kb = _sky(first), _sky(second)
+    if ka and kb and ka != kb:
+        return f'{ka} sky vs {kb} sky'
     return None
 
 
@@ -568,6 +722,9 @@ def main():
                     help='fetch missing Commons notes only, no model calls')
     ap.add_argument('--refetch-suspect', action='store_true',
                     help='also redo notes stored under the old cut/strip rules')
+    ap.add_argument('--redescribe', action='store_true',
+                    help='rewrite descriptions written under an older prompt '
+                         '(never touches a library that has already posted)')
     args = ap.parse_args()
 
     rows = load_rows()
@@ -581,7 +738,16 @@ def main():
         log(f'\ncontext notes held: {ctx}')
         return
 
-    todo = [r for r in rows if not alt.get(library_id(r), {}).get('visual')]
+    if args.redescribe:
+        posted = posted_ids()
+        todo = [r for r in rows
+                if alt.get(library_id(r), {}).get('visual')
+                and alt[library_id(r)].get('visual_v') != PROMPT_VERSION
+                and library_id(r) not in posted]
+        log(f'redescribe  prompt v{PROMPT_VERSION}, '
+            f'{len(posted)} posted libraries left alone')
+    else:
+        todo = [r for r in rows if not alt.get(library_id(r), {}).get('visual')]
     if args.limit:
         todo = todo[:args.limit]
     log(f'visual   {len(todo)} to describe, {args.workers} at a time')
@@ -601,7 +767,12 @@ def main():
             except Exception:
                 text = None
             if text:
-                alt.setdefault(library_id(row), {})['visual'] = typographic(text)
+                entry = alt.setdefault(library_id(row), {})
+                entry['visual'] = typographic(text)
+                # Stamped on the way in, so a redescribe pass is resumable and
+                # a run that dies half way through cannot lose the entries it
+                # never reached: they are simply still outstanding.
+                entry['visual_v'] = PROMPT_VERSION
                 done += 1
             else:
                 failed += 1
