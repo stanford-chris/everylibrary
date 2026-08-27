@@ -36,6 +36,7 @@ Usage:
 
 import argparse
 import csv
+from collections import Counter
 import difflib
 import html
 import json
@@ -557,12 +558,25 @@ def fetch_image(row, session):
     return None
 
 
-def _one_description(path, env):
-    """A single read of one image file. None on any failure."""
+RETRY_NOTE = """
+
+An earlier attempt at this description asserted the following, and a check against the image could not find them:
+{bad}
+
+Write it again, leaving out anything you cannot actually resolve. A shorter, safer description is the right answer here."""
+
+
+def _one_description(path, env, extra=''):
+    """A single read of one image file. None on any failure.
+
+    `extra` is appended to the prompt, and is how the verification retry names
+    the claims that failed. Empty for the two ordinary reads, so the agreement
+    check above still compares two genuinely independent looks.
+    """
     try:
         p = subprocess.run(
             ['claude', '-p', '--model', MODEL,
-             PROMPT.format(path=path, maxlen=MAX_VISUAL_CHARS)],
+             PROMPT.format(path=path, maxlen=MAX_VISUAL_CHARS) + extra],
             capture_output=True, text=True, env=env, timeout=CALL_TIMEOUT)
         if p.returncode != 0:
             return None
@@ -676,6 +690,116 @@ def disagreement(first, second):
     return None
 
 
+# The agreement check above catches a description of a photograph the model
+# never looked at. It does NOT catch one where the model looked and misread,
+# because two reads of the same image misread it the same way and agree
+# perfectly — and it tests only three coarse dimensions in any case.
+#
+# Measured 27 August 2026 over all 118 descriptions the three model-written
+# bots had shipped since 16 August: 35 (30%) assert something the photograph
+# does not support. This bot was the worst of the three, with 17 wrong-attribute
+# errors in 29 images — a black wrought-iron fence called white, a gable called
+# a mansard roof, coursed grey stone called brick, a bus shelter's canopy
+# credited to the library entrance, and five wrong storey counts.
+#
+# ⚠️ Those five are the important ones. The prompt above already forbids
+# guessing storey counts, at length and with its reasoning. It was still wrong
+# five times in twenty-nine images. A prompt rule written at a failure did not
+# stop the failure, which is why this is a check and not a sixth rule.
+#
+# So the surviving description is read back against the image, claim by claim.
+# The check asks a DIFFERENT QUESTION from the one that wrote it — locate each
+# asserted thing, rather than judge the sentence — because a verifier asked
+# "is this good?" mostly agrees with itself.
+#
+# ⚠️⚠️ IT RETRIES RATHER THAN DROPPING, and that was decided by measurement
+# after the first version dropped. Twelve stored descriptions were swept on
+# 27 August 2026 and SEVEN were flagged — 58%. Three of the storey findings
+# were then checked by eye: Wandsworth Town (three rows of windows, described
+# as two storeys) and Redland (one tall storey with a gabled window above,
+# described as two) were real, and Nunhead (plainly two storeys) was the
+# verifier being wrong. Two in three.
+#
+# A gate that drops at a 58% flag rate with roughly two-thirds precision would
+# take more than half of this bot's descriptions away and be wrong about a
+# third of them. ⚠️ THE FALLBACK IS WHAT MAKES THAT A BAD TRADE: it is bare
+# identification from the roster, "Photograph of Redland Library, Whiteladies
+# Road", which tells a blind listener nothing about the photograph at all.
+# Ship a wrong storey count and a listener is mildly misinformed; drop the
+# description and they get nothing. The damaging class — an object that is not
+# there — was 5% of images, not 58%, and a wholesale drop is far too blunt an
+# instrument for it.
+#
+# So the failed claims are named back to the model and the description is
+# written again, which usually just omits them. Only a second failure drops.
+#
+# ⚠️ The residual drop rate after the retry is NOT YET MEASURED: the sweep that
+# would establish it ran into "API Error: Rate limit reached". Do not quote a
+# figure for it until someone has run one.
+#
+# ⚠️ The model is never shown the Commons note, here as everywhere in this
+# file. The note asserts things no photograph can show — "the council contact
+# centre out the back", "Levan Strice Wood in background" — and a verifier
+# holding it reports them as unsupported. The sweep that produced the figures
+# above verified the assembled alt text and scored exactly those two human
+# sentences as model hallucinations before they were caught by hand.
+
+VERIFY_PROMPT = """Look at the image {path}
+
+A description of that image appears at the end of this message. Your job is to LOCATE things in the image, not to judge the writing.
+
+Take every concrete thing the description asserts is present — each object, structure, material, number or feature — and for each one output exactly one line:
+
+FOUND | <the claim in a few words> | <where it is in the image>
+ABSENT | <the claim in a few words> | <what is actually there instead>
+
+Rules:
+- Be strict. If you cannot point to it, it is ABSENT. Do not give it the benefit of the doubt.
+- Count before you confirm a number. Storeys, windows, doors and entrances are where this goes wrong most often.
+- Judge presence only. Never judge wording, style, tone or completeness.
+- Output only those lines and nothing else.
+
+Description: {alt}"""
+
+_ABSENT_LINE = re.compile(r'^\s*ABSENT\s*\|\s*(.+?)\s*(?:\||$)')
+_FOUND_LINE = re.compile(r'^\s*FOUND\s*\|')
+
+
+def unsupported(path, text, env):
+    """Claims in `text` that cannot be located in the image at `path`.
+
+    Returns (claims, why): ([], None) when every claim checks out,
+    ([...], None) when some cannot be found, and (None, reason) when the check
+    could not be made at all.
+
+    ⚠️ The reason is carried rather than collapsed, because the first live run
+    of --reverify returned 12 of 12 NOT CHECKED and there was no way to tell a
+    throttled model from an unfetchable image from a changed reply format. A
+    sweep that reports only that it failed is a sweep nobody can act on.
+
+    ⚠️ None is NOT [] and callers must not treat it as one. A failed call, a
+    timeout and a model that ignored the format all yield no ABSENT lines,
+    which is byte-identical to a clean verification: the dangerous state and
+    the healthy one producing the same silence. Same rule as
+    portfolio_brief.py refusing to publish a total it could not compute.
+    """
+    try:
+        p = subprocess.run(
+            ['claude', '-p', '--model', MODEL,
+             VERIFY_PROMPT.format(path=path, alt=text)],
+            capture_output=True, text=True, env=env, timeout=CALL_TIMEOUT)
+    except (subprocess.TimeoutExpired, OSError) as exc:
+        return None, exc.__class__.__name__
+    if p.returncode != 0:
+        err = (p.stderr or p.stdout or '').strip()[:120] or '(no output)'
+        return None, f'exit {p.returncode}: {err}'
+    lines = (p.stdout or '').strip().splitlines()
+    absent = [m.group(1) for m in (_ABSENT_LINE.match(ln) for ln in lines) if m]
+    if not absent and not any(_FOUND_LINE.match(ln) for ln in lines):
+        return None, 'reply carried no verdict lines'
+    return absent, None
+
+
 def describe(row, session, env):
     """One image, two independent reads, kept only if they agree.
 
@@ -703,14 +827,157 @@ def describe(row, session, env):
             log(f'         two reads disagreed ({conflict}), dropped: '
                 f'{row.get("name", "?")}')
             return None
-        return min(first, second, key=len)
+        chosen = min(first, second, key=len)
+
+        # ⚠️ A check that could not be MADE keeps the description, and says so.
+        # This is not the same as a check that passed, and the log distinguishes
+        # them: an unattended monthly pass must not silently throw away every
+        # description because the verifier had a bad hour.
+        bad, why = unsupported(path, chosen, env)
+        if bad is None:
+            log(f'         kept UNVERIFIED ({why}): {row.get("name", "?")}')
+            return chosen
+        if not bad:
+            return chosen
+
+        # One retry, naming what could not be found. Not a reroll of the same
+        # dice: the model is told which claims failed, and the usual outcome is
+        # a description that simply leaves them out.
+        log(f'         failed verification ({"; ".join(bad)}), rewriting: '
+            f'{row.get("name", "?")}')
+        again = _one_description(
+            path, env, extra=RETRY_NOTE.format(
+                bad='\n'.join(f'- {b}' for b in bad)))
+        if not again:
+            return None
+        bad2, why2 = unsupported(path, again, env)
+        if bad2 is None:
+            log(f'         rewrite kept UNVERIFIED ({why2}): '
+                f'{row.get("name", "?")}')
+            return again
+        if bad2:
+            log(f'         rewrite failed too ({"; ".join(bad2)}), dropped: '
+                f'{row.get("name", "?")}')
+            return None
+        return again
     except OSError:
         return None
     finally:
         os.unlink(path)
 
 
+def reverify(row, session, env):
+    """Check a description already on file against its image.
+
+    Returns (verdict, claims): 'clean', 'failed' or 'unchecked'. Generates
+    nothing — one model call per image instead of the three a redescribe would
+    cost, which is what makes sweeping 2,236 stored descriptions affordable at
+    all.
+
+    ⚠️ It is the VISUAL half that is checked, never the assembled alt text. The
+    Commons note is a human sentence about things no photograph shows, and
+    feeding it to the verifier manufactures failures out of the one part of the
+    record that was never machine-written.
+    """
+    text = (row.get('_visual') or '').strip()
+    if not text:
+        return 'unchecked', ['no stored description']
+    data = fetch_image(row, session)
+    if not data:
+        return 'unchecked', ['image could not be fetched']
+
+    TMP_DIR.mkdir(exist_ok=True)
+    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False, dir=TMP_DIR) as fh:
+        fh.write(data)
+        path = fh.name
+    try:
+        bad, why = unsupported(path, text, env)
+    finally:
+        os.unlink(path)
+
+    if bad is None:
+        return 'unchecked', [why]
+    return ('failed', bad) if bad else ('clean', [])
+
+
 # --------------------------------------------------------------------- main
+
+
+def run_reverify(rows, alt, session, args):
+    """Sweep stored descriptions against their images and report.
+
+    ⚠️ Reports and changes nothing unless --clear-failed is passed, following
+    every other audit in this estate. A verifier is a fallible reader of a
+    fallible reader: measured on a 118-image sweep it raised four false
+    positives in forty-nine findings, so an automatic delete would throw away
+    good descriptions at about that rate with nobody ever seeing what went.
+    """
+    todo = []
+    for r in rows:
+        entry = alt.get(library_id(r)) or {}
+        if entry.get('visual'):
+            r = dict(r, _visual=entry['visual'])
+            todo.append(r)
+    if args.limit:
+        todo = todo[:args.limit]
+    log(f'reverify {len(todo)} stored descriptions, {args.workers} at a time')
+    if not todo:
+        return
+
+    env = claude_env()
+    counts = {'clean': 0, 'failed': 0, 'unchecked': 0}
+    failures = []
+    reasons = Counter()
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futures = {pool.submit(reverify, r, session, env): r for r in todo}
+        for n, fut in enumerate(as_completed(futures), 1):
+            row = futures[fut]
+            try:
+                verdict, claims = fut.result()
+            except Exception:                       # noqa: BLE001
+                verdict, claims = 'unchecked', ['worker raised']
+            counts[verdict] += 1
+            if verdict == 'failed':
+                failures.append((row, claims))
+            elif verdict == 'unchecked':
+                reasons[claims[0] if claims else 'unknown'] += 1
+            if n % 25 == 0 or n == len(todo):
+                log(f'         {n:>5}/{len(todo)}  clean {counts["clean"]}  '
+                    f'failed {counts["failed"]}  unchecked {counts["unchecked"]}')
+
+    log('')
+    for row, claims in sorted(failures, key=lambda f: display_name(f[0]['name'])):
+        log(f'  {display_name(row["name"])}')
+        log(f'    {alt[library_id(row)]["visual"]}')
+        for c in claims:
+            log(f'    ✗ {c}')
+
+    if reasons:
+        log('\n  not checked, by reason:')
+        for why, n in sorted(reasons.items(), key=lambda kv: -kv[1]):
+            log(f'    {n:>5}  {why}')
+
+    checked = counts['clean'] + counts['failed']
+    rate = f'{counts["failed"] / checked:.0%}' if checked else 'n/a'
+    log(f'\nclean {counts["clean"]}  failed {counts["failed"]} ({rate})  '
+        f'not checked {counts["unchecked"]}')
+    # ⚠️ "not checked" is reported beside the rate and never folded into it.
+    # A sweep that could not read half the images has not found a low failure
+    # rate, it has found nothing, and an average over the half it managed
+    # would hide that completely.
+
+    if not args.clear_failed:
+        if failures:
+            log('reporting only. --clear-failed drops these so the next '
+                'ordinary run rewrites them.')
+        return
+    for row, _ in failures:
+        entry = alt[library_id(row)]
+        entry.pop('visual', None)
+        entry.pop('visual_v', None)
+    save_alt(alt)
+    log(f'cleared {len(failures)} descriptions; rerun without --reverify '
+        f'to rewrite them')
 
 
 def main():
@@ -725,12 +992,25 @@ def main():
     ap.add_argument('--redescribe', action='store_true',
                     help='rewrite descriptions written under an older prompt '
                          '(never touches a library that has already posted)')
+    ap.add_argument('--reverify', action='store_true',
+                    help='check descriptions already on file against their '
+                         'images; reports only, changes nothing')
+    ap.add_argument('--clear-failed', action='store_true',
+                    help='with --reverify, drop the descriptions that failed '
+                         'so the next ordinary run rewrites them')
     args = ap.parse_args()
 
     rows = load_rows()
     alt = load_alt()
     session = requests.Session()
     session.headers.update({'User-Agent': USER_AGENT})
+
+    # ⚠️ Ahead of fetch_context, deliberately. Reverification reads the visual
+    # half and never the Commons note, so fetching notes would be work it does
+    # not use — and fetch_context WRITES alt_text.json, which a read-only audit
+    # has no business doing.
+    if args.reverify:
+        return run_reverify(rows, alt, session, args)
 
     fetch_context(rows, alt, session, refetch_suspect=args.refetch_suspect)
     if args.context_only:
