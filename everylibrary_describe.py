@@ -212,6 +212,9 @@ PROMPT = (
     'building and legible, you may state that.\n'
     '- Do not begin with "A photograph of" or "An image of".\n'
     '- One or two sentences, maximum {maxlen} characters.\n'
+    # Deliberate exception to the house style's American-spelling default
+    # (CLAUDE.md, 28 August 2026): this bot's whole subject is UK public
+    # libraries, so British spelling is the content-appropriate choice.
     '- British English.\n'
     '- Return the description only, with no preamble or quotation marks.'
 )
