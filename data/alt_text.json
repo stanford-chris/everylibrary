@@ -109,7 +109,8 @@
  },
  "81dfe9d9340d": {
   "context": "",
-  "visual": "Two-storey stone fortified building with dark crenellated lower storey, cream-rendered upper storey and slate roof. Entrance accessed via metal-railed steps beneath a rounded stone arch, flanked by potted plants."
+  "visual": "A rough stone wall with battlement-like crenellations rises to a rendered upper storey with a pitched, tiled roof. Stone steps with metal handrails lead up to glass double doors set into an arched stone surround, flanked by wooden barrel planters and a freestanding café sign, under a clear blue sky.",
+  "visual_v": 2
  },
  "6758accbb4e6": {
   "context": "",
@@ -189,7 +190,8 @@
  },
  "1ceed86b6a7b": {
   "context": "Warrington Library & Museum The museum and library on the corner of Bold Street/Museum Street. It was founded in 1848 after Warrington’s first Town Clerk, John Fitchett Marsh. The foundation stone for the current building was laid on 22 September 1855. Inside the museum you can see rare rocks, fossil footprints, an Egyptian mummy, a Roman actor’s mask (the only one of its kind in Britain), bot",
-  "visual": "Two-storey red brick building with regularly spaced windows and dark entrance; bollards and bicycle racks on the street outside, corner setting, overcast sky."
+  "visual": "A red brick building runs along the street with tall arched windows, stone banding and a projecting cornice below a flat roofline. A recessed doorway with a stone surround sits between the windows, fronted by black railings, cycle racks and a red postbox, with a street sign on a pole pointing towards the entrance under an overcast sky.",
+  "visual_v": 2
  },
  "ee8c87f54af5": {
   "context": "",
@@ -724,7 +726,7 @@
   "visual": "One-storey library building with cream rendered walls and dark purple-trimmed gable roof sections featuring large triangular windows. Metal roofing, grey forecourt, and yellow disabled parking markings beneath overcast sky."
  },
  "c0dc99e48cd9": {
-  "context": "This library is run by Wakefield libraries. Find out more about this library at: www.wakefield.gov.uk/residents/libraries-and-local-histor... Photo credit: Wakefield libraries",
+  "context": "This library is run by Wakefield libraries. Photo credit: Wakefield libraries",
   "visual": "Red-brick multi-storey building topped by dark corrugated metal, with modern windows and red entrance. Trees and grass surround the paved forecourt where a car is parked; overcast sky."
  },
  "63df96cd3ab9": {
@@ -1012,7 +1014,7 @@
   "visual": "Single-storey modern brick library with expansive glass frontage framed in green metalwork. Overcast day; car park with bollards, parked bicycles, and trees visible beyond."
  },
  "b388f5a195a0": {
-  "context": "The new Ashbourne Library built in 2013 on Compton Street in Ashbourne, Derbyshire. Foundation stone was laid in February 2013 , and <a href=”http://www.ashbournenewstelegraph.co.uk/Thumbsup-towns-new-librar",
+  "context": "The new Ashbourne Library built in 2013 on Compton Street in Ashbourne, Derbyshire. Foundation stone was laid in February 2013 , and opened to the public in May 2013",
   "visual": "Single-storey building of honey-coloured stone with large glass entrance, topped by a striking cantilevered black roof. Metal railings border the paved forecourt; a white rendered section extends to the right."
  },
  "3af8bcb833ec": {
@@ -1252,7 +1254,7 @@
   "visual": "Sandstone building with three storeys and a central tower topped with a spire. Tall arched windows punctuate the façade; bare trees and parked cars line the street on a clear day."
  },
  "3d0aaf5b0452": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Guiseley-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Single-storey stone library with red entrance door, white windows and a cream-rendered extension adjoining. Paved forecourt, chimney stack, bare winter trees, clear sky; several visitors at the entrance."
  },
  "66a6c7e770a9": {
@@ -1272,7 +1274,7 @@
   "visual": "Two-storey redbrick building with blue entrance door and rectangular windows, some boarded. Red brick paving in forecourt, adjacent shops visible, overcast sky."
  },
  "03d56a472068": {
-  "context": "Charlbury library is located in Charlbury community centre, which it shares with a multi-discipline sports hall, community spaces, and cafe. www.charlburycommunitycentre.org.uk/ Library services are provided by Oxfordshire county council. Photo credit: Charlotte Lane/Libraries Taskforce",
+  "context": "Charlbury library is located in Charlbury community centre, which it shares with a multi-discipline sports hall, community spaces, and cafe. Library services are provided by Oxfordshire county council. Photo credit: Charlotte Lane/Libraries Taskforce",
   "visual": "Modern library interior with high cream ceiling, fluorescent strip lighting, and exposed structural beams. Open-plan layout with multiple bookshelves displaying multicoloured book spines, burgundy feature wall, grey carpet, and contemporary furnishings."
  },
  "281b3b49d3a7": {
@@ -1592,7 +1594,7 @@
   "visual": "Red-brick building with turrets, pointed slate roofs and multiple chimneys. Large rectangular windows across several storeys with ornate brickwork detailing. Sits on a paved public square with modern street barriers."
  },
  "80e10e6edc0c": {
-  "context": "This library is run by Stockton-on-Tees council. Find out more about it: www.stockton.gov.uk/arts-culture-and-leisure/libraries/fi...",
+  "context": "",
   "visual": "Contemporary library interior with a bright lime-green shelving unit for customer services and self-service terminals, displaying books and materials. Rust and lime-coloured upholstered chairs sit in the foreground beneath linear ceiling lights and a wooden staircase."
  },
  "4629e6e0c01c": {
@@ -2400,7 +2402,7 @@
   "visual": "Buff-brick building with a fully glazed ground-floor frontage and a gabled window in the roof above. Open doors flanked by windows carrying posters and a green library sign; a tall dark conifer stands to the right, over block paving."
  },
  "88d0f1904b2f": {
-  "context": "Aylesbury Library Aylesbury Library http://www.buckscc.gov.uk/bcc/content/index.jsp?contentid=-711863930 is in Walton Street. Beatties is a department store in the Friars Square shopping centre.",
+  "context": "Aylesbury Library Aylesbury Library is in Walton Street. Beatties is a department store in the Friars Square shopping centre.",
   "visual": "Red-brick building with cream stone trim, arched windows framed in turquoise set above a glazed ground-floor frontage. Modern office buildings beyond. Partly cloudy day."
  },
  "15b4c3dacd9a": {
@@ -2412,7 +2414,7 @@
   "visual": "Two-storey red-brick building with white cladding and extensive glazing, curving roofline. Ground-floor retail frontage opens to a sunny public plaza with planted trees."
  },
  "5fffbb60aad7": {
-  "context": "Branksome Library On Ashley Road, opened 2001. http://boroughofpoole.com/go.php?structureID=U464057c6c52db&ref=S464B0D035A8F7",
+  "context": "Branksome Library On Ashley Road, opened 2001.",
   "visual": "Three-storey terraced building of red brick and cream render, with slate roof and dormer windows. Shop frontages occupy the ground floor along a high street lined with parked vehicles."
  },
  "f4af15937684": {
@@ -2500,7 +2502,7 @@
   "visual": "Flat-roofed brick library with dark wooden lattice panels set amongst mature trees and yellow flowering shrubs. Single storey, bright daylight, fronted by a road."
  },
  "d52d04aa5557": {
-  "context": "Lower Parkstone, library At the junction of Salterns and Britannia Roads; a converted fire station, undergoing renovation, but still open for business. Note the tower, which is part of the premises. http://boroughofpoole.com/go.php?structureID=U464057c6c52db&ref=S464B0ADD0A2B8",
+  "context": "Lower Parkstone, library At the junction of Salterns and Britannia Roads; a converted fire station, undergoing renovation, but still open for business. Note the tower, which is part of the premises.",
   "visual": "Red-brick library with decorative gable roof and pitched chimneys, currently under scaffolding for renovation. Two storeys, surrounded by Victorian terraces under an overcast sky."
  },
  "6ed10655c4a1": {
@@ -2516,7 +2518,7 @@
   "visual": "Cream-coloured concrete building with five storeys of gridded windows and a stone relief emblem. Ground-level retail units beneath; overcast sky, metal railings and parked car at street level."
  },
  "9ad4e41d4fff": {
-  "context": "Rossmore Library. To be formal, Rossmore Community Library & Learning Centre; in front of Rossmore Community College 1195608, and replacing old library 1195572. For more information, see http://www.boroughofpoole.com/go.php?ref=S464B0C6BE3A69&structureID=U464057c6c52db",
+  "context": "Rossmore Library. To be formal, Rossmore Community Library & Learning Centre; in front of Rossmore Community College 1195608 , and replacing old library 1195572 . For more information, see",
   "visual": "Single-storey modern building with rendered cream and blue walls, large windows, and glass entrance doors. Set behind a lawn bordered by bare winter trees under overcast skies."
  },
  "5c271d27e643": {
@@ -2568,15 +2570,15 @@
   "visual": "White-rendered library building with stone base and pitched roof, beside a rural road. Glazed entrance with multi-paned upper windows, bordered by hanging flower baskets and green hedging beneath partly cloudy skies."
  },
  "2566c5371f10": {
-  "context": "West Howe Library On Cunningham Crescent, in the centre of West Howe Estate. Note the slightly ornate lamp post to the right, perhaps to give the area a touch of distinctiveness. http://www.bournemouth.gov.uk/Residents/Libraries/Info/WestHowe_Library_Details.asp",
+  "context": "West Howe Library On Cunningham Crescent, in the centre of West Howe Estate. Note the slightly ornate lamp post to the right, perhaps to give the area a touch of distinctiveness.",
   "visual": "Multi-material building with continuous horizontal window bands, a taller rear section, and red brick end wall. Set on open grassland beneath bare deciduous trees and a slate-grey overcast sky."
  },
  "0d873aeac492": {
-  "context": "West Moors Library On Station Road, at the junction with Moorlands Road. http://www.westmoorsdorset.co.uk/library_services.htm",
+  "context": "West Moors Library On Station Road, at the junction with Moorlands Road.",
   "visual": "Single-storey modern library building with cream facade, extensive glazing and dark flat roof; set beside a road with trees visible behind under overcast skies."
  },
  "12a45425a787": {
-  "context": "One of four libraries built in Bournemouth, following a donation of £10,000 from Carnegie. Westbourne was the last to open, on 13 May 1916. The original building was refurbished and extended, reopening in January 1992 (the new section is off to the right of this photo). More about this library: <a href=”https://carnegielegacyinengland.wordpress.com/2016/07/12/westbourne-library/” rel=”nofollow”",
+  "context": "One of four libraries built in Bournemouth, following a donation of £10,000 from Carnegie. Westbourne was the last to open, on 13 May 1916. The original building was refurbished and extended, reopening in January 1992 (the new section is off to the right of this photo). More about this library: carnegielegacyinengland.wordpress.com/2016/07/12/westbour...",
   "visual": "Red brick building with pitched roof, central cupola and decorative half-timbered gable. Large multi-pane windows have cream stone trim; hanging baskets of magenta flowers frame the entrance, surrounded by dense green hedges and mature trees."
  },
  "3789844c8bf8": {
@@ -2592,7 +2594,7 @@
   "visual": "Single-storey red brick building with contemporary dark-clad extensions. Modern glass entrance with metal railings and bicycle racks on wet paving; bare trees frame the view under overcast sky."
  },
  "c69d0fe0b155": {
-  "context": "Winton Library At junction Wimborne & Library Roads, English Heritage-listed https://historicengland.org.uk/listing/the-list/list-entry/1154082. Looks as if it was designed by the same architect as 1016303; opened 1907. http://www.wintonforum.co.uk/library.html",
+  "context": "Winton Library At junction Wimborne & Library Roads, English Heritage-listed . Looks as if it was designed by the same architect as 1016303 ; opened 1907.",
   "visual": "Red brick library building with tall arched windows and decorative gables, slate roof sections, and a recessed arched entrance. Corner street location beneath overcast sky."
  },
  "d9dd6ad7d70a": {
@@ -2632,7 +2634,7 @@
   "visual": "Stone-built library with neoclassical details: dark ashlar walls, recessed entrance with fanlight, circular clock, ornate carved panels above, beside a street under overcast sky."
  },
  "e1191b776dec": {
-  "context": "Dalton Library is managed by Cumbria libraries. It moved to its new location in the Dalton community centre in 2016. More information can be found: www.cumbria.gov.uk/libraries/locations/dal_lib.asp Photo credit: Cumbria County Council",
+  "context": "Dalton Library is managed by Cumbria libraries. It moved to its new location in the Dalton community centre in 2016. Photo credit: Cumbria County Council",
   "visual": "Library media collection area with magenta shelving units storing CDs and DVDs, grey carpet, ceiling lights, and advertising posters overhead."
  },
  "ed7ba3721842": {
@@ -2676,7 +2678,7 @@
   "visual": "Two-storey stone library with honey-coloured ashlar walls, sash windows, and arcaded ground floor with white-framed arched doors. Clock tower surmounts the slate roof; daytime crowds gather in front beneath a clear sky."
  },
  "7e448cbe86ff": {
-  "context": "Carlisle Library is managed by Cumbria libraries. More information can be found: www.cumbria.gov.uk/libraries/locations/cal_lib.asp Photo credit: Cumbria County Council",
+  "context": "Carlisle Library is managed by Cumbria libraries. Photo credit: Cumbria County Council",
   "visual": "View down a modern library’s interior with a teal-green metal staircase, skylights above, bright blue-and-yellow wall panels, and shelving on the lower floor where visitors browse."
  },
  "45b45a3b7eb0": {
@@ -3628,7 +3630,7 @@
   "visual": "Single-storey stone building with pitched slate roof, set behind a low stone wall. Blue entrance door, multiple windows, and signage boards visible; mature trees on both sides under overcast sky."
  },
  "82e72f3c3817": {
-  "context": "www.thetelegraphandargus.co.uk/news/11665864.Thousands_ba...",
+  "context": "",
   "visual": "Single-storey sandstone building with a classical portico entrance supported by columns. Symmetrical façade features tall sash windows, green lawns, and surrounding trees beneath an overcast sky."
  },
  "a8fe56ab20ca": {
@@ -3880,7 +3882,7 @@
   "visual": "Red-brick, two-storey library with white-framed windows, a red entrance door, and green signage. Wooden fence, patio furniture, and vehicles fill the forecourt under overcast skies."
  },
  "1d11f271056d": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Halton-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Single-storey red brick building with pitched dark tile roof and dark-framed windows. Tiled forecourt with entrance on right side, blue bins, and street furniture visible."
  },
  "b143c56cdbb3": {
@@ -3900,11 +3902,11 @@
   "visual": "Modern library with curved white cladding and dark grey panels, large windows, and a prominent blue stripe. Steps lead to glass entrance doors; metal bollards and bench seating line the paved forecourt under overcast skies."
  },
  "8d0e62e6143c": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Horsforth-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Modern stone library with horizontal green-framed windows and a sloped roof, adjoined by an older stone wing with tall chimneys. Yellow bollards line the forecourt under clear sky."
  },
  "39025934969a": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Hunslet-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Single-storey brick building with rendered upper half and distinctive curved roofline. Large arched entrance with black doors flanked by tall rectangular windows; paved forecourt under overcast sky."
  },
  "0ce380bcfdf4": {
@@ -3944,7 +3946,7 @@
   "visual": "Red-brick building with two storeys and regular windows set in parkland with mature trees including birches; a paved forecourt faces a tree-lined road."
  },
  "3661ef83df80": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Otley-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "A single-storey brick library with white-framed glazing and dark slate roof set on a street corner. Large windows and glass doors face the street; metal railings mark the entrance beneath an overcast sky."
  },
  "d3a89fa03ce8": {
@@ -3964,7 +3966,7 @@
   "visual": "Single-storey red-brick building with pitched roof and glass entrance, situated at a street corner behind low railings. Clear skies and surrounding trees frame the contemporary street location."
  },
  "3da9c6d82af1": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Scholes-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Single-storey red brick library with blue entrance and flat roof. A brick wall with integrated seating faces it; a playground is visible to the right, surrounded by grass and bare-branched trees under grey sky."
  },
  "517a47a5a78f": {
@@ -3980,15 +3982,15 @@
   "visual": "Single-storey building with pink-brick facade and small windows, adjoining a darker brick wing. Large colourful mural decorates one wall; metal fencing encloses the grassy forecourt beneath overcast skies."
  },
  "2d6d68cfa8af": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Wetherby-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Stone-built library with contemporary glass upper level. Single-storey entrance features large windows and doors facing a tiled forecourt with planters and street frontage."
  },
  "6db10554a9e2": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Whinmoor-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Single-storey red-brick library with blue entrance door and multiple blue-framed windows, dark pitched tile roof, forecourt with two bare trees and grass verge under overcast sky."
  },
  "8f2e6d96d9f6": {
-  "context": "This library is run by Leeds libraries. Find out more about this library: www.leeds.gov.uk/leisure/Pages/Yeadon-library.aspx Photo credit: Leeds libraries",
+  "context": "This library is run by Leeds libraries. Photo credit: Leeds libraries",
   "visual": "Stone library building with two storeys, pitched roofs and dormer windows, marked by red LIBRARY signs. Ground-floor windows face a street lined with parked cars and neighbouring stone buildings under clear sky."
  },
  "25a411edbcda": {
@@ -4596,7 +4598,7 @@
   "visual": "Single-storey red-brick building with flat roof, dark-framed windows and yellow-bordered entrance doors on a paved forecourt. Overcast sky, with grass verge and surrounding trees."
  },
  "1f2dced38c43": {
-  "context": "Find out more about this library: www.cambridgeshire.gov.uk/directory_record/37646/barnwell... Photo credit: Cambridgeshire libraries",
+  "context": "",
   "visual": "Single-storey charcoal brick building with extensive white-framed glass frontage showing interior bookshelves, flat metal roof with trim. Wooden bench, mature hedging, and paved courtyard."
  },
  "01ee6e02882b": {
@@ -4648,7 +4650,7 @@
   "visual": "Red brick library building set behind a gated car park entrance with green metal fencing. Mature trees flank the grounds under clear blue sky."
  },
  "4e78beab9907": {
-  "context": "Originally designed as two shop fronts, and with the well loved post box returned. To find out more about this library: www.cambridgeshire.gov.uk/directory_record/37660/great_sh... Photo credit: Cambridgeshire libraries",
+  "context": "Originally designed as two shop fronts, and with the well loved post box returned. Photo credit: Cambridgeshire libraries",
   "visual": "Pale yellow ashlar stone building, two storeys, with slate roof and white-trimmed gables. Modern shopfront at street level; multiple sash windows above. Climbing plants, flowering pots and red postbox on the pavement."
  },
  "b113a66a61cc": {
@@ -4672,7 +4674,7 @@
   "visual": "A brass memorial plaque on dark wood with decorative border, engraved with text commemorating an assistant librarian who fell in 1917. A single red flower rests on the plaque’s surface."
  },
  "4bcaf22872e5": {
-  "context": "To find out more about this library: www.cambridgeshire.gov.uk/directory_record/37677/st_ives_... Photo credit: Cambridgeshire libraries",
+  "context": "",
   "visual": "Children’s library interior with colourful floor sections in green, orange, and navy, wooden tables and chairs, and tall bookshelves painted in jewel tones. Large windows overlook a car park bordered by trees; a rainbow “Children’s Library” sign hangs from the ceiling."
  },
  "cd5da745ccb2": {
@@ -4788,7 +4790,7 @@
   "visual": "Two-storey red-brick building with large rectangular windows and a turquoise entrance door. A modern curved extension adjoins the traditional structure; bare trees and overcast sky visible."
  },
  "d5e8ea1f0d8c": {
-  "context": "Yaxley Library Small community library near the shopping centre in Lansdowne Road. http://www.cambridgeshire.gov.uk/leisure/libraries/directory/yaxley_library.htm",
+  "context": "Yaxley Library Small community library near the shopping centre in Lansdowne Road.",
   "visual": "Red-brick single-storey library with sloped metal roof and tall vertical black window panels across the front. Clear day with green surroundings, trees, and a modern street lamp to the side."
  },
  "c6fd719def01": {
@@ -5300,7 +5302,7 @@
   "visual": "Single-storey building of red brick and glass with green-framed windows spanning three sides and flat roof. Set in landscaped grounds with mature trees, approached via asphalt path with yellow kerb markings."
  },
  "50eadfbc6357": {
-  "context": "Milford-on-Sea, library Small library & village hall in Park Road http://www3.hants.gov.uk/library/library-finder/milford-on-sea-library.htm",
+  "context": "Milford-on-Sea, library Small library & village hall in Park Road",
   "visual": "Single-storey cream-painted building with pitched roof and multiple white-framed windows situated on a quiet residential street lined with brick houses under clear skies."
  },
  "e229e8fac54e": {
@@ -6016,7 +6018,7 @@
   "visual": "Contemporary two-storey building with cream render and grey upper section. Large glazed ground-floor frontage with dark fascia signage; upper floor features regular windows. Patterned red and cream paving forecourt beneath overcast sky."
  },
  "4707136ead84": {
-  "context": "Burton Joyce Library Built using the CLASP system http://www.clasp.gov.uk/NetBuildPro/process/6/History.html of which Nottinghamshire has always been a leading partner.",
+  "context": "Burton Joyce Library Built using the CLASP system of which Nottinghamshire has always been a leading partner.",
   "visual": "Single-storey brick building with large green-framed windows and glass doors, set behind low hedges and bare deciduous trees. Overcast day with residential properties visible beyond."
  },
  "2845246cbf70": {
@@ -6364,7 +6366,7 @@
   "visual": "Single-storey red brick building with black-and-white timber-framed entrance porch, pitched slate roof, multiple sash windows and entrance steps. Lawns, hedges and trees under clear blue sky."
  },
  "48c2bc6472cd": {
-  "context": "Wallingford Library Entrance to the Wallingford Library just by Flint House. There is a proposed extension to the Library which will be down by the gate on the right. http://www.oxfordmail.co.uk/news/4862294.Open_day_launches_Wallingford_Museum_s_extension_appeal/",
+  "context": "Wallingford Library Entrance to the Wallingford Library just by Flint House. There is a proposed extension to the Library which will be down by the gate on the right.",
   "visual": "Single-storey red-brick building with flat roof, set amongst mature trees. Yellow-lined driveway with parked vehicles; blue signage visible on the left."
  },
  "0353ea9c2df0": {
@@ -7041,7 +7043,8 @@
  },
  "156c9931fef0": {
   "context": "",
-  "visual": "Three metal flower or butterfly sculptures in red, blue and purple are arranged on a bed of wood chip, surrounded by green foliage and a brick wall."
+  "visual": "A red flower and a purple butterfly, both formed from painted stones, sit on a bed of wood chip and are linked by a winding trail of pastel-painted stones. Green shrubs and a brick wall stand behind.",
+  "visual_v": 2
  },
  "98a5be7e5677": {
   "context": "",
@@ -7792,7 +7795,7 @@
   "visual": "Modern single-storey building with extensive glazing adjoins a traditional stone structure of two to three storeys with pitched roof and multiple chimneys, sited on a street corner under clear sky."
  },
  "18481b799630": {
-  "context": "Aberystwyth Town Hall In Queens Square. The original town hall on this site (the 3rd in the town) was built in 1857. It was burned down and rebuilt in 1957. Ceredigion County Council has a webcam mounted on the town hall looking along Portland Street: http://www.ceredigion.gov.uk/index.cfm?articleid=994",
+  "context": "Aberystwyth Town Hall In Queens Square. The original town hall on this site (the 3rd in the town) was built in 1857. It was burned down and rebuilt in 1957. Ceredigion County Council has a w",
   "visual": "White-painted stone library: classical portico with four columns and arched entrance, adjoined by three-storey rectangular wing with multi-pane windows. Stone base wall, stepped forecourt with metal bollards, clear blue sky."
  },
  "913f88e7e15e": {
@@ -7836,7 +7839,7 @@
   "visual": "Red-brick single-storey building with cream-rendered section and white-painted entrance door. Directory board and metal railings are visible under grey skies."
  },
  "10457bc79224": {
-  "context": "County Hall, Market Street (Heol y Farchnad), Aberaeron However I have found no evidence that Aberaeron has been the county town of Cardiganshire in the past. It was nominally Cardigan, but the offices were in Aberystwyth. The little shield-shaped plaque on the left reads: neuadd y dref / town hall / 1833-45. http://www.bbc.co.uk/wales/mid/sites/aberaeron/pages/bicentenary_plaques.shtml?3",
+  "context": "County Hall, Market Street (Heol y Farchnad), Aberaeron However I have found no evidence that Aberaeron has been the county town of Cardiganshire in the past. It was nominally Cardigan, but the offices were in Aberystwyth. The little shield-shaped plaque on the left reads: neuadd y dref / town hall / 1833-45.",
   "visual": "Two-storey golden-stone building with tall sash windows, wide arched ground-floor windows, central pediment, and small bell tower. Paved forecourt with flowerbeds and several people near the entrance; blue sky and adjacent stone buildings visible."
  },
  "794525cff33a": {
@@ -8208,7 +8211,7 @@
   "visual": "Library building at a road corner: pale single-storey section with large sash windows on left; red-brick two-storey section with red front door on right. Dark slate roof, surrounded by black bollards and metal fencing; overcast sky."
  },
  "8b1c1a9180f7": {
-  "context": "Chepstow Library Next to the Welsh Street car park. http://www.visionwebsites.co.uk/Contents/Text/Index.asp?SiteId=137&SiteExtra=14722766&TopNavId=283&NavSideId=1480",
+  "context": "Chepstow Library Next to the Welsh Street car park.",
   "visual": "Single-storey library with white rendered walls and cream horizontal bands, featuring three peaked roofs with dark coverings and large grid-pattern windows in a modern design. Grey slate base and landscaped forecourt under overcast sky."
  },
  "38d9cda5cfaf": {
@@ -8244,7 +8247,7 @@
   "visual": "Single-storey modern brick library with cream walls, dark metal panels, and turquoise-framed glass entrance. Bare winter trees frame the building beneath overcast sky, with a paved pathway through grass leading to the doors."
  },
  "003cdd5c0613": {
-  "context": "Malpas Library There are two buildings on the site, which is set back from Pillmawr Road with parking spaces available. This one is the Malpas Library and Information Centre. A curious hybrid, its external structure is of stone, part of a former school building. The back of the building https://www.geograph.org.uk/photo/1478345 looks little changed from its earlier use.",
+  "context": "Malpas Library There are two buildings on the site, which is set back from Pillmawr Road with parking spaces available. This one is the Malpas Library and Information Centre. A curious hybrid, its external structure is of stone, part of a former school building. The back of the building looks little changed from its earlier use.",
   "visual": "Single-storey red-brick building with a slate roof and large glazed entrance comprising doors and floor-to-ceiling windows, topped by a row of smaller rectangular windows. Paved forecourt with car-parking spaces marked in yellow; partly cloudy sky."
  },
  "809182ad2032": {
@@ -8752,7 +8755,7 @@
   "visual": "A single-storey building with bright blue painted elevations and large window panels. Wet asphalt car park and metal bollards in front, beneath overcast skies."
  },
  "e783bc6e411d": {
-  "context": "Meldrum Academy, Oldmeldrum. Purpose built academy which contains community facilities too e.g. library. A “new community school”. https://www.meldrumacademy.aberdeenshire.sch.uk/",
+  "context": "Meldrum Academy, Oldmeldrum. Purpose built academy which contains community facilities too e.g. library. A “new community school”.",
   "visual": "A modern single-storey building with wooden cladding, white rendered walls and a blue-painted section. Large windows line the front, opening onto a tan-brick courtyard beneath overcast skies; low shrubs edge the forecourt."
  },
  "4dc69855a006": {

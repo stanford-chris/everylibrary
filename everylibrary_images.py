@@ -208,7 +208,8 @@ def stage2_geosearch(rows, state):
             s -= h.get("dist", RADIUS_M) / RADIUS_M    # prefer closer
             return s
 
-        candidates = [h for h in hits if "librar" in h["title"].lower()]
+        candidates = [h for h in hits if "librar" in h["title"].lower()
+                      and not NON_BUILDING_RE.search(h["title"])]
         if candidates:
             best = max(candidates, key=score)
             state["geo"][key] = {"title": best["title"], "dist": round(best.get("dist", 0))}
@@ -247,6 +248,24 @@ def stage2_geosearch(rows, state):
 CLOSED_RE = re.compile(
     r"\b(former(ly)?|closed|disused|demolished|vacant|"
     r"replaced by|until \d{4})\b", re.I)
+
+# NON_BUILDING_RE is load-bearing for the same reason as CLOSED_RE: the title
+# match alone is not the claim it looks like. Eyemouth Library's stage 2 photo
+# was "Eyemouth, Pattern of stones sculpture outside the library" — "librar"
+# scores it 10.0 same as a photo of the building itself, and at 11m it was also
+# the closest candidate, so it won outright. Found 31 August 2026 when the
+# posted alt text called painted pebbles "metal sculptures". A title naming an
+# object that merely sits *outside* or *near* the library is excluded from
+# stage 2's candidates rather than let the score alone decide.
+NON_BUILDING_RE = re.compile(
+    r"\b(sculpture|statue|mural|mosaic|plaque|carving|artwork|"
+    r"noticeboard|notice board)\b", re.I)
+# "memorial" was tried and dropped: "Fitzroy Memorial Library", "Malvern War
+# Memorial and Library" and "Joseph Rowntree Memorial Library" are real
+# building names, not objects near one, and the word appears in 62 titles
+# across the geograph_libraries.json corpus. The eight words above were swept
+# against that same 9,035-title corpus and every one of the 158 matches names
+# an object rather than a building.
 
 # Q28564 is public library; P279* picks up its subclasses. P17 wd:Q145 is the UK.
 WD_NEARBY_QUERY = """
@@ -449,8 +468,9 @@ def stage3_geograph(rows, state):
         log("stage 3  skipped: neither geograph_libraries.json nor the dump is present")
         return
 
-    photos = extract_geograph_index()
-    log(f"stage 3  Geograph: {len(photos)} library-titled photos in the index")
+    photos = [p for p in extract_geograph_index() if not NON_BUILDING_RE.search(p["title"])]
+    log(f"stage 3  Geograph: {len(photos)} library-titled photos in the index "
+        f"after dropping sculptures, plaques and the like")
 
     grid = {}
     for p in photos:
