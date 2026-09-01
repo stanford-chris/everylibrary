@@ -348,6 +348,11 @@ def build_post(row):
     if address:
         tb.text(address + '\n')
 
+    lat, lon = (row.get('lat') or '').strip(), (row.get('lon') or '').strip()
+    if lat and lon:
+        tb.link('📍 Map', f'https://www.google.com/maps?q={lat},{lon}')
+        tb.text('\n')
+
     place = short_place(row['authority'])
 
     # Name the nation. "Medway" places nothing for a reader outside the UK, and
