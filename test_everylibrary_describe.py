@@ -199,5 +199,41 @@ class SubjectAndSpelling(unittest.TestCase):
             self.assertIn('American English', p)
 
 
+class BilingualAgreementChecks(unittest.TestCase):
+    """_storeys()/OUTDOOR/INDOOR only ever carried British vocabulary
+    (storey, pavement, car park, kerb, issue desk), because everylibrary's
+    own descriptions only ever get asked for British English. Now that
+    everycarnegie can ask for American on 79% of its roster, a check that
+    still only recognises the British half loses sensitivity exactly where
+    it matters most: an American two-storey description agreeing with
+    itself on storey count, or on being outdoors, would silently stop
+    being checked at all."""
+
+    def test_storeys_matches_british_singular_and_plural(self):
+        self.assertEqual(eld._storeys('a single-storey building'), {1})
+        self.assertEqual(eld._storeys('three storeys of red brick'), {3})
+
+    def test_storeys_matches_american_singular_and_plural(self):
+        self.assertEqual(eld._storeys('a single-story building'), {1})
+        self.assertEqual(eld._storeys('three stories of red brick'), {3})
+
+    def test_a_british_and_an_american_read_still_disagree(self):
+        # The actual failure mode this exists to catch: two reads that truly
+        # disagree must still be caught regardless of which register either
+        # one happens to be written in.
+        conflict = eld.disagreement('a single-storey library',
+                                    'a three-story library')
+        self.assertIn('storeys', conflict)
+
+    def test_outdoor_matches_british_and_american_terms(self):
+        for word in ('pavement', 'sidewalk', 'car park', 'parking lot',
+                    'kerb', 'curb'):
+            self.assertTrue(eld.OUTDOOR.search(f'a {word} out front'), word)
+
+    def test_indoor_matches_british_and_american_terms(self):
+        for word in ('issue desk', 'circulation desk'):
+            self.assertTrue(eld.INDOOR.search(f'a librarian at the {word}'), word)
+
+
 if __name__ == '__main__':
     unittest.main()

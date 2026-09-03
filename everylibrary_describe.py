@@ -626,12 +626,18 @@ def _one_description(path, env, extra='', subject='a UK public library',
 # only whether they saw the same kind of thing.
 NUMBER_WORDS = {'single': 1, 'one': 1, 'two': 2, 'three': 3, 'four': 4,
                 'five': 5, 'six': 6, 'seven': 7, 'eight': 8}
-OUTDOOR = re.compile(r'\b(sky|skies|forecourt|pavement|street|roofline|roof|'
-                     r'fa[çc]ade|car park|hedge|kerb|road|chimney|chimneys|'
-                     r'gable|gables|courtyard|garden|railings|pathway)\b', re.I)
+# Both spellings of every word, because a description can now be asked for
+# either register (everycarnegie's `spelling='American'`) and a check that
+# only recognises the British half would silently lose sensitivity on
+# exactly the 79% of that roster it matters most for: sidewalk/pavement,
+# parking lot/car park, curb/kerb, circulation desk/issue desk.
+OUTDOOR = re.compile(r'\b(sky|skies|forecourt|pavement|sidewalk|street|'
+                     r'roofline|roof|fa[çc]ade|car park|parking lot|hedge|'
+                     r'kerb|curb|road|chimney|chimneys|gable|gables|'
+                     r'courtyard|garden|railings|pathway)\b', re.I)
 INDOOR = re.compile(r'\b(shelving|bookshel\w+|carpet\w*|ceiling|reading room|'
                     r'interior|indoor|furniture|armchair\w*|study space|'
-                    r'issue desk|counter)\b', re.I)
+                    r'issue desk|circulation desk|counter)\b', re.I)
 
 
 def _storeys(text):
@@ -639,8 +645,10 @@ def _storeys(text):
 
     'three to four storeys' yields {4}: one number is enough to disagree with
     'single-storey', and the range itself is not the interesting part.
+    Matches 'storey'/'storeys' and the American 'story'/'stories' alike, for
+    the same reason OUTDOOR/INDOOR above carry both spellings.
     """
-    words = re.findall(r'([a-z]+)[\s-]stor(?:ey|ie)s?\b', text, re.I)
+    words = re.findall(r'([a-z]+)[\s-]stor(?:eys?|ies|y)\b', text, re.I)
     return {NUMBER_WORDS[w.lower()] for w in words if w.lower() in NUMBER_WORDS}
 
 
