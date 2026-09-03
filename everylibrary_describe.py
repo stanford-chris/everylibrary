@@ -172,7 +172,7 @@ PROMPT_VERSION = 2
 
 PROMPT = (
     'Read the image at {path} and describe it as alt text for a blind reader. '
-    'It is usually the exterior of a UK public library, but it may be an '
+    'It is usually the exterior of {subject}, but it may be an '
     'interior, a plaque, a memorial, a shopfront or something else entirely.\n\n'
     'Rules:\n'
     '- Describe only what is visible: building material, windows, doors, '
@@ -213,9 +213,13 @@ PROMPT = (
     '- Do not begin with "A photograph of" or "An image of".\n'
     '- One or two sentences, maximum {maxlen} characters.\n'
     # Deliberate exception to the house style's American-spelling default
-    # (CLAUDE.md, 28 August 2026): this bot's whole subject is UK public
-    # libraries, so British spelling is the content-appropriate choice.
-    '- British English.\n'
+    # (CLAUDE.md, 28 August 2026): everylibrary's whole subject is UK public
+    # libraries, so British spelling is the content-appropriate choice, which
+    # is why `spelling` defaults to British below. everycarnegie reuses this
+    # describer for a worldwide roster (79% American, 13% UK/Ireland as of
+    # 3 September 2026) and passes `subject`/`spelling` per row's own country
+    # instead of taking the default — see carnegie_describe.py.
+    '- {spelling} English.\n'
     '- Return the description only, with no preamble or quotation marks.'
 )
 
@@ -569,17 +573,22 @@ An earlier attempt at this description asserted the following, and a check again
 Write it again, leaving out anything you cannot actually resolve. A shorter, safer description is the right answer here."""
 
 
-def _one_description(path, env, extra=''):
+def _one_description(path, env, extra='', subject='a UK public library',
+                      spelling='British'):
     """A single read of one image file. None on any failure.
 
     `extra` is appended to the prompt, and is how the verification retry names
     the claims that failed. Empty for the two ordinary reads, so the agreement
     check above still compares two genuinely independent looks.
+
+    `subject`/`spelling` default to this module's own UK-library, British-
+    English case; everycarnegie's caller overrides both per row.
     """
     try:
         p = subprocess.run(
             ['claude', '-p', '--model', MODEL,
-             PROMPT.format(path=path, maxlen=MAX_VISUAL_CHARS) + extra],
+             PROMPT.format(path=path, maxlen=MAX_VISUAL_CHARS,
+                           subject=subject, spelling=spelling) + extra],
             capture_output=True, text=True, env=env, timeout=CALL_TIMEOUT)
         if p.returncode != 0:
             return None
@@ -803,12 +812,16 @@ def unsupported(path, text, env):
     return absent, None
 
 
-def describe(row, session, env):
+def describe(row, session, env, subject='a UK public library', spelling='British'):
     """One image, two independent reads, kept only if they agree.
 
     Returns the shorter of the two: both passed the same guard, and the shorter
     is the one making fewer claims. Returns None on any failure or on
     disagreement — a missing description is fine, a wrong one is not.
+
+    `subject`/`spelling` default to everylibrary's own case and are unused by
+    its own caller (main(), below); everycarnegie's caller passes both, keyed
+    off the row's own country, since its roster is mostly not British.
     """
     data = fetch_image(row, session)
     if not data:
@@ -819,10 +832,10 @@ def describe(row, session, env):
         fh.write(data)
         path = fh.name
     try:
-        first = _one_description(path, env)
+        first = _one_description(path, env, subject=subject, spelling=spelling)
         if not first:
             return None
-        second = _one_description(path, env)
+        second = _one_description(path, env, subject=subject, spelling=spelling)
         if not second:
             return None
         conflict = disagreement(first, second)
@@ -850,7 +863,8 @@ def describe(row, session, env):
             f'{row.get("name", "?")}')
         again = _one_description(
             path, env, extra=RETRY_NOTE.format(
-                bad='\n'.join(f'- {b}' for b in bad)))
+                bad='\n'.join(f'- {b}' for b in bad)),
+            subject=subject, spelling=spelling)
         if not again:
             return None
         bad2, why2 = unsupported(path, again, env)

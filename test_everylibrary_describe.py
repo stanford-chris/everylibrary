@@ -90,7 +90,7 @@ class DescribeRetry(unittest.TestCase):
         unsupported returns in order."""
         calls = {'extra': []}
 
-        def fake_read(path, env, extra=''):
+        def fake_read(path, env, extra='', **kwargs):
             calls['extra'].append(extra)
             return reads.pop(0)
 
@@ -148,6 +148,55 @@ class DescribeRetry(unittest.TestCase):
             ['A single-storey brick library.', 'A three-storey brick library.'],
             [])
         self.assertIsNone(out)
+
+
+class SubjectAndSpelling(unittest.TestCase):
+    """The prompt's subject/spelling default to everylibrary's own case
+    (a UK public library, British) and everycarnegie overrides both per row
+    — see everycarnegie/carnegie_describe.py. Checked at the subprocess
+    boundary, since _one_description is what actually builds the prompt."""
+
+    def run_one(self, **kwargs):
+        with unittest.mock.patch.object(
+                eld.subprocess, 'run',
+                return_value=reply(0, GOOD)) as mock_run:
+            eld._one_description('/tmp/x.jpg', env=None, **kwargs)
+        return mock_run.call_args[0][0][-1]   # the prompt string argument
+
+    def test_default_is_everylibrarys_own_case(self):
+        prompt = self.run_one()
+        self.assertIn('a UK public library', prompt)
+        self.assertIn('British English', prompt)
+
+    def test_carnegie_can_override_both(self):
+        prompt = self.run_one(subject='a Carnegie library building',
+                               spelling='American')
+        self.assertIn('a Carnegie library building', prompt)
+        self.assertIn('American English', prompt)
+        self.assertNotIn('UK public library', prompt)
+        self.assertNotIn('British English', prompt)
+
+    def test_describe_threads_subject_and_spelling_through_every_read(self):
+        # Not mocking _one_description this time: three real calls (two
+        # reads + a retry) must each carry the override, not just the first.
+        prompts = []
+
+        def fake_run(cmd, **_):
+            prompts.append(cmd[-1])
+            return reply(0, GOOD)
+
+        with unittest.mock.patch.object(eld, 'fetch_image', return_value=b'jpeg'), \
+             unittest.mock.patch.object(eld.subprocess, 'run', side_effect=fake_run), \
+             unittest.mock.patch.object(eld, 'unsupported',
+                                        side_effect=[(['slate roof'], None), ([], None)]), \
+             unittest.mock.patch.object(eld, 'log', lambda *_: None):
+            eld.describe({'name': 'X', 'image_source': 'commons', 'image_title': 't'},
+                         session=None, env=None,
+                         subject='a Carnegie library building', spelling='American')
+        self.assertEqual(len(prompts), 3)   # two reads + one retry
+        for p in prompts:
+            self.assertIn('a Carnegie library building', p)
+            self.assertIn('American English', p)
 
 
 if __name__ == '__main__':
