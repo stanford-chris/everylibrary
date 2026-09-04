@@ -57,6 +57,15 @@ from everylibrary_post import (MANIFEST, DATA, USER_AGENT, STATE_FILE,
                                library_id, commons_filepath_url, display_name,
                                typographic)
 
+# limit_guard.py lives one level up, at ~/Scripts, rather than beside this
+# file: it is the same shared module old-seoul, sherlock-quotes and
+# seoul-index each carry their own copy of, and scripts_tidy.sh's
+# SHARED_MODULES check already watches the ~/Scripts one for drift against
+# those. Importing it directly avoids adding a fourth copy that check would
+# not even see, since it only scans ~/Scripts at one level deep.
+sys.path.insert(0, str(Path(__file__).parent.parent))
+import limit_guard
+
 ALT_PATH = DATA / 'alt_text.json'
 
 CLAUDE_TOKEN_ACCOUNT = 'seoulbot'
@@ -573,6 +582,15 @@ An earlier attempt at this description asserted the following, and a check again
 Write it again, leaving out anything you cannot actually resolve. A shorter, safer description is the right answer here."""
 
 
+# One wait per process run, never reset back to False, matching
+# image_alt.py's own _limit_waited: a quota that has not actually cleared
+# must not send a batch of hundreds of images round the same wait forever.
+# Shared across the ThreadPoolExecutor's workers with no lock on purpose —
+# the only race is two workers both deciding to wait at once, which just
+# means the wait happens twice instead of once, not a wrong result.
+_limit_waited = False
+
+
 def _one_description(path, env, extra='', subject='a UK public library',
                       spelling='British'):
     """A single read of one image file. None on any failure.
@@ -583,14 +601,42 @@ def _one_description(path, env, extra='', subject='a UK public library',
 
     `subject`/`spelling` default to this module's own UK-library, British-
     English case; everycarnegie's caller overrides both per row.
+
+    Waits out a spent `claude -p` quota once per run, the same way
+    image_alt.py's `_generate()` already does and for the same reason: this
+    call is worth an hours-long wait, since the alternative is losing the
+    description outright. `unsupported()` below deliberately does NOT get
+    this treatment, matching image_alt.py's `_unsupported()` — a verification
+    held late is fine, a description shipped unverified is not, so waiting
+    there would trade a good outcome for a worse one.
+
+    Before this, a quota hit partway through a run had no way to notice: every
+    call after it returned a plain non-zero exit and was treated exactly like
+    a real failure, so a batch of hundreds of images silently lost every one
+    of them from that point on. That is what happened to everycarnegie's
+    photo-description redo across three runs on 2-4 September 2026 — 622 of
+    1,367 libraries ended up with no description at all, and the one-shot
+    resume job had already exhausted itself and torn down by the time it was
+    noticed.
     """
-    try:
-        p = subprocess.run(
-            ['claude', '-p', '--model', MODEL,
-             PROMPT.format(path=path, maxlen=MAX_VISUAL_CHARS,
-                           subject=subject, spelling=spelling) + extra],
-            capture_output=True, text=True, env=env, timeout=CALL_TIMEOUT)
+    global _limit_waited
+    while True:
+        try:
+            p = subprocess.run(
+                ['claude', '-p', '--model', MODEL,
+                 PROMPT.format(path=path, maxlen=MAX_VISUAL_CHARS,
+                               subject=subject, spelling=spelling) + extra],
+                capture_output=True, text=True, env=env, timeout=CALL_TIMEOUT)
+        except (subprocess.TimeoutExpired, OSError):
+            return None
+
         if p.returncode != 0:
+            err = (p.stderr or p.stdout or '').strip()
+            if not _limit_waited and limit_guard.is_usage_limit(err):
+                _limit_waited = True
+                if limit_guard.wait_for_reset(
+                        err, budget_s=limit_guard.DEFAULT_BUDGET_S, log=log):
+                    continue
             return None
         out = (p.stdout or '').strip().strip('"').strip()
         # Guard against the model ignoring the instruction to skip preamble.
@@ -601,8 +647,6 @@ def _one_description(path, env, extra='', subject='a UK public library',
         if not_a_description(out):
             return None
         return out
-    except (subprocess.TimeoutExpired, OSError):
-        return None
 
 
 # A description can be fluent, guard-clean and simply invented. On 17 August

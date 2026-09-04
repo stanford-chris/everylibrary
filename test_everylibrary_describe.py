@@ -150,6 +150,78 @@ class DescribeRetry(unittest.TestCase):
         self.assertIsNone(out)
 
 
+LIMIT_ERR = "You've hit your limit · resets 1:30pm (Asia/Seoul)"
+
+
+class OneDescriptionLimitGuard(unittest.TestCase):
+    """_one_description waits out a spent quota once, then gives up for good.
+
+    Added 4 September 2026: everycarnegie's photo-description redo lost 622
+    of 1,367 libraries' descriptions across three runs because a quota hit
+    partway through produced a plain non-zero exit that looked identical to
+    a real failure, and this function had no way to tell the two apart.
+    """
+
+    def setUp(self):
+        eld._limit_waited = False
+
+    def tearDown(self):
+        eld._limit_waited = False
+
+    def test_a_usage_limit_is_retried_after_waiting(self):
+        with unittest.mock.patch.object(
+                eld.subprocess, 'run',
+                side_effect=[reply(1, LIMIT_ERR), reply(0, GOOD)]), \
+             unittest.mock.patch.object(eld.limit_guard, 'wait_for_reset',
+                                        return_value=True) as waited, \
+             unittest.mock.patch.object(eld, 'log', lambda *_: None):
+            out = eld._one_description('/tmp/x.jpg', env=None)
+        self.assertEqual(out, GOOD)
+        waited.assert_called_once()
+
+    def test_only_one_wait_per_run(self):
+        with unittest.mock.patch.object(
+                eld.subprocess, 'run',
+                side_effect=[reply(1, LIMIT_ERR), reply(0, GOOD)]), \
+             unittest.mock.patch.object(eld.limit_guard, 'wait_for_reset',
+                                        return_value=True), \
+             unittest.mock.patch.object(eld, 'log', lambda *_: None):
+            eld._one_description('/tmp/x.jpg', env=None)
+
+        # A second limit hit later in the same run must not wait again —
+        # image_alt.py's own reason applies here too: a quota that has not
+        # actually cleared must not send the batch round the same wait
+        # forever.
+        with unittest.mock.patch.object(
+                eld.subprocess, 'run', return_value=reply(1, LIMIT_ERR)), \
+             unittest.mock.patch.object(eld.limit_guard, 'wait_for_reset') as waited2, \
+             unittest.mock.patch.object(eld, 'log', lambda *_: None):
+            out = eld._one_description('/tmp/x.jpg', env=None)
+        waited2.assert_not_called()
+        self.assertIsNone(out)
+
+    def test_a_real_failure_is_not_treated_as_a_quota(self):
+        with unittest.mock.patch.object(
+                eld.subprocess, 'run',
+                return_value=reply(1, '401 Unauthorized')), \
+             unittest.mock.patch.object(eld.limit_guard, 'wait_for_reset') as waited, \
+             unittest.mock.patch.object(eld, 'log', lambda *_: None):
+            out = eld._one_description('/tmp/x.jpg', env=None)
+        waited.assert_not_called()
+        self.assertIsNone(out)
+
+    def test_giving_up_on_the_wait_budget_still_returns_none(self):
+        # wait_for_reset returns False when the reset is further off than the
+        # budget allows: the run should give up cleanly, not loop forever.
+        with unittest.mock.patch.object(
+                eld.subprocess, 'run', return_value=reply(1, LIMIT_ERR)), \
+             unittest.mock.patch.object(eld.limit_guard, 'wait_for_reset',
+                                        return_value=False), \
+             unittest.mock.patch.object(eld, 'log', lambda *_: None):
+            out = eld._one_description('/tmp/x.jpg', env=None)
+        self.assertIsNone(out)
+
+
 class SubjectAndSpelling(unittest.TestCase):
     """The prompt's subject/spelling default to everylibrary's own case
     (a UK public library, British) and everycarnegie overrides both per row

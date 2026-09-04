@@ -538,9 +538,14 @@ def build_alt(row):
         # Curled here rather than in the store: the descriptions already written
         # carry straight quotes, and a listener gets the same house style as a
         # reader without a migration.
-        parts = [f'{AI_PREFIX} {typographic(visual)}']
+        # Commons material is attached to the photograph itself and comes
+        # first; the A.I.-written description is generated afterwards and
+        # follows it, so a listener hears what came with the photo before
+        # what a model guessed about it.
+        parts = []
         if context:
             parts.append(f'{COMMONS_PREFIX} {typographic(context)}')
+        parts.append(f'{AI_PREFIX} {typographic(visual)}')
         return ' '.join(parts)[:ALT_MAX]
 
     place = short_place(row['authority'])
