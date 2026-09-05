@@ -362,7 +362,7 @@
  "107203622": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/peebles-library/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/peebles-library/"
  },
  "1073026576": {
   "source": "roster",
@@ -531,8 +531,8 @@
  },
  "11051572679": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/new-earswick-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/new-earswick-library/"
  },
  "1106151710": {
   "source": "roster",
@@ -1269,11 +1269,6 @@
   "status": 200,
   "url": "https://www.derbyshire.gov.uk/leisure/libraries/find_your_local_library/belper/default.asp"
  },
- "1299346890": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
- },
  "129961943": {
   "source": "roster",
   "status": 202,
@@ -1446,13 +1441,13 @@
  },
  "133334716": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/acomb-explore/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/acomb-explore/"
  },
  "133335269": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/poppleton-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/poppleton-library/"
  },
  "1333708174": {
   "source": "roster",
@@ -1787,7 +1782,7 @@
  "1419924935": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/eyemouth-library/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/eyemouth-library/"
  },
  "1421396859": {
   "source": "roster",
@@ -1847,7 +1842,7 @@
  "143332072": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/kelso-library-contact-centre/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/kelso-library-contact-centre/"
  },
  "1433413656": {
   "source": "roster",
@@ -2106,8 +2101,8 @@
  },
  "1549340531": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/fulford-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/fulford-library/"
  },
  "155169336": {
   "source": "roster",
@@ -2324,11 +2319,6 @@
   "status": 200,
   "url": "https://info.cambridgeshire.gov.uk/kb5/cambridgeshire/directory/service.page?id=ES6Plvg8bzk&camcommunitychannel=6-1"
  },
- "170484682": {
-  "source": "roster",
-  "status": 200,
-  "url": "http://www.culturepk.org.uk/your-local-library/loch-leven-community-library/"
- },
  "1705151432": {
   "source": "roster",
   "status": 0,
@@ -2474,11 +2464,6 @@
   "status": 200,
   "url": "https://www.trafford.gov.uk:443/libraries-archives"
  },
- "179974765": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
- },
  "180215805": {
   "source": "wikidata",
   "status": 200,
@@ -2496,8 +2481,8 @@
  },
  "182181224": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/huntington-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/libraries/huntington-library/"
  },
  "182181274": {
   "source": "roster",
@@ -2521,8 +2506,8 @@
  },
  "183040221": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/dringhouses-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/dringhouses-library/"
  },
  "1830838372": {
   "source": "roster",
@@ -2649,11 +2634,6 @@
   "status": 0,
   "url": "http://www3.northamptonshire.gov.uk/councilservices/library-service/visiting-your-library/list-of-libraries/Pages/default.aspx"
  },
- "191125731": {
-  "source": "roster",
-  "status": 200,
-  "url": "http://www.culturepk.org.uk/your-local-library/ak-bell-library/"
- },
  "191278832": {
   "source": "roster",
   "status": 0,
@@ -2696,8 +2676,8 @@
  },
  "1929189589": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/cafes/rowntree-park-york-reading-cafe/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/cafes/rowntree-park-reading-cafe/"
  },
  "1933669239": {
   "source": "roster",
@@ -2728,11 +2708,6 @@
   "source": "roster",
   "status": 403,
   "url": "http://www.tameside.gov.uk/libraries"
- },
- "1974854271": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
  },
  "197667720": {
   "source": "roster",
@@ -2947,7 +2922,7 @@
  "211489714": {
   "source": "wikidata",
   "status": 200,
-  "url": "https://www.northyorks.gov.uk/leisure-tourism-and-culture/libraries/local-libraries/harrogate-library"
+  "url": "https://www.northyorks.gov.uk/leisure-tourism-and-culture/libraries/leisure-tourism-and-culture/libraries/local-libraries/leisure-tourism-and-culture/libraries/leisure-tourism-and-culture/libraries/local-libraries/harrogate-library"
  },
  "211736261": {
   "source": "wikidata",
@@ -2998,11 +2973,6 @@
   "source": "roster",
   "status": 403,
   "url": "https://www.leicestershire.gov.uk/leisure-and-community/libraries/find-a-library/syston-library"
- },
- "215651812": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
  },
  "2163420863": {
   "source": "roster",
@@ -3083,11 +3053,6 @@
   "source": "roster",
   "status": 0,
   "url": "https://www.oxfordshire.gov.uk/libraries"
- },
- "223471766": {
-  "source": "wikidata",
-  "status": 0,
-  "url": "http://www.croydonlibraries.com/find-your-library/south-norwood-library"
  },
  "224128560": {
   "source": "roster",
@@ -3517,7 +3482,7 @@
  "2479494867": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/duns-library-contact-centre/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/duns-library-contact-centre/"
  },
  "2480916752": {
   "source": "roster",
@@ -3542,7 +3507,7 @@
  "2494825196": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/melrose-library/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/melrose-library/"
  },
  "249562682": {
   "source": "roster",
@@ -3924,11 +3889,6 @@
   "status": 403,
   "url": "https://www.dorsetcouncil.gov.uk/libraries-history-culture/libraries/find-your-local-library/library.aspx?l=9b4a3c39-90a4-4c37-b428-e5a151d894f4"
  },
- "265887071": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
- },
  "26622519": {
   "source": "roster",
   "status": 200,
@@ -4041,8 +4001,8 @@
  },
  "277939834": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/strensall-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/strensall-library/"
  },
  "27815146": {
   "source": "roster",
@@ -4116,8 +4076,8 @@
  },
  "28451887": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/dunnington-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/dunnington-library/"
  },
  "285932014": {
   "source": "roster",
@@ -4909,11 +4869,6 @@
   "status": 200,
   "url": "https://www.wolverhampton.gov.uk/libraries"
  },
- "35651696": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
- },
  "3568512152": {
   "source": "roster",
   "status": 0,
@@ -5552,7 +5507,7 @@
  "4321247659": {
   "source": "wikidata",
   "status": 403,
-  "url": "http://mylibrary.co.uk/libraries-list/blyth-library"
+  "url": "https://northumberland.spydus.co.uk/libraries-list/blyth-library"
  },
  "4326895": {
   "source": "roster",
@@ -5678,11 +5633,6 @@
   "source": "roster",
   "status": 403,
   "url": "https://www.norfolk.gov.uk/libraries-local-history-and-archives/libraries"
- },
- "448097367": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
  },
  "45024381": {
   "source": "roster",
@@ -6093,16 +6043,6 @@
   "source": "roster",
   "status": 403,
   "url": "https://www.hants.gov.uk/library"
- },
- "50.79910,-1.09989": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
- },
- "50.84893,-1.09385": {
-  "source": "roster",
-  "status": 200,
-  "url": "https://www.portsmouth.gov.uk/services/leisure/libraries/"
  },
  "50.85092,-0.22483": {
   "source": "roster",
@@ -6800,6 +6740,11 @@
   "url": "https://www.warwickshire.gov.uk/libraries"
  },
  "52.16799,-1.85936": {
+  "source": "roster",
+  "status": 202,
+  "url": "https://www.warwickshire.gov.uk/libraries"
+ },
+ "52.19366,-1.70753": {
   "source": "roster",
   "status": 202,
   "url": "https://www.warwickshire.gov.uk/libraries"
@@ -7621,13 +7566,18 @@
  },
  "53.95875,-1.07567": {
   "source": "roster",
-  "status": 200,
+  "status": 500,
   "url": "https://exploreyork.org.uk/cafes/hungate-york-reading-cafe/"
+ },
+ "53.96932,-1.10275": {
+  "source": "roster",
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/homestead-park-pop-up-reading-cafe/"
  },
  "53.97805,-1.10663": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/clifton-explore/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/clifton-explore/"
  },
  "53089980": {
   "source": "wikidata",
@@ -7672,7 +7622,7 @@
  "536129046": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/galashiels-library/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/galashiels-library/"
  },
  "536729219": {
   "source": "wikidata",
@@ -7892,7 +7842,7 @@
  "55.54857,-2.84223": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/selkirk-library/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/selkirk-library/"
  },
  "55.55595,-2.83841": {
   "source": "roster",
@@ -7901,8 +7851,8 @@
  },
  "55.59217,-4.48800": {
   "source": "roster",
-  "status": 520,
-  "url": "https://ayrshire360.com/index.php?a=venuedetail&id=6&venueid=40"
+  "status": 0,
+  "url": "https://eastayrshireleisure.com/index.php?a=venuedetail&id=6&venueid=40"
  },
  "55.60853,-4.48964": {
   "source": "roster",
@@ -7917,7 +7867,7 @@
  "55.61956,-3.05882": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/innerleithen-library-contact-centre/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/innerleithen-library-contact-centre/"
  },
  "55.62190,-3.52541": {
   "source": "roster",
@@ -8149,11 +8099,6 @@
   "status": 0,
   "url": "http://www.clacksweb.org.uk/culture/tillicoultrycap/"
  },
- "56.41003,-3.43824": {
-  "source": "roster",
-  "status": 200,
-  "url": "http://www.culturepk.org.uk/your-local-library/north-inch-community-library/"
- },
  "56.51987,-6.91623": {
   "source": "roster",
   "status": 200,
@@ -8161,8 +8106,8 @@
  },
  "56077520": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/york-explore/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/york-explore/"
  },
  "5612290113": {
   "source": "roster",
@@ -8186,8 +8131,8 @@
  },
  "56332558": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/bishopthorpe-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/bishopthorpe-library/"
  },
  "564319888": {
   "source": "roster",
@@ -8581,8 +8526,8 @@
  },
  "6127267030": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/tang-hall-explore/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/tang-hall-explore/"
  },
  "613138326": {
   "source": "roster",
@@ -8596,8 +8541,8 @@
  },
  "614891134": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/copmanthorpe-library/"
+  "status": 500,
+  "url": "https://www.exploreyork.org.uk/copmanthorpe-library/"
  },
  "6157577257": {
   "source": "roster",
@@ -9244,11 +9189,6 @@
   "status": 200,
   "url": "https://www.northlanculture.co.uk/libraries/your-library/condorrat-library/"
  },
- "7173783870": {
-  "source": "roster",
-  "status": 200,
-  "url": "http://www.culturepk.org.uk/your-local-library/comrie-library/"
- },
  "718475905": {
   "source": "roster",
   "status": 200,
@@ -9282,7 +9222,7 @@
  "724095450": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.onfife.com/visit-explore/"
+  "url": "https://www.onfife.com/wp-content/uploads/ninja-forms/18/Jennie-Lee-Library.jpg"
  },
  "725195133": {
   "source": "roster",
@@ -9607,7 +9547,7 @@
  "7819653651": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/hawick-library/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/hawick-library/"
  },
  "78217193": {
   "source": "roster",
@@ -9916,8 +9856,8 @@
  },
  "8265446030": {
   "source": "roster",
-  "status": 200,
-  "url": "https://exploreyork.org.uk/libraries/explore-at-york-stadium/"
+  "status": 500,
+  "url": "https://exploreyork.org.uk/explore-at-york-stadium/"
  },
  "831373641": {
   "source": "roster",
@@ -10122,7 +10062,7 @@
  "8788705018": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/coldstream-library-contact-centre/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/coldstream-library-contact-centre/"
  },
  "878909838": {
   "source": "roster",
@@ -10347,7 +10287,7 @@
  "9285777097": {
   "source": "roster",
   "status": 200,
-  "url": "http://www.liveborders.org.uk/culture/libraries/our-libraries/earlston-library/"
+  "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/earlston-library/"
  },
  "928846348": {
   "source": "roster",

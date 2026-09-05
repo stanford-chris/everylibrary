@@ -8767,7 +8767,9 @@
   "visual": "Covered arcade with arched glass roof supported by white ribs leads to a red library entrance door. Weathered red brick on the left, painted lower walls, stone paving, and metal railings."
  },
  "50a3a82f4127": {
-  "context": ""
+  "context": "",
+  "visual": "A red brick building with pale stone dressings and arched windows, its central bay rising to a small domed tower above a pillared doorway with a balcony. Hanging flower baskets flank the entrance, and foliage overhangs the top left corner of the scene.",
+  "visual_v": 2
  },
  "cd0c770e50f4": {
   "context": "",
@@ -8848,5 +8850,38 @@
  "3a8a4cc65e7f": {
   "context": "Y Capel Formerly a Baptist chapel, built in 1860, this is now the local tourist office for Llangollen and a gallery for local artists.",
   "visual": "Red brick building, two storeys with gabled roof and arched windows on both levels. Metal-railed stairs lead to the entrance with a blue library sign. A black taxi is parked in front under an overcast sky."
+ },
+ "6fe5443c9555": {
+  "context": "",
+  "visual": "A long building with a curved glass frontage over a course of speckled stone cladding, timber panelling at one end, seen across a road junction with traffic lights, bollards and a bus shelter on the pavement in front, under a partly cloudy sky.",
+  "visual_v": 2
+ },
+ "164589bf7410": {
+  "context": "",
+  "visual": "Interior with wood-panelled walls, book-filled shelves labelled with genre signs on the left, and a pale wooden table with two dark chairs beside a large window looking onto greenery, a noticeboard and leaflet racks nearby.",
+  "visual_v": 2
+ },
+ "38719c39698d": {
+  "context": "",
+  "visual": "A single-storey brick building with a flat roof, dark vertical posts along the front and “LIBRARY” in raised letters near the corner, set behind a wide lawn and trees, with a road and pavement in the foreground under a cloudy sky.",
+  "visual_v": 2
+ },
+ "5028f999edf1": {
+  "context": "",
+  "visual": "A brick building with a long row of windows along the upper floor and a pink sign fixed to the wall below, next to a shuttered entrance and a small clock tower. Cars are parked in front on a tarmac car park, with a low mural-covered wall and another building beyond, under a partly cloudy sky.",
+  "visual_v": 2
+ },
+ "a23664587294": {
+  "context": "",
+  "visual": "A single-storey brick building with a gabled end facing forward, a tall chimney at the peak and a small round window with a cross-shaped frame below it. A ramp with white railings leads to an open doorway, with a wooden fence to one side and tree branches visible at the edge of the frame.",
+  "visual_v": 2
+ },
+ "fe6c5b9e26f2": {
+  "context": ""
+ },
+ "58a2046400ba": {
+  "context": "",
+  "visual": "A single-storey red brick building with a grey pitched roof, tall chimneys and a decorative stone gable bearing carved lettering above a row of large arched windows with small square panes, set behind iron railings on a street corner, with a supermarket and other shops nearby.",
+  "visual_v": 2
  }
 }
