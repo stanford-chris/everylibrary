@@ -102,6 +102,27 @@ def fetch_live():
         raise RuntimeError(f'only {len(records)} records returned; the roster '
                            f'held 3,753 on 17 August 2026. Refusing to report '
                            f'drift against a partial fetch.')
+
+    # ⚠️ POSTCODE_FIXES corrects a bad postcode AT THE SOURCE, before anything
+    # downstream computes a match key from it. Applied here rather than by
+    # hand-editing the corpus row: this function is the one place roster_check
+    # AND roster_apply (which imports it) both see the live data, so a fix
+    # here can never drift into a match-key mismatch the way editing only the
+    # corpus would. Confirmed 9 September 2026 by matching the record's own
+    # Address 1/2/3 (Welfare Hall, Meinciau Road, Pontyates) against
+    # Carmarthenshire County Council's own page for the library, which states
+    # the postcode as SA15 5TR — SA15 5SC does not resolve on postcodes.io at
+    # all and is presumably a scan/typo somewhere upstream in the roster API.
+    # Keyed on the record's own stable `id`, never on name+postcode, since
+    # correcting the postcode is exactly what would break a name+postcode key.
+    POSTCODE_FIXES = {
+        4079: 'SA15 5TR',  # Pontyates Library; API serves SA15 5SC (bad)
+    }
+    for rec in records.values():
+        fix = POSTCODE_FIXES.get(rec.get('id'))
+        if fix:
+            rec['Postcode'] = fix
+
     return list(records.values())
 
 
