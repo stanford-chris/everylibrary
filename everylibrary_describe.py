@@ -42,6 +42,7 @@ import html
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -94,11 +95,36 @@ MAX_VISUAL_CHARS = 240
 FETCH_WIDTH = 900          # enough detail to describe, small enough to move fast
 CALL_TIMEOUT = 240
 
-# Claude Code's Read tool refuses paths outside its working directory, so the
-# images it is asked to look at have to live inside the project. A tempfile in
-# /var/folders comes back not as an error but as exit code 0 and a courteous
-# "I don't have a tool available to read image files", which is exactly the
-# shape of a sentence that could be stored as a description by mistake.
+# ⚠️⚠️ Every `claude -p` call in this module carries these flags, since
+# 11 September 2026, and the reason is on the record in everygeorgia's
+# transcribe.py, where it was found: unconfined, `claude -p` is an AGENT with
+# Bash, not a vision endpoint. On a hard image there it cropped and enlarged
+# the file with sips and Python through a dozen tool calls (60-280 s each,
+# the timeouts); on one page it ran `find ~ -iname clips.py`, read that
+# project's own code, executed it on three other pages and returned a progress
+# report as the "transcription". Nothing here stopped the same thing.
+# --restricted removes every command-running tool, confines the file tools to
+# cwd and ignores the user's settings files (so no hook and no permission rule
+# leaks in); --tools Read leaves exactly one way to look at the one image.
+# Measured 11 September 2026: a path outside cwd is refused, a request for a
+# shell is answered NO_SHELL. The verifier (unsupported(), below) is confined
+# too, deliberately: it is the same agent looking at the same file, and a
+# verdict reached by running code is not a verdict about the picture.
+CONFINED = ['--restricted', '--tools', 'Read']
+
+# Each image is staged ALONE in a fresh directory under here (_staged), and the
+# model runs with that directory as its cwd, since 11 September 2026. Under
+# --restricted the file tools are confined to cwd, so the only file the model
+# can read is the one it is being asked about, and it no longer matters what
+# directory the caller was launched from. Before this the call inherited the
+# caller's cwd and named the image by absolute path, and Claude Code's Read
+# tool refuses a path outside its working directory not as an error but as
+# exit code 0 and a courteous "I don't have a tool available to read image
+# files" — exactly the shape of a sentence that could be stored as a
+# description by mistake, and a run from anywhere but this directory could
+# silently describe nothing. The staging directory stays under the project
+# rather than in /var/folders only because everycarnegie points TMP_DIR at its
+# own data/ directory (carnegie_describe.py); nothing else depends on where it is.
 TMP_DIR = DATA / '_tmp'
 
 # Two ways the model returns a sentence that is not a description, both seen in
@@ -623,10 +649,12 @@ def _one_description(path, env, extra='', subject='a UK public library',
     while True:
         try:
             p = subprocess.run(
-                ['claude', '-p', '--model', MODEL,
+                ['claude', '-p', *CONFINED, '--model', MODEL,
                  PROMPT.format(path=path, maxlen=MAX_VISUAL_CHARS,
                                subject=subject, spelling=spelling) + extra],
-                capture_output=True, text=True, env=env, timeout=CALL_TIMEOUT)
+                capture_output=True, text=True, env=env,
+                cwd=os.path.dirname(path), stdin=subprocess.DEVNULL,
+                timeout=CALL_TIMEOUT)
         except (subprocess.TimeoutExpired, OSError):
             return None
 
@@ -829,6 +857,19 @@ _ABSENT_LINE = re.compile(r'^\s*ABSENT\s*\|\s*(.+?)\s*(?:\||$)')
 _FOUND_LINE = re.compile(r'^\s*FOUND\s*\|')
 
 
+def _staged(data):
+    """Write `data` as the ONLY file in a fresh directory under TMP_DIR and
+    return its path. Callers remove the directory, not just the file: with the
+    model's cwd set to it (see CONFINED and TMP_DIR above), a directory holding
+    one image is the whole of what the model can see, and a shared directory
+    would show a worker every other image in flight."""
+    TMP_DIR.mkdir(parents=True, exist_ok=True)
+    path = os.path.join(tempfile.mkdtemp(dir=TMP_DIR), 'image.jpg')
+    with open(path, 'wb') as fh:
+        fh.write(data)
+    return path
+
+
 def unsupported(path, text, env):
     """Claims in `text` that cannot be located in the image at `path`.
 
@@ -849,9 +890,11 @@ def unsupported(path, text, env):
     """
     try:
         p = subprocess.run(
-            ['claude', '-p', '--model', MODEL,
+            ['claude', '-p', *CONFINED, '--model', MODEL,
              VERIFY_PROMPT.format(path=path, alt=text)],
-            capture_output=True, text=True, env=env, timeout=CALL_TIMEOUT)
+            capture_output=True, text=True, env=env,
+            cwd=os.path.dirname(path), stdin=subprocess.DEVNULL,
+            timeout=CALL_TIMEOUT)
     except (subprocess.TimeoutExpired, OSError) as exc:
         return None, exc.__class__.__name__
     if p.returncode != 0:
@@ -879,10 +922,7 @@ def describe(row, session, env, subject='a UK public library', spelling='British
     if not data:
         return None
 
-    TMP_DIR.mkdir(exist_ok=True)
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False, dir=TMP_DIR) as fh:
-        fh.write(data)
-        path = fh.name
+    path = _staged(data)
     try:
         first = _one_description(path, env, subject=subject, spelling=spelling)
         if not first:
@@ -932,7 +972,7 @@ def describe(row, session, env, subject='a UK public library', spelling='British
     except OSError:
         return None
     finally:
-        os.unlink(path)
+        shutil.rmtree(os.path.dirname(path), ignore_errors=True)
 
 
 def reverify(row, session, env):
@@ -955,14 +995,11 @@ def reverify(row, session, env):
     if not data:
         return 'unchecked', ['image could not be fetched']
 
-    TMP_DIR.mkdir(exist_ok=True)
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False, dir=TMP_DIR) as fh:
-        fh.write(data)
-        path = fh.name
+    path = _staged(data)
     try:
         bad, why = unsupported(path, text, env)
     finally:
-        os.unlink(path)
+        shutil.rmtree(os.path.dirname(path), ignore_errors=True)
 
     if bad is None:
         return 'unchecked', [why]

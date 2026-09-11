@@ -104,6 +104,8 @@ Re-run `everylibrary_post.py --pin` to update that note. It replaces its own pre
 
 The bot's original alt text repeated the post — name, address, photographer, licence — all of which sits visibly above the image already, so a screen-reader user heard the caption twice and learned nothing about the building.
 
+Every `claude -p` call the describer makes, the verification pass included, runs `--restricted --tools Read` since 11 September 2026 (`CONFINED`), with each image staged alone in its own directory and that directory as the model's cwd (`_staged`). Unconfined, `claude -p` is an agent with a shell, and in the everygeorgia transcriber it was found cropping images through a dozen tool calls and once running the project's own code. Confined, it can read the one image and nothing else, whatever directory the script was launched from, and answers in about ten seconds a call rather than seventeen. everycarnegie's `carnegie_describe.py` imports this module and is confined with it.
+
 Two sources, kept separate so provenance stays honest:
 
 | | Source | Count |
