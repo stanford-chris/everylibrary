@@ -35,6 +35,7 @@ Usage:
 import argparse
 import csv
 import difflib
+import html
 import json
 import math
 import os
@@ -267,6 +268,67 @@ NON_BUILDING_RE = re.compile(
 # against that same 9,035-title corpus and every one of the 158 matches names
 # an object rather than a building.
 
+# STALE_RE is CLOSED_RE's problem again, one layer down. CLOSED_RE catches a
+# former library naming itself as one in a Wikidata item's own label or
+# description, which is short and structured. A Commons or Geograph photo's
+# title carries none of that: "Lichfield College and Library" scored a fine
+# match against "Lichfield Library" on text and distance alike, and posted on
+# 10 September 2026 as the current Market Square building. The photo's own
+# free-text description said otherwise — "the library has recently opened in
+# St Mary's church on Market Square" — but nothing read it, because the title
+# is all either matching stage ever looks at. STALE_RE is checked against that
+# description text wherever it is cheaply available (Commons' own
+# ImageDescription, captured in fetch_imageinfo below; a Geograph photo's page,
+# fetched in stage3_geograph) and a match is treated exactly like a miss: the
+# candidate is passed over for the next-best one, or the library goes without
+# a photograph rather than a wrong one.
+#
+# ⚠️ A bare `former(ly)?` was tried first and dropped the same day it was
+# written, caught before it ever reached state by testing the Beaumaris
+# Library fix against it: "Former school, originally founded in 1603 ...
+# has served as a community centre and library" tripped it, and on the same
+# reasoning it had already wrongly flagged Hook Norton ("Formerly the
+# National School ... [now] Hook Norton Library") and Leyton ("opened in
+# 1882 as Leyton Town Hall ... later adapted to serve as a public library")
+# in the very first corpus sweep — both correctly the CURRENT library
+# building, merely repurposed FROM something else, which is exactly what a
+# "library since <year>" post caption already says honestly. A photo whose
+# subject has *some* earlier use is the common case, not the exception; the
+# only useful signal is whether the LIBRARY ITSELF is the thing described as
+# former, closed or moved elsewhere. Every clause below is anchored on
+# "librar\w*" for that reason, and the one clause that is not (the
+# repurposed-building list) excludes a trailing "and library" so a dual-use
+# building like Beaumaris's — a community centre *and* library in the same
+# complex — is not flagged for saying so honestly.
+STALE_RE = re.compile(
+    r"\b("
+    # The library itself named as former, within a couple of words either
+    # side -- "formerly a library" and "former Bridgetown Library" both
+    # need this, and "formerly the National School ... now Hook Norton
+    # Library" must not: there the words between "formerly" and the next
+    # "library" number in the dozens, well outside this window.
+    r"former(ly)?\s+(a |the )?(\w+\s+){0,2}librar\w*|"
+    r"librar\w*\s+(\w+\s+){0,2}(was|is|has been) formerly\b|"
+    r"old librar\w*|disused librar\w*|demolished librar\w*|"
+    r"derelict librar\w*|vacant librar\w*|"
+    r"librar\w*\s+(\w+\s+){0,3}(is|was|has been)\s+(now\s+)?"
+    r"(closed|disused|demolished|derelict|vacant)|"
+    r"no longer (a |the )?librar\w*|"
+    r"librar\w*\s+(\w+\s+){0,2}(has|had) (now |recently )?"
+    r"(opened|moved|relocated)|"
+    r"librar\w*\s+(\w+\s+){0,2}(has |had )?(now |recently )?closed|"
+    r"librar\w* moved (to|into)|librar\w* relocated (to|into)|"
+    r"librar\w*\s+(\w+\s+){0,3}(has|had) since (moved|relocated|closed)|"
+    r"used to be (a |the )?(\w+\s+){0,1}librar\w*|"
+    # A building repurposed away from library use, with no "library" of its
+    # own nearby -- Beaumaris's "served as a community centre and library"
+    # names one close enough to fail the lookahead, on purpose.
+    r"now (a |the |used as (a |the )?|serves as (a |the )?)?"
+    r"(council offices?|"
+    r"private (flats|apartments|residence)|apartments|flats|"
+    r"business centre|museum)(?!\s*(,|&|and)?\s*(a |the )?librar)"
+    r")\b", re.I)
+
 # Q28564 is public library; P279* picks up its subclasses. P17 wd:Q145 is the UK.
 WD_NEARBY_QUERY = """
 SELECT ?item ?itemLabel ?itemDescription ?img ?coord WHERE {
@@ -398,6 +460,11 @@ def fetch_imageinfo(titles, state):
                 "uploader": info.get("user"),
                 "licence": em.get("LicenseShortName", {}).get("value"),
                 "licence_url": em.get("LicenseUrl", {}).get("value"),
+                # Free text, not used for attribution. Carried through so
+                # resolve_source() can run STALE_RE against what the
+                # photographer actually wrote, which is where the Lichfield
+                # mismatch's own caveat lived and a title alone never shows.
+                "description": strip_html(em.get("ImageDescription", {}).get("value")),
             }
         for t in chunk:
             state["imageinfo"].setdefault(t, None)
@@ -447,17 +514,33 @@ def extract_geograph_index():
     return out
 
 
-def geograph_image_url(photo_id):
-    """Geograph filenames embed an unguessable hash, so read it off the photo
-    page. The 'stamped' variant carries the credit burned into the image."""
+def geograph_photo_details(photo_id):
+    """Geograph filenames embed an unguessable hash, so the image URL has to be
+    read off the photo page. The 'stamped' variant carries the credit burned
+    into the image.
+
+    The page's `og:description` carries the photographer's own caption too,
+    which is where the Lichfield mismatch's own caveat lived ("the library has
+    recently opened in St Mary's church on Market Square") and which the
+    matching stage never looked at, only the title. Returned alongside the URL
+    so stage3_geograph can run STALE_RE against it before accepting a match,
+    the same page fetch it already needed for the URL.
+
+    Returns (url, description) or (None, None) on any failure. A photo with no
+    caption at all (most of them) gives ("", url) — description is "" rather
+    than None so STALE_RE.search("") is a clean, cheap no-match.
+    """
     try:
         r = SESSION.get(f"https://www.geograph.org.uk/photo/{photo_id}", timeout=45)
         if r.status_code != 200:
-            return None
+            return None, None
         m = re.search(r'property="og:image"\s+content="([^"]+)"', r.text)
-        return m.group(1) if m else None
+        url = m.group(1) if m else None
+        dm = re.search(r'property="og:description"\s+content="([^"]*)"', r.text)
+        desc = html.unescape(dm.group(1)) if dm else ""
+        return url, desc
     except requests.RequestException:
-        return None
+        return None, None
 
 
 def stage3_geograph(rows, state):
@@ -489,7 +572,12 @@ def stage3_geograph(rows, state):
 
     taken = {v["id"] for v in state["geograph"].values() if v}
     for n, (key, r) in enumerate(pending, 1):
-        best, best_score = None, -99.0
+        # Ranked, not just the single best: the top scorer by title and
+        # distance is exactly the one that can turn out to be a photo of a
+        # former library building (Lichfield's "College and Library"), so a
+        # candidate flagged by STALE_RE is skipped in favour of the next one
+        # rather than accepted outright or given up on.
+        scored = []
         for dy in (-1, 0, 1):
             for dx in (-1, 0, 1):
                 for p in grid.get((round(r["lat"] + dy * 0.01, 2),
@@ -502,20 +590,30 @@ def stage3_geograph(rows, state):
                     s = 2.0 * difflib.SequenceMatcher(
                         None, normalise_name(r["name"]), normalise_name(p["title"])
                     ).ratio() - d / RADIUS_M
-                    if s > best_score:
-                        best, best_score = p, s
-        if best:
-            url = geograph_image_url(best["id"])
-            if url:
-                taken.add(best["id"])
-                state["geograph"][key] = {
-                    "id": best["id"], "title": best["title"], "url": url,
-                    "photographer": best["photographer"],
-                    "dist": round(haversine_m(r["lat"], r["lon"], best["lat"], best["lon"])),
-                }
-            else:
-                state["geograph"][key] = None
+                    scored.append((s, d, p))
+        scored.sort(key=lambda t: -t[0])
+
+        match = None
+        for s, d, p in scored:
+            url, desc = geograph_photo_details(p["id"])
             time.sleep(REQUEST_DELAY)
+            if url is None:
+                continue                              # page fetch failed; try the next
+            if STALE_RE.search(desc or ""):
+                log(f"         skipped (photo's own caption says former/closed): "
+                    f"{r['name'][:40]} <- {p['title']}")
+                continue
+            match = (p, url, desc)
+            break
+
+        if match:
+            best, url, desc = match
+            taken.add(best["id"])
+            state["geograph"][key] = {
+                "id": best["id"], "title": best["title"], "url": url,
+                "photographer": best["photographer"], "description": desc,
+                "dist": round(haversine_m(r["lat"], r["lon"], best["lat"], best["lon"])),
+            }
         else:
             state["geograph"][key] = None
 
@@ -606,6 +704,27 @@ def library_key(r):
     return r["osm_id"] or f"{r['lat']:.5f},{r['lon']:.5f}"
 
 
+def _usable(meta):
+    """A resolved photograph is usable when it exists and its own caption does
+    not say the depicted building is a former one.
+
+    STALE_RE is the Lichfield mismatch's own lesson: a title-and-distance
+    match found a photo of "Lichfield College and Library" for the current
+    Market Square library, and the photo's own free-text description said the
+    library had since moved out. Nothing read that description at match time,
+    only the title. Checked here as well as at match time, so a stale entry
+    already sitting in the state file from before this check existed is
+    caught too, not only a freshly-matched one — resolve_source is what both
+    build_manifest and expire_misses call, so this is the one place that
+    guarantees a stale photograph never reaches the manifest, however it got
+    into state.
+
+    A missing description is fine (most photos have none, and that is the
+    common case this must not penalise); a wrong one is not.
+    """
+    return bool(meta) and not STALE_RE.search(meta.get("description") or "")
+
+
 def resolve_source(r, state):
     """Which photograph this library gets, in priority order.
 
@@ -613,32 +732,40 @@ def resolve_source(r, state):
     and get the same answer. If the two ever disagreed about whether a library
     already has a picture, the sweep would go looking for one that would then
     outrank it — see the note on expire_misses().
+
+    A tier whose matched photo fails _usable() is treated exactly like a tier
+    with no match at all: it cascades to the next one down, and if none of
+    them is usable the library goes without a photograph rather than with a
+    wrong one, same as it would have if none of them had ever matched.
     """
     key = library_key(r)
-    source = title = dist = None
+    source = title = dist = meta = None
 
     qid = r["wikidata"]
     if qid and state["p18"].get(qid):
-        source, title = "wikidata-p18", "File:" + state["p18"][qid]
-    elif key in state["geo"]:
-        source = "commons-geosearch"
-        title = state["geo"][key]["title"]
-        dist = state["geo"][key]["dist"]
+        cand_title = "File:" + state["p18"][qid]
+        cand_meta = state["imageinfo"].get(cand_title)
+        if _usable(cand_meta):
+            source, title, meta = "wikidata-p18", cand_title, cand_meta
 
-    meta = state["imageinfo"].get(title) if title else None
-    if title and not meta:
-        source = None                     # file vanished or failed to resolve
+    if source is None and key in state["geo"]:
+        cand_title = state["geo"][key]["title"]
+        cand_meta = state["imageinfo"].get(cand_title)
+        if _usable(cand_meta):
+            source = "commons-geosearch"
+            title, dist, meta = cand_title, state["geo"][key]["dist"], cand_meta
 
     if source is None:
         g = state.get("geograph", {}).get(key)
         if g:
-            source, dist = "geograph", g["dist"]
-            title = g["title"]
-            meta = {"url": g["url"], "full_url": g["url"],
+            cand_meta = {"url": g["url"], "full_url": g["url"],
                     "width": "", "height": "",
                     "page": f"https://www.geograph.org.uk/photo/{g['id']}",
                     "artist": g["photographer"],
-                    "licence": GEOGRAPH_LICENCE, "licence_url": GEOGRAPH_LICENCE_URL}
+                    "licence": GEOGRAPH_LICENCE, "licence_url": GEOGRAPH_LICENCE_URL,
+                    "description": g.get("description", "")}
+            if _usable(cand_meta):
+                source, dist, title, meta = "geograph", g["dist"], g["title"], cand_meta
 
     # Last resort, and deliberately last. Ranking it above Geograph would
     # swap the picture under 25 libraries that already have one, and
@@ -646,9 +773,10 @@ def resolve_source(r, state):
     # silently go on describing the photograph it replaced.
     if source is None:
         w = state.get("wdnear", {}).get(key)
-        if w and state["imageinfo"].get(w["title"]):
-            source, title, dist = "wikidata-nearby", w["title"], w["dist"]
-            meta = state["imageinfo"][title]
+        if w:
+            cand_meta = state["imageinfo"].get(w["title"])
+            if _usable(cand_meta):
+                source, title, dist, meta = "wikidata-nearby", w["title"], w["dist"], cand_meta
 
     return source, title, dist, meta
 
