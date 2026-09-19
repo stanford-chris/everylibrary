@@ -26,8 +26,17 @@ import unittest.mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-sys.modules.setdefault('requests', types.SimpleNamespace(
-    Session=object, RequestException=Exception, exceptions=types.SimpleNamespace()))
+# A real requests, when one is installed, must always win over this stub —
+# setdefault() alone raced against every other test file in this directory
+# that also stubs requests, and being the alphabetically-earliest of them,
+# this one used to win that race even on a machine with requests installed,
+# poisoning it for test_everylibrary_images.py and test_api_call_log.py when
+# run together under `python3 -m unittest` discovery.
+try:
+    import requests  # noqa: F401
+except ImportError:
+    sys.modules.setdefault('requests', types.SimpleNamespace(
+        Session=object, RequestException=Exception, exceptions=types.SimpleNamespace()))
 
 import everylibrary_describe as eld
 

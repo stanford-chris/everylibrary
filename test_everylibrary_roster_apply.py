@@ -31,6 +31,16 @@ sys.path.insert(0, str(HERE))
 
 
 def _stub(name, **attrs):
+    # A real module, when one is installed, always wins over the stub below:
+    # setdefault() alone raced against test_everylibrary_describe.py's own
+    # requests stub under `python3 -m unittest` discovery, and whichever
+    # loaded first (alphabetically, that file) won the race and poisoned
+    # sys.modules for every test file that loaded after it, even on a
+    # machine with requests and atproto genuinely installed.
+    try:
+        return importlib.import_module(name)
+    except ImportError:
+        pass
     mod = types.ModuleType(name)
     for k, v in attrs.items():
         setattr(mod, k, v)
