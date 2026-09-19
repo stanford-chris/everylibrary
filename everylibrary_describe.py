@@ -58,13 +58,17 @@ from everylibrary_post import (MANIFEST, DATA, USER_AGENT, STATE_FILE,
                                library_id, commons_filepath_url, display_name,
                                typographic)
 
-# limit_guard.py lives one level up, at ~/Scripts, rather than beside this
-# file: it is the same shared module old-seoul, sherlock-quotes and
-# seoul-index each carry their own copy of, and scripts_tidy.sh's
-# SHARED_MODULES check already watches the ~/Scripts one for drift against
-# those. Importing it directly avoids adding a fourth copy that check would
-# not even see, since it only scans ~/Scripts at one level deep.
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# limit_guard.py lives at ~/Scripts, rather than beside this file: it is the
+# same shared module old-seoul, sherlock-quotes and seoul-index each carry
+# their own copy of, and scripts_tidy.sh's SHARED_MODULES check already
+# watches the ~/Scripts one for drift against those. Importing it directly
+# avoids adding a fourth copy that check would not even see, since it only
+# scans ~/Scripts at one level deep.
+# ⚠️ ~/Scripts by name, not this file's parent: this directory lives in
+# ~/Projects and is reached from ~/Scripts through a symlink, so the parent
+# of the real path is not ~/Scripts (the trap that broke everycarnegie's
+# import of this same describer during its own move).
+sys.path.insert(0, str(Path.home() / "Scripts"))
 import limit_guard
 
 ALT_PATH = DATA / 'alt_text.json'
