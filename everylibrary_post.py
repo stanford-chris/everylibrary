@@ -428,9 +428,11 @@ def build_credits():
                     'public-libraries-in-england-basic-dataset')
     tb.text(' (OGL) and ')
     tb.link('Libraries Hacked', 'https://www.librarieshacked.org')
-    tb.text('\n🗺️ Buildings: ')
+    tb.text('\n🏢 Buildings: ')
     tb.link('OpenStreetMap', 'https://www.openstreetmap.org/copyright')
-    tb.text(' contributors (ODbL)')
+    tb.text(' contributors (ODbL)\n')
+    tb.text('💻 Source: ')
+    tb.link('GitHub', 'https://github.com/stanford-chris/everylibrary')
     return tb
 
 
