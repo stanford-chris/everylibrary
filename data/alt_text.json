@@ -8398,7 +8398,8 @@
  },
  "663a5f4cd44d": {
   "visual": "A large stone church with a tall pointed spire and a rose window in a pointed gable, set against a blue sky. Market stalls with canvas awnings selling plants and clothing stand on the paved square in front.",
-  "visual_v": 2
+  "visual_v": 2,
+  "context": "Exterior shot of the former St Mary’s Church, Lichfield, now a library and creative hub."
  },
  "7e1eb07aa073": {
   "visual": "Two-storey tan brick building with large windows, fronted by a metal-framed transparent canopy. Mature trees with autumn foliage surround the site; a road with white centre markings runs in front."
@@ -8669,7 +8670,9 @@
   "visual": "A historic village street lined with brick and timber-framed buildings of varying periods, with a clock tower visible in the distance and parked cars along the road beneath overcast skies."
  },
  "c22501b2d792": {
-  "context": ""
+  "context": "",
+  "visual": "A curved building with pale brick walls and a sweeping arched roof edged in yellow, its rounded glazed-block corner topped with blue circular letters spelling out a name. Glass entrance doors sit beneath a two-storey glazed section, with a street sign and round bollards on the pavement in front.",
+  "visual_v": 2
  },
  "b04e12bcf324": {
   "context": "",
@@ -8878,11 +8881,17 @@
   "visual_v": 2
  },
  "fe6c5b9e26f2": {
-  "context": ""
+  "context": "",
+  "visual": "A timber-framed black-and-white building with a gabled front, leaded windows and a dark wooden door beneath “Public Library” lettering in gold; on the paved forecourt a person painted white and dressed as a historical performer stands motionless on a small plinth while passers-by look on.",
+  "visual_v": 2
  },
  "58a2046400ba": {
   "context": "",
   "visual": "A single-storey red brick building with a grey pitched roof, tall chimneys and a decorative stone gable bearing carved lettering above a row of large arched windows with small square panes, set behind iron railings on a street corner, with a supermarket and other shops nearby.",
+  "visual_v": 2
+ },
+ "e5fedf117766": {
+  "visual": "A pale rendered building with dark tiled pitched roofs, brick trim around the windows and doors, and the date “1938” set above a central entrance. A car park with painted bays and “no parking” signs lies in front under a grey overcast sky, with a monument’s base visible at the left edge.",
   "visual_v": 2
  }
 }
