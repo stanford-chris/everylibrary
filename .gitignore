@@ -22,3 +22,11 @@ data/url_state.json.tmp
 # these exist for an instant; a crash mid-write is the only way one survives.
 data/uk_libraries_images.csv.tmp
 data/uk_libraries_final.csv.tmp
+
+# Run logs and hand-made state backups, never source: the logs are what
+# the monthly and annual passes print, the .bak/.pre-* files are copies of
+# post_state.json taken before a repost. Added 20 September 2026.
+__pycache__/
+.DS_Store
+data/*.log
+data/post_state.json.*
