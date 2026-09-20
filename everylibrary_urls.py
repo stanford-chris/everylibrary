@@ -49,7 +49,6 @@ import csv
 import json
 import os
 import queue
-import sys
 import threading
 import time
 from urllib.parse import urlparse, urlunparse

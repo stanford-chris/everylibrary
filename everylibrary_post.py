@@ -30,6 +30,7 @@ import csv
 import hashlib
 import io
 import json
+import os
 import random
 import re
 import subprocess
@@ -153,7 +154,12 @@ def load_state():
 
 
 def save_state(state):
-    STATE_FILE.write_text(json.dumps(state, indent=2))
+    # Sibling temp file + atomic rename, as the other posters here do: a crash
+    # mid-write can never leave a truncated state file behind, which would
+    # break the posted list and cause reposts.
+    tmp = STATE_FILE.with_name(STATE_FILE.name + '.tmp')
+    tmp.write_text(json.dumps(state, indent=2))
+    os.replace(tmp, STATE_FILE)
 
 
 def typographic(s):
