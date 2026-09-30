@@ -366,5 +366,31 @@ class ResolveSourceCascade(unittest.TestCase):
         self.assertEqual(src, "commons-geosearch")
 
 
+class RejectedPhotos(unittest.TestCase):
+    """A photograph a human turned down must never reach the manifest, whether
+    it arrives as a Commons copy or straight from Geograph (Heanor, 30 September
+    2026: a wall sign posted as the library)."""
+
+    def test_commons_copy_of_a_rejected_geograph_photo_is_passed_over(self):
+        state = ResolveSourceCascade().base_state()
+        t = "File:Heanor Library Sign - geograph.org.uk - 5078384.jpg"
+        state["geo"]["12345"] = {"title": t, "dist": 70}
+        state["imageinfo"][t] = {"description": "", "url": "x",
+                                 "licence": "CC BY-SA 2.0", "artist": "Gary"}
+        src, *_ = m.resolve_source(ResolveSourceCascade().row(), state)
+        self.assertIsNone(src)
+
+    def test_rejected_geograph_photo_is_passed_over(self):
+        state = ResolveSourceCascade().base_state()
+        state["geograph"]["12345"] = {"id": "1455748", "title": "Sign at Garvagh Library",
+                                      "url": "z", "photographer": "C", "dist": 10,
+                                      "description": ""}
+        src, *_ = m.resolve_source(ResolveSourceCascade().row(), state)
+        self.assertIsNone(src)
+
+    def test_an_unlisted_geograph_photo_is_untouched(self):
+        self.assertFalse(m._rejected("File:Other - geograph.org.uk - 5078385.jpg"))
+
+
 if __name__ == "__main__":
     unittest.main()

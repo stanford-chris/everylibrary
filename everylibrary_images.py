@@ -210,7 +210,8 @@ def stage2_geosearch(rows, state):
             return s
 
         candidates = [h for h in hits if "librar" in h["title"].lower()
-                      and not NON_BUILDING_RE.search(h["title"])]
+                      and not NON_BUILDING_RE.search(h["title"])
+                      and not _rejected(h["title"])]
         if candidates:
             best = max(candidates, key=score)
             state["geo"][key] = {"title": best["title"], "dist": round(best.get("dist", 0))}
@@ -267,6 +268,28 @@ NON_BUILDING_RE = re.compile(
 # across the geograph_libraries.json corpus. The eight words above were swept
 # against that same 9,035-title corpus and every one of the 158 matches names
 # an object rather than a building.
+
+# REJECTED_* is the hand-kept list of photographs a human has looked at and
+# turned down: the title said "library" and the frame did not show one. Heanor
+# posted on 30 September 2026 as a blurry close-up of a wall sign, and a sweep
+# of every postable title containing "sign" found three more of the same kind.
+# "sign" was NOT added to NON_BUILDING_RE, because Grove Vale's "Library sign"
+# is giant letters standing in front of the building, which is a fine picture.
+# A rejected photo is treated exactly like a stale one: the library falls to
+# its next source, or goes without a photograph rather than a wrong one.
+# Commons copies of Geograph photos are matched by their Geograph id, so the
+# same frame cannot come back through either door.
+# ⚠️ Rejecting a photo means deleting that library's entry from
+# data/alt_text.json too: descriptions are keyed by library, not by image,
+# and the old one would otherwise ride on whatever photograph replaces it.
+REJECTED_GEOGRAPH_IDS = {
+    "5078384",   # Heanor: wall sign, building not shown (posted 30 Sep 2026, deleted)
+    "1455748",   # Garvagh: wall plaque only
+    "8022151",   # Ealing Central: "Library of Things" locker advert
+    "2637820",   # Beaconsfield: fingerpost pointing away from an office block
+}
+REJECTED_TITLES = set()   # Commons titles with no Geograph origin
+GEOGRAPH_IN_TITLE = re.compile(r"geograph\.org\.uk - (\d+)")
 
 # STALE_RE is CLOSED_RE's problem again, one layer down. CLOSED_RE catches a
 # former library naming itself as one in a Wikidata item's own label or
@@ -551,7 +574,8 @@ def stage3_geograph(rows, state):
         log("stage 3  skipped: neither geograph_libraries.json nor the dump is present")
         return
 
-    photos = [p for p in extract_geograph_index() if not NON_BUILDING_RE.search(p["title"])]
+    photos = [p for p in extract_geograph_index() if not NON_BUILDING_RE.search(p["title"])
+              and not _rejected(geograph_id=p["id"])]
     log(f"stage 3  Geograph: {len(photos)} library-titled photos in the index "
         f"after dropping sculptures, plaques and the like")
 
@@ -704,7 +728,15 @@ def library_key(r):
     return r["osm_id"] or f"{r['lat']:.5f},{r['lon']:.5f}"
 
 
-def _usable(meta):
+def _rejected(title=None, geograph_id=None):
+    """True for a photograph a human has looked at and turned down."""
+    if geograph_id is None and title:
+        m = GEOGRAPH_IN_TITLE.search(title)
+        geograph_id = m.group(1) if m else None
+    return (title or "") in REJECTED_TITLES or str(geograph_id or "") in REJECTED_GEOGRAPH_IDS
+
+
+def _usable(meta, title=None, geograph_id=None):
     """A resolved photograph is usable when it exists and its own caption does
     not say the depicted building is a former one.
 
@@ -722,7 +754,8 @@ def _usable(meta):
     A missing description is fine (most photos have none, and that is the
     common case this must not penalise); a wrong one is not.
     """
-    return bool(meta) and not STALE_RE.search(meta.get("description") or "")
+    return (bool(meta) and not STALE_RE.search(meta.get("description") or "")
+            and not _rejected(title, geograph_id))
 
 
 def resolve_source(r, state):
@@ -745,13 +778,13 @@ def resolve_source(r, state):
     if qid and state["p18"].get(qid):
         cand_title = "File:" + state["p18"][qid]
         cand_meta = state["imageinfo"].get(cand_title)
-        if _usable(cand_meta):
+        if _usable(cand_meta, cand_title):
             source, title, meta = "wikidata-p18", cand_title, cand_meta
 
     if source is None and key in state["geo"]:
         cand_title = state["geo"][key]["title"]
         cand_meta = state["imageinfo"].get(cand_title)
-        if _usable(cand_meta):
+        if _usable(cand_meta, cand_title):
             source = "commons-geosearch"
             title, dist, meta = cand_title, state["geo"][key]["dist"], cand_meta
 
@@ -764,7 +797,7 @@ def resolve_source(r, state):
                     "artist": g["photographer"],
                     "licence": GEOGRAPH_LICENCE, "licence_url": GEOGRAPH_LICENCE_URL,
                     "description": g.get("description", "")}
-            if _usable(cand_meta):
+            if _usable(cand_meta, geograph_id=g["id"]):
                 source, dist, title, meta = "geograph", g["dist"], g["title"], cand_meta
 
     # Last resort, and deliberately last. Ranking it above Geograph would
@@ -775,7 +808,7 @@ def resolve_source(r, state):
         w = state.get("wdnear", {}).get(key)
         if w:
             cand_meta = state["imageinfo"].get(w["title"])
-            if _usable(cand_meta):
+            if _usable(cand_meta, w["title"]):
                 source, title, dist, meta = "wikidata-nearby", w["title"], w["dist"], cand_meta
 
     return source, title, dist, meta
