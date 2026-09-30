@@ -542,3 +542,22 @@ class CorpusIsStillUnique(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class AltNoteEndsItsSentence(unittest.TestCase):
+    """A Commons note with no closing full stop must not run into the A.I.
+    label (Lurgan, 30 September 2026)."""
+
+    def test_bare_note_gains_a_full_stop(self):
+        self.assertEqual(post.end_sentence('The Library has recently been extended'),
+                         'The Library has recently been extended.')
+
+    def test_dangling_comma_is_replaced(self):
+        self.assertEqual(post.end_sentence('Built 1905, '), 'Built 1905.')
+
+    def test_finished_notes_are_untouched(self):
+        for s in ('Built 1905.', 'Is it?', 'and more…', 'Called “the Carnegie.”',
+                  '(Opened 1906.)'):
+            self.assertEqual(post.end_sentence(s), s)
+
+    def test_closing_bracket_without_a_stop_still_gets_one(self):
+        self.assertEqual(post.end_sentence('Photo (1905)'), 'Photo (1905).')

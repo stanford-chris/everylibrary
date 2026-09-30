@@ -526,6 +526,22 @@ def alt_text_store():
     return _alt_cache
 
 
+def end_sentence(text):
+    """Close a note that stops without a full stop.
+
+    174 of the 681 Commons notes on 30 September 2026 simply end, as their
+    editors left them ("The Library has recently been extended"), and the
+    A.I. label is joined straight on, so a listener heard "has recently been
+    extended A.I.-written description". A closing quote or bracket after a
+    sentence end already closes it; an ellipsis from clip_note is left alone.
+    """
+    text = text.rstrip()
+    if not text or text[-1] in '.!?…' or (
+            text[-1] in '"”’\')' and text[-2:-1] in ('.', '!', '?', '…')):
+        return text
+    return text.rstrip(' ,;:-–—') + '.'
+
+
 def build_alt(row):
     """Describe the photograph, not the post.
 
@@ -552,7 +568,7 @@ def build_alt(row):
         # what a model guessed about it.
         parts = []
         if context:
-            parts.append(f'{COMMONS_PREFIX} {typographic(context)}')
+            parts.append(f'{COMMONS_PREFIX} {end_sentence(typographic(context))}')
         parts.append(f'{AI_PREFIX} {typographic(visual)}')
         return ' '.join(parts)[:ALT_MAX]
 
