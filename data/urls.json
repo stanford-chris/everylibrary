@@ -169,6 +169,16 @@
   "status": 403,
   "url": "http://www.tameside.gov.uk/libraries"
  },
+ "1021653669": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/hailsham/"
+ },
+ "1021694469": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/eastbourne/"
+ },
  "10219529115": {
   "source": "roster",
   "status": 403,
@@ -311,7 +321,7 @@
  },
  "1064424702": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/mexborough-library"
  },
  "106447747": {
@@ -481,7 +491,7 @@
  },
  "1090298998": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/sprotbrough-community-library"
  },
  "10934511": {
@@ -531,8 +541,8 @@
  },
  "11051572679": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/new-earswick-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/new-earswick-library/"
  },
  "1106151710": {
   "source": "roster",
@@ -729,6 +739,11 @@
   "status": 200,
   "url": "https://discover.librariesunlimited.org.uk/-/sidmouth-library#/?location=Sidmouth%20Library"
  },
+ "1148064129": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/crowborough/"
+ },
  "1148104839": {
   "source": "roster",
   "status": 403,
@@ -776,7 +791,7 @@
  },
  "1159276061": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "11596532172": {
@@ -846,7 +861,7 @@
  },
  "11822438058": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "118342361": {
@@ -1159,6 +1174,11 @@
   "status": 202,
   "url": "http://www.oldham.gov.uk/find_a_library"
  },
+ "12645046550": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/wadhurst/"
+ },
  "1264907804": {
   "source": "roster",
   "status": 200,
@@ -1221,7 +1241,7 @@
  },
  "1288177671": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "12887406256": {
@@ -1441,13 +1461,13 @@
  },
  "133334716": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/acomb-explore/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/acomb-explore/"
  },
  "133335269": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/poppleton-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/poppleton-library/"
  },
  "1333708174": {
   "source": "roster",
@@ -1706,7 +1726,7 @@
  },
  "14022779871": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "14032253564": {
@@ -1753,6 +1773,11 @@
   "source": "roster",
   "status": 200,
   "url": "https://www.hertfordshire.gov.uk/services/libraries-and-archives/library-opening-hours/stevenage-central-library.aspx"
+ },
+ "1412681894": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/hollington/"
  },
  "141277717": {
   "source": "roster",
@@ -1936,12 +1961,12 @@
  },
  "146667432": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "146908842": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "1477716026": {
@@ -1976,7 +2001,7 @@
  },
  "1490218441": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/conisbrough-community-library"
  },
  "1493537225": {
@@ -2002,7 +2027,7 @@
  "1501840953": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "150429056": {
   "source": "roster",
@@ -2042,7 +2067,7 @@
  "1518410363": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.staffordshire.gov.uk/libraries/find-library/newcastle-library"
+  "url": "https://www.staffordshire.gov.uk/libraries/find-library/newcastle-under-lyme-library"
  },
  "152600811": {
   "source": "roster",
@@ -2101,8 +2126,8 @@
  },
  "1549340531": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/fulford-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/fulford-library/"
  },
  "155169336": {
   "source": "roster",
@@ -2138,11 +2163,6 @@
   "source": "roster",
   "status": 200,
   "url": "https://www.rctcbc.gov.uk/EN/Resident/Libraries/Librarylocationsandopeninghours/MountainAshLibrary.aspx"
- },
- "156809431": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/10"
  },
  "156821440": {
   "source": "roster",
@@ -2462,7 +2482,7 @@
  "1799676626": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "180215805": {
   "source": "wikidata",
@@ -2481,8 +2501,8 @@
  },
  "182181224": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/libraries/huntington-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/huntington-library/"
  },
  "182181274": {
   "source": "roster",
@@ -2506,8 +2526,8 @@
  },
  "183040221": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/dringhouses-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/dringhouses-library/"
  },
  "1830838372": {
   "source": "roster",
@@ -2541,7 +2561,7 @@
  },
  "18476002": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "185891899": {
@@ -2576,7 +2596,7 @@
  },
  "187715840": {
   "source": "wikidata",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/libraries/find-your-local-library/south-friern-library"
  },
  "1880567012": {
@@ -2586,13 +2606,18 @@
  },
  "188084389": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "188203546": {
   "source": "roster",
   "status": 200,
   "url": "https://www.surreycc.gov.uk/libraries/your-library/find-your-nearest/reigate"
+ },
+ "1894646266": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/peacehaven/"
  },
  "189539636": {
   "source": "roster",
@@ -2676,8 +2701,8 @@
  },
  "1929189589": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/cafes/rowntree-park-reading-cafe/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/cafes/rowntree-park-york-reading-cafe/"
  },
  "1933669239": {
   "source": "roster",
@@ -2736,7 +2761,7 @@
  },
  "198992576": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "199276300": {
@@ -2836,7 +2861,7 @@
  },
  "205779546": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "2059639584": {
@@ -2922,7 +2947,7 @@
  "211489714": {
   "source": "wikidata",
   "status": 200,
-  "url": "https://www.northyorks.gov.uk/leisure-tourism-and-culture/libraries/leisure-tourism-and-culture/libraries/local-libraries/leisure-tourism-and-culture/libraries/leisure-tourism-and-culture/libraries/local-libraries/harrogate-library"
+  "url": "https://www.northyorks.gov.uk/leisure-tourism-and-culture/leisure-tourism-and-culture/libraries/leisure-tourism-and-culture/leisure-tourism-and-culture/libraries/local-libraries/leisure-tourism-and-culture/leisure-tourism-and-culture/libraries/leisure-tourism-and-culture/leisure-3"
  },
  "211736261": {
   "source": "wikidata",
@@ -3071,7 +3096,7 @@
  },
  "226290558": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/bawtry-community-library"
  },
  "226520318": {
@@ -3484,6 +3509,11 @@
   "status": 200,
   "url": "https://www.liveborders.org.uk/culture/libraries/our-libraries/duns-library-contact-centre/"
  },
+ "248048610": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/bexhill/"
+ },
  "2480916752": {
   "source": "roster",
   "status": 200,
@@ -3548,6 +3578,11 @@
   "source": "roster",
   "status": 200,
   "url": "https://www.staffordshire.gov.uk/libraries/find-library/shenstone-community-library"
+ },
+ "2520495071": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/rye/"
  },
  "252524762": {
   "source": "roster",
@@ -3936,7 +3971,7 @@
  },
  "268336731": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/cantley-community-library"
  },
  "268521790": {
@@ -4001,8 +4036,8 @@
  },
  "277939834": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/strensall-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/strensall-library/"
  },
  "27815146": {
   "source": "roster",
@@ -4076,13 +4111,13 @@
  },
  "28451887": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/dunnington-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/dunnington-library/"
  },
- "285932014": {
+ "285305377": {
   "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/5"
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/lewes/"
  },
  "286073071": {
   "source": "roster",
@@ -4091,7 +4126,7 @@
  },
  "286276868": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/bessacarr-community-library"
  },
  "28808110": {
@@ -4167,7 +4202,7 @@
  "292603674": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "292812303": {
   "source": "roster",
@@ -4336,7 +4371,7 @@
  },
  "305266329": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/askern-community-library"
  },
  "305549509": {
@@ -4396,8 +4431,8 @@
  },
  "309047815": {
   "source": "roster",
-  "status": 200,
-  "url": "https://www.shetland.gov.uk/libraries"
+  "status": 0,
+  "url": "http://www.shetland-library.gov.uk/OpeningHours.asp"
  },
  "309433466": {
   "source": "roster",
@@ -4413,6 +4448,11 @@
   "source": "roster",
   "status": 200,
   "url": "https://www.omacl.co.uk/emergency-loans/"
+ },
+ "3105264416": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/battle/"
  },
  "310714735": {
   "source": "wikidata",
@@ -4831,7 +4871,7 @@
  },
  "353931022": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "353945214": {
@@ -4924,11 +4964,6 @@
   "status": 200,
   "url": "https://www.inspireculture.org.uk/reading-information/find-a-library/southwell-library/"
  },
- "362162704": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/9"
- },
  "362850350": {
   "source": "roster",
   "status": 200,
@@ -4981,7 +5016,7 @@
  },
  "369407791": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/intake-community-library"
  },
  "36969174": {
@@ -5201,7 +5236,7 @@
  },
  "394931194": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/moorends-community-library"
  },
  "394940706": {
@@ -5371,13 +5406,18 @@
  },
  "4156434193": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/thorne-library"
  },
  "418994323": {
   "source": "roster",
   "status": 200,
   "url": "https://www.hertfordshire.gov.uk/services/libraries-and-archives/library-opening-hours/bovingdon-community-library.aspx"
+ },
+ "420010947": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/uckfield/"
  },
  "420014617": {
   "source": "roster",
@@ -5506,7 +5546,7 @@
  },
  "4321247659": {
   "source": "wikidata",
-  "status": 403,
+  "status": 405,
   "url": "https://northumberland.spydus.co.uk/libraries-list/blyth-library"
  },
  "4326895": {
@@ -5598,11 +5638,6 @@
   "source": "wikidata",
   "status": 0,
   "url": "http://ww.hackney.gov.uk/hackney-central-library"
- },
- "4455526999": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/7"
  },
  "44572128": {
   "source": "roster",
@@ -5994,6 +6029,11 @@
   "status": 200,
   "url": "https://www.westsussex.gov.uk/find-my-nearest/library/details/api/type/library/view/lancing-library"
  },
+ "4929590437": {
+  "source": "wikidata",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/willingdon/"
+ },
  "493733422": {
   "source": "roster",
   "status": 403,
@@ -6003,6 +6043,11 @@
   "source": "roster",
   "status": 200,
   "url": "https://info.cambridgeshire.gov.uk/kb5/cambridgeshire/directory/service.page?id=IjesK3Pbg6o&camcommunitychannel=6-1"
+ },
+ "494013896": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/heathfield/"
  },
  "494479055": {
   "source": "roster",
@@ -6017,7 +6062,7 @@
  "496512831": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "497184896": {
   "source": "wikidata",
@@ -6027,7 +6072,7 @@
  "497214482": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "499278982": {
   "source": "roster",
@@ -6088,6 +6133,11 @@
   "source": "roster",
   "status": 403,
   "url": "https://www.hants.gov.uk/library"
+ },
+ "502965859": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/hampdenpark/"
  },
  "5030801067": {
   "source": "roster",
@@ -6173,6 +6223,11 @@
   "source": "roster",
   "status": 200,
   "url": "https://discover.librariesunlimited.org.uk/-/northam-library#/?location=Northam%20Library"
+ },
+ "51.09610,0.03622": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/forestrow/"
  },
  "51.13306,0.26398": {
   "source": "roster",
@@ -6431,7 +6486,7 @@
  },
  "51.60326,-0.26321": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "51.60480,-3.54174": {
@@ -6539,6 +6594,11 @@
   "status": 0,
   "url": "https://www.oxfordshire.gov.uk/libraries"
  },
+ "51.75324,-4.21781": {
+  "source": "roster",
+  "status": 200,
+  "url": "https://www.carmarthenshire.gov.wales/home/council-services/libraries-archives/pontyates-library/"
+ },
  "51.76109,-3.35399": {
   "source": "roster",
   "status": 200,
@@ -6631,7 +6691,7 @@
  },
  "5141528223": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "514298900": {
@@ -7281,7 +7341,7 @@
  },
  "53.43128,-1.10950": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/tickhill-community-library"
  },
  "53.44754,-1.98587": {
@@ -7307,11 +7367,11 @@
  "53.45902,-2.28748": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "53.47594,-1.07507": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/rossington-community-library"
  },
  "53.47654,-2.08342": {
@@ -7321,7 +7381,7 @@
  },
  "53.48085,-1.19395": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/edlington-library"
  },
  "53.48838,-2.67314": {
@@ -7336,12 +7396,12 @@
  },
  "53.49067,-1.24579": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/denaby-community-library-and-hub"
  },
  "53.49398,-1.18196": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/warmsworth-community-library"
  },
  "53.49573,-0.66487": {
@@ -7351,7 +7411,7 @@
  },
  "53.50681,-1.15134": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/balby-community-library"
  },
  "53.51524,-2.12679": {
@@ -7366,7 +7426,7 @@
  },
  "53.52101,-1.12986": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "https://library.doncaster.gov.uk/web/arena/central-library"
  },
  "53.52202,-2.65498": {
@@ -7386,12 +7446,12 @@
  },
  "53.53629,-1.06065": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/armthorpe-community-library"
  },
  "53.53708,-1.10861": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/wheatley-community-library"
  },
  "53.54104,-2.68810": {
@@ -7401,22 +7461,22 @@
  },
  "53.54390,-1.16517": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/scawthorpe-community-library"
  },
  "53.54917,-1.14768": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/bentley-area-community-library"
  },
  "53.55605,-1.06899": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/edenthorpe-community-library"
  },
  "53.56565,-1.19353": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/woodlands-community-library-and-hub"
  },
  "53.56672,-2.02299": {
@@ -7431,7 +7491,7 @@
  },
  "53.57780,-0.99736": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/hatfield-community-library"
  },
  "53.58786,-2.44880": {
@@ -7446,7 +7506,7 @@
  },
  "53.59343,-1.02985": {
   "source": "roster",
-  "status": 403,
+  "status": 405,
   "url": "http://library.doncaster.gov.uk/web/arena/stainforth-community-library"
  },
  "53.60494,-2.43883": {
@@ -7566,18 +7626,13 @@
  },
  "53.95875,-1.07567": {
   "source": "roster",
-  "status": 500,
+  "status": 200,
   "url": "https://exploreyork.org.uk/cafes/hungate-york-reading-cafe/"
- },
- "53.96932,-1.10275": {
-  "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/homestead-park-pop-up-reading-cafe/"
  },
  "53.97805,-1.10663": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/clifton-explore/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/clifton-explore/"
  },
  "53089980": {
   "source": "wikidata",
@@ -7851,8 +7906,8 @@
  },
  "55.59217,-4.48800": {
   "source": "roster",
-  "status": 0,
-  "url": "https://eastayrshireleisure.com/index.php?a=venuedetail&id=6&venueid=40"
+  "status": 520,
+  "url": "https://ayrshire360.com/index.php?a=venuedetail&id=6&venueid=40"
  },
  "55.60853,-4.48964": {
   "source": "roster",
@@ -7941,12 +7996,12 @@
  },
  "55.84505,-4.37570": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "55.84567,-4.41630": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "55.87466,-3.11761": {
@@ -7979,16 +8034,6 @@
   "status": 200,
   "url": "https://www.west-dunbarton.gov.uk/libraries/library-branches/faifley-library"
  },
- "55.93775,-3.00442": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/15"
- },
- "55.96941,-2.94797": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/12"
- },
  "55.98712,-4.58344": {
   "source": "roster",
   "status": 200,
@@ -8007,7 +8052,7 @@
  "552200262": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "55344245": {
   "source": "roster",
@@ -8069,11 +8114,6 @@
   "status": 200,
   "url": "https://www.bradford.gov.uk/libraries/find-your-local-library/great-horton-library/"
  },
- "56.03309,-2.82923": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/6"
- },
  "56.11364,-3.34449": {
   "source": "roster",
   "status": 200,
@@ -8106,8 +8146,8 @@
  },
  "56077520": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/york-explore/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/york-explore/"
  },
  "5612290113": {
   "source": "roster",
@@ -8131,8 +8171,8 @@
  },
  "56332558": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/bishopthorpe-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/bishopthorpe-library/"
  },
  "564319888": {
   "source": "roster",
@@ -8211,7 +8251,7 @@
  },
  "570702397": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "571041225": {
@@ -8397,7 +8437,7 @@
  "5970539245": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "59707436": {
   "source": "roster",
@@ -8419,20 +8459,15 @@
   "status": 200,
   "url": "https://www.hertfordshire.gov.uk/services/libraries-and-archives/library-opening-hours/stevenage-old-town-library.aspx"
  },
- "599667268": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/4"
- },
  "60.60136,-1.06841": {
   "source": "roster",
-  "status": 200,
-  "url": "https://www.shetland.gov.uk/libraries"
+  "status": 0,
+  "url": "http://www.shetland-library.gov.uk/OpeningHours.asp"
  },
  "60.75868,-0.88102": {
   "source": "roster",
-  "status": 200,
-  "url": "https://www.shetland.gov.uk/libraries"
+  "status": 0,
+  "url": "http://www.shetland-library.gov.uk/OpeningHours.asp"
  },
  "601375964": {
   "source": "roster",
@@ -8526,8 +8561,8 @@
  },
  "6127267030": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/tang-hall-explore/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/tang-hall-explore/"
  },
  "613138326": {
   "source": "roster",
@@ -8541,8 +8576,8 @@
  },
  "614891134": {
   "source": "roster",
-  "status": 500,
-  "url": "https://www.exploreyork.org.uk/copmanthorpe-library/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/copmanthorpe-library/"
  },
  "6157577257": {
   "source": "roster",
@@ -8626,7 +8661,7 @@
  },
  "6225526667": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "62278306": {
@@ -8819,11 +8854,6 @@
   "status": 200,
   "url": "https://www.reading.gov.uk/leisure/libraries/all-libraries/palmer-park-library/"
  },
- "65703944": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/8"
- },
  "6589760001": {
   "source": "roster",
   "status": 200,
@@ -8872,7 +8902,7 @@
  "663883526": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.staffordshire.gov.uk/libraries/find-library/newcastle-library"
+  "url": "https://www.staffordshire.gov.uk/libraries/find-library/newcastle-under-lyme-library"
  },
  "664872413": {
   "source": "wikidata",
@@ -9031,7 +9061,7 @@
  },
  "6942842966": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "694373997": {
@@ -9174,11 +9204,6 @@
   "status": 403,
   "url": "https://www.kent.gov.uk/leisure-and-community/libraries"
  },
- "71537435": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/13"
- },
  "716742967": {
   "source": "wikidata",
   "status": 200,
@@ -9243,11 +9268,6 @@
   "source": "roster",
   "status": 200,
   "url": "https://www.bradford.gov.uk/libraries/find-your-local-library/clayton-library/"
- },
- "72701228": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/11"
  },
  "727214963": {
   "source": "roster",
@@ -9339,6 +9359,11 @@
   "status": 0,
   "url": "https://www.oxfordshire.gov.uk/libraries"
  },
+ "745163356": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/hastings/"
+ },
  "746494626": {
   "source": "roster",
   "status": 200,
@@ -9381,7 +9406,7 @@
  },
  "75720860": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "75767284": {
@@ -9431,7 +9456,7 @@
  },
  "765802909": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "766789218": {
@@ -9498,6 +9523,11 @@
   "source": "roster",
   "status": 200,
   "url": "https://www.buckinghamshire.gov.uk/schools-libraries-and-parks/libraries/information-about-local-library/buckingham-library/"
+ },
+ "775085717": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/newhaven/"
  },
  "775212880": {
   "source": "roster",
@@ -9722,7 +9752,7 @@
  "809164331": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "8095026": {
   "source": "roster",
@@ -9836,7 +9866,7 @@
  },
  "82489311": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "825713262": {
@@ -9856,8 +9886,13 @@
  },
  "8265446030": {
   "source": "roster",
-  "status": 500,
-  "url": "https://exploreyork.org.uk/explore-at-york-stadium/"
+  "status": 200,
+  "url": "https://exploreyork.org.uk/libraries/explore-at-york-stadium/"
+ },
+ "82948358": {
+  "source": "roster",
+  "status": 502,
+  "url": "https://new.eastsussex.gov.uk/libraries/locations/seaford/"
  },
  "831373641": {
   "source": "roster",
@@ -9886,7 +9921,7 @@
  },
  "836426960": {
   "source": "roster",
-  "status": 200,
+  "status": 0,
   "url": "https://libcat.renfrewshire.gov.uk/iguana/www.main.cls?v=96c85272-ef02-4d78-8ef0-f831bf46dc19"
  },
  "836518890": {
@@ -9977,7 +10012,7 @@
  "854048312": {
   "source": "roster",
   "status": 200,
-  "url": "https://www.trafford.gov.uk:443/libraries-archives"
+  "url": "https://www.trafford.gov.uk/libraries-archives"
  },
  "85516450": {
   "source": "wikidata",
@@ -10009,11 +10044,6 @@
   "status": 200,
   "url": "http://leeds.gov.uk/libraries"
  },
- "863342043": {
-  "source": "roster",
-  "status": 403,
-  "url": "https://www.eastlothian.gov.uk/info/200259/your_local_library/486/local_libraries_in_east_lothian/14"
- },
  "865984512": {
   "source": "roster",
   "status": 200,
@@ -10041,7 +10071,7 @@
  },
  "87095829": {
   "source": "roster",
-  "status": 200,
+  "status": 403,
   "url": "https://www.barnet.gov.uk/citizen-home/libraries.html"
  },
  "87201530": {

@@ -7612,7 +7612,8 @@
  },
  "18012c2aff4d": {
   "visual": "Aerial view of a low, pitched-roof building with pale stone and white-rendered sections and a small bell-turret, set beside a car park with two cars, a stone boundary wall and grassy fields dotted with trees around it.",
-  "visual_v": 2
+  "visual_v": 2,
+  "context": "Canolfan Cymdeithasol David Hughes Community Centre The former David Hughes Free Grammar School, which was opened in 1603, was converted to a Community Centre in 1971. The low building at right angles on the left is the library. Beaumaris Castle is out of sight on the right. David Hughes is recorded in the Oxford Dictionary of National Biography."
  },
  "80d88cee06d9": {
   "context": "",
@@ -8876,6 +8877,16 @@
  },
  "e5fedf117766": {
   "visual": "A pale rendered building with dark tiled pitched roofs, brick trim around the windows and doors, and the date “1938” set above a central entrance. A car park with painted bays and “no parking” signs lies in front under a grey overcast sky, with a monument’s base visible at the left edge.",
-  "visual_v": 2
+  "visual_v": 2,
+  "context": "Pontiets library. Library and community hall at Pontiets."
+ },
+ "3b82e6568b54": {
+  "context": ""
+ },
+ "219e3fd5c08a": {
+  "context": "Garvagh Library It is located at Bridge Street."
+ },
+ "efe7d037f998": {
+  "context": ""
  }
 }
