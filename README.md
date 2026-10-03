@@ -152,10 +152,9 @@ everylibrary_urls.py --recheck             # re-verify every council link
 everylibrary_images.py --recheck-misses    # look again for photographs
 everylibrary_images.py --manifest-only     # cheap rebuild, in case the sweep died
 everylibrary_describe.py                   # alt text for whatever turned up
-update_colophon_library_count.py --dry-run # report the site's figures drifting
 ```
 
-⚠️ **The colophon step reports and never writes.** `update_colophon_library_count.py` commits and pushes to the site repo by default, and an unattended job must not: the change would sit committed and undeployed until someone ran `site_deploy.sh`. Until the monthly pass existed the colophon could only go stale when a harvest was run by hand; now it drifts every month, so the drift is at least named in the log.
+A seventh step, reporting drift in the colophon's library figures, was removed on 3 October 2026: the colophon stopped carrying those figures on 24 August 2026, so the step failed every month with nothing to check.
 
 **Detecting rather than refreshing was deliberate, and the reason has since been removed.** `library_id` was `sha1(name|postcode|lat)`, so an upstream coordinate correction minted a new id, the library read as never-posted and would have gone out twice. That was fixed on 23 August 2026: the latitude is gone from the key and `library_id` and the check's match key are now one function, `norm()`, imported from the poster. See “What the applier will and will not do” below for what replaced the refresh — which is still not a rebuild.
 

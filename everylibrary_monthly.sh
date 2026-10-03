@@ -100,15 +100,5 @@ after=$(counts)
 echo "--- before: $before"
 echo "--- after:  $after"
 
-# ⚠️ Reports only. update_colophon_library_count.py commits and pushes to the
-# site repo by default, and this job must not do that unattended: the change
-# would sit committed but undeployed until someone ran site_deploy.sh, and an
-# automated push to a public repo is not this script's call to make. Until the
-# monthly pass existed the colophon could only go stale when someone re-ran the
-# harvest by hand; now it drifts every month, so the drift is at least named.
-echo "--- colophon figures"
-"$PY" "$HOME/Scripts/update_colophon_library_count.py" --dry-run; rc=$?
-[ $rc -gt $worst ] && worst=$rc
-
 echo "=== done, exit $worst ==="
 exit $worst
